@@ -1,0 +1,168 @@
+{
+  "app": {
+    "name": "Transfert",
+    "taglines": [
+      "Offline by design.",
+      "Runs on your machine.",
+      "No cloud bullshit.",
+      "Yours. Not ours.",
+      "No accounts. No ads.",
+      "Local-first, always.",
+      "Your files stay yours."
+    ],
+    "tagline": "Your computer can already do most of this. So let it."
+  },
+  "nav": {
+    "toolbox": "Toolbox",
+    "settings": "Settings"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "tools": {
+    "fileConverter": {
+      "name": "File Converter",
+      "description": "Convert files between formats.",
+      "image": {
+        "name": "Image",
+        "description": "Convert images between formats."
+      },
+      "document": {
+        "name": "Document",
+        "description": "Convert documents between formats."
+      },
+      "audio": {
+        "name": "Audio",
+        "description": "Convert audio between formats."
+      },
+      "video": {
+        "name": "Video",
+        "description": "Convert video between formats."
+      }
+    },
+    "pdfTools": {
+      "name": "PDF Tools",
+      "description": "Merge, compress and edit PDF files.",
+      "mergeSplit": {
+        "name": "Merge & Split",
+        "description": "Combine or split PDF documents."
+      },
+      "compress": {
+        "name": "Compress",
+        "description": "Reduce PDF file size."
+      },
+      "edit": {
+        "name": "Edit & Annotate",
+        "description": "Edit pages and add annotations."
+      }
+    },
+    "ocr": {
+      "name": "OCR",
+      "description": "Extract text from images and scans.",
+      "image": {
+        "name": "Image to Text",
+        "description": "Extract text from pictures and scans."
+      },
+      "pdf": {
+        "name": "PDF to Text",
+        "description": "Extract text from PDF documents."
+      }
+    },
+    "metadata": {
+      "name": "Metadata",
+      "description": "Inspect and clean hidden file metadata.",
+      "strip": {
+        "name": "Strip Metadata",
+        "description": "Remove hidden metadata from files."
+      },
+      "edit": {
+        "name": "Edit Metadata",
+        "description": "View and edit file metadata."
+      }
+    },
+    "comingSoon": "Coming soon"
+  },
+  "home": {
+    "title": "Toolbox",
+    "subtitle": "Pick a tool to get started."
+  },
+  "dropzone": {
+    "cta": "Drag & drop files here",
+    "or": "or",
+    "browse": "Browse files",
+    "unsupported_one": "\"{{name}}\" isn't a supported format.",
+    "unsupported_other": "{{count}} files skipped — unsupported format."
+  },
+  "imageConverter": {
+    "dropzone": {
+      "title": "Image Converter",
+      "description": "Drop images here, or browse to convert them between formats."
+    },
+    "svgNotice": "SVG output wraps the image as-is — it's not vectorized yet. Real vector tracing is planned for a future update."
+  },
+  "queue": {
+    "filesReady_one": "{{count}} file ready",
+    "filesReady_other": "{{count}} files ready",
+    "addMore": "Add more",
+    "clearAll": "Clear all",
+    "convertAllTo": "Convert all to",
+    "destination": {
+      "label": "Save to",
+      "placeholder": "No folder selected",
+      "browse": "Browse"
+    },
+    "saveMode": {
+      "label": "Output",
+      "individual": "Save files",
+      "zip": "Bundle as .zip"
+    },
+    "naming": {
+      "label": "File names",
+      "keep": "Keep original name",
+      "suffix": "Add suffix",
+      "custom": "Custom pattern",
+      "customPlaceholder": "{name}-{index}.{ext}",
+      "customHint": "Available tokens: {name}, {ext}, {index}"
+    },
+    "bundledInto": "Bundled into {{zipName}}",
+    "convert_one": "Convert {{count}} file",
+    "convert_other": "Convert {{count}} files"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage how Transfert looks and behaves.",
+    "appearance": {
+      "label": "Theme",
+      "description": "Switch between light, dark, or match your system."
+    },
+    "language": {
+      "label": "Language",
+      "description": "More languages are coming soon."
+    },
+    "about": {
+      "label": "About",
+      "cta": "About Transfert",
+      "madeWith": "Made with",
+      "by": "by",
+      "author": "Vincent",
+      "sourceCode": "Source code",
+      "license": "License"
+    },
+    "credits": {
+      "label": "Credits & Licenses",
+      "description": "Transfert stands on the shoulders of these open source projects.",
+      "contributors": "Contributors"
+    }
+  },
+  "about": {
+    "back": "Back to Settings"
+  },
+  "license": {
+    "back": "Back to About",
+    "title": "License",
+    "subtitle": "Transfert is free software, licensed under the GNU GPL v3.",
+    "readOnGnu": "Read on gnu.org"
+  }
+}
