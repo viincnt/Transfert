@@ -59,7 +59,7 @@ macOS support is in progress — the app icon and `.icns` bundle asset already e
 **Windows** — one-liner, no admin rights needed (the MSI installs per-user):
 
 ```powershell
-curl.exe -sSL https://gitlab.com/viincnt/transfert/-/raw/main/scripts/install.ps1 | iex
+irm https://gitlab.com/viincnt/transfert/-/raw/main/scripts/install.ps1 | iex
 ```
 
 Downloads whatever the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) is and installs it silently. To grab the `.msi` by hand instead, it's on that same release page.
