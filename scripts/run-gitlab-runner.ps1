@@ -17,6 +17,13 @@ if (-not (Test-Path $RunnerDir)) {
     New-Item -ItemType Directory -Path $RunnerDir | Out-Null
 }
 
+# gitlab-runner defaults its builds/cache dirs to ./builds and ./cache
+# relative to the *current* working directory, not to where the exe or its
+# config live - config.toml pins those explicitly, but pin the working
+# directory too so a stray checkout can never land inside this repo again
+# (e.g. double-clicking the .cmd from Explorer starts it in scripts/).
+Set-Location $RunnerDir
+
 if (-not (Test-Path $RunnerExe)) {
     Write-Host "gitlab-runner.exe not found - downloading it to $RunnerDir..."
     $downloadUrl = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-amd64.exe"

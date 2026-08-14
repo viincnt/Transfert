@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# In case a local GitLab Runner is ever pointed at this repo without an
+# explicit builds_dir/cache_dir in its config.toml (see scripts/run-gitlab-runner.ps1)
+scripts/builds/
+scripts/cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
