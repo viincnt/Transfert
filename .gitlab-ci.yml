@@ -69,6 +69,11 @@ release:
     - if: $CI_COMMIT_TAG
   script:
     - echo "Publishing $ASSET_NAME for $CI_COMMIT_TAG"
+    # The upload in build-msi gets a 201 back immediately, but the package
+    # registry's read path (what this job's release-cli "stat" check hits)
+    # lags a few seconds behind that write - give it a moment before
+    # step_release runs, or the stat fails with a false "not found".
+    - sleep 15
   release:
     tag_name: $CI_COMMIT_TAG
     name: "Transfert $CI_COMMIT_TAG"
