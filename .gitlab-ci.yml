@@ -13,10 +13,27 @@
 # ourselves, in the same job as the upload, also sidesteps any timing gap
 # between the upload becoming visible and a separate job checking for it.
 #
+# Also builds and signs an MSIX (for the Microsoft Store's packaged-app path)
+# from that same MSI, via the MSIX Packaging Tool's CLI and a template
+# checked in at src-tauri/msix/template.xml. That CLI hard-requires
+# elevation - "The requested operation requires elevation" - no matter what
+# the template asks it to do, so scripts/run-gitlab-runner.ps1 self-elevates
+# the whole runner process for this reason (it doesn't affect what ships:
+# the MSI/MSIX both still install per-user, no elevation for end users).
+#
+# The signing certificate is self-signed (its Subject matches the Package
+# Identity's Publisher exactly - that's all Partner Center needs to *accept*
+# an upload; Microsoft re-signs for real during Store certification) and
+# lives only on this runner's disk, at the fixed path referenced below -
+# never in the repo. Its password comes from the masked/protected CI/CD
+# variable MSIX_SIGN_PASSWORD (set once in GitLab: Settings > CI/CD >
+# Variables).
+#
 # Runs on a self-hosted Windows runner using the `shell` executor, so it
-# reuses whatever's already installed on that machine (Rust, Node, pnpm)
-# instead of reinstalling a toolchain on every run. Register the runner with
-# a tag matching the one below (or edit the tag to match what you used):
+# reuses whatever's already installed on that machine (Rust, Node, pnpm,
+# the MSIX Packaging Tool, the Windows SDK's signtool.exe) instead of
+# reinstalling a toolchain on every run. Register the runner with a tag
+# matching the one below (or edit the tag to match what you used):
 #
 #   gitlab-runner register --executor shell --tag-list windows
 #
@@ -75,12 +92,58 @@ build-msi:
           exit 1
         }
 
-        $description = "Standalone Windows installer (MSI).`n`nThis is also the Microsoft Store `"Package URL`" for this version:`n$url"
+        # --- MSIX (Microsoft Store packaged-app submission) ---
+        $msixTool = "C:\Users\viincnt\AppData\Local\Microsoft\WindowsApps\MsixPackagingTool.exe"
+        $signTool = "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe"
+        $signCert = "C:\Users\viincnt\Transfert-signing\transfert-msix-signing.pfx"
+
+        $versionParts = @($env:CI_COMMIT_TAG.TrimStart("v") -split "\.")
+        while ($versionParts.Count -lt 4) { $versionParts += "0" }
+        $msixVersion = ($versionParts[0..3] -join ".")
+
+        $msixDir = "src-tauri/target/release/bundle/msix"
+        New-Item -ItemType Directory -Path $msixDir -Force | Out-Null
+        $msixName = "Transfert_${msixVersion}_x64.msix"
+        $msixPath = (Join-Path (Get-Location) "$msixDir/$msixName")
+        $resolvedTemplatePath = (Join-Path (Get-Location) "msix-template-resolved.xml")
+
+        $msixTemplate = Get-Content "src-tauri/msix/template.xml" -Raw
+        $msixTemplate = $msixTemplate.Replace("__VERSION__", $msixVersion)
+        $msixTemplate = $msixTemplate.Replace("__INSTALLER_PATH__", $msi.FullName)
+        $msixTemplate = $msixTemplate.Replace("__PACKAGE_PATH__", $msixPath)
+        $msixTemplate = $msixTemplate.Replace("__TEMPLATE_SAVE_PATH__", $resolvedTemplatePath)
+        $msixTemplate | Out-File -FilePath $resolvedTemplatePath -Encoding utf8NoBOM
+
+        & $msixTool create-package --template $resolvedTemplatePath
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "MSIX packaging failed (exit $LASTEXITCODE)."
+          exit 1
+        }
+
+        & $signTool sign /f $signCert /p $env:MSIX_SIGN_PASSWORD /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $msixPath
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "MSIX signing failed (exit $LASTEXITCODE)."
+          exit 1
+        }
+
+        $msixUrl = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/packages/generic/$env:PACKAGE_NAME/$env:CI_COMMIT_TAG/$msixName"
+        curl.exe --fail -sS -w "`nHTTP status: %{http_code}`n" --header "JOB-TOKEN: $env:CI_JOB_TOKEN" --upload-file $msixPath $msixUrl
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Upload of the MSIX to the package registry failed (curl exit $LASTEXITCODE) - see the response above."
+          exit 1
+        }
+
+        $description = "Standalone Windows installer (MSI) and Microsoft Store package (MSIX).`n`nThe MSI is also the Microsoft Store `"Package URL`" for the unpackaged submission:`n$url"
         $releaseBody = @{
           tag_name    = $env:CI_COMMIT_TAG
           name        = "Transfert $env:CI_COMMIT_TAG"
           description = $description
-          assets      = @{ links = @(@{ name = $msi.Name; url = $url }) }
+          assets      = @{
+            links = @(
+              @{ name = $msi.Name; url = $url }
+              @{ name = $msixName; url = $msixUrl }
+            )
+          }
         } | ConvertTo-Json -Depth 5
         $releaseBody | Out-File -FilePath release.json -Encoding utf8NoBOM
 
@@ -94,4 +157,5 @@ build-msi:
   artifacts:
     paths:
       - src-tauri/target/release/bundle/msi/*.msi
+      - src-tauri/target/release/bundle/msix/*.msix
     expire_in: 1 week

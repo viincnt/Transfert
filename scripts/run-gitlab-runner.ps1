@@ -9,6 +9,18 @@
 
 $ErrorActionPreference = "Stop"
 
+# Elevated so CI jobs can call tools that refuse to run otherwise (the MSIX
+# Packaging Tool's CLI hard-requires admin - "The requested operation
+# requires elevation" - regardless of what its template asks for). This is
+# about *this* machine building packages, not about how they install:
+# the shipped MSI still installs per-user with no elevation for end users.
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Relaunching elevated (needed for MSIX packaging)..."
+    Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+    exit
+}
+
 $RunnerDir = "C:\GitLab-Runner"
 $RunnerExe = Join-Path $RunnerDir "gitlab-runner.exe"
 $ConfigFile = Join-Path $RunnerDir "config.toml"
