@@ -30,6 +30,19 @@ build-msi:
   rules:
     - if: $CI_COMMIT_TAG
     - when: manual # smoke-test the pipeline without cutting a tag
+  # GitLab Runner git-cleans the checkout before every job (wipes
+  # node_modules/ and target/ along with everything else untracked), so
+  # without this every tag push means a full ~6min Rust rebuild from
+  # scratch. Cache is stored locally on this runner (self-hosted, not a
+  # SaaS one) so restoring it is just a local copy, not a network upload.
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+        - src-tauri/Cargo.lock
+    paths:
+      - node_modules/
+      - src-tauri/target/
   script:
     - pnpm install --frozen-lockfile
     - pnpm tauri build --bundles msi
