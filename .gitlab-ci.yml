@@ -5,6 +5,14 @@
 # file upload to Partner Center). No updater in the app, so a new version
 # just means a new tag -> a new URL to paste into Partner Center.
 #
+# The release (GitLab Releases API) is created with a plain curl POST rather
+# than the `release:` keyword - that keyword hands off to release-cli's
+# bundled `glab`, which was seen "stat"-ing our asset URL like a local file
+# path and failing with ENOENT ("no such file or directory") even though the
+# upload right before it had already gotten back 201 Created. Doing it
+# ourselves, in the same job as the upload, also sidesteps any timing gap
+# between the upload becoming visible and a separate job checking for it.
+#
 # Runs on a self-hosted Windows runner using the `shell` executor, so it
 # reuses whatever's already installed on that machine (Rust, Node, pnpm)
 # instead of reinstalling a toolchain on every run. Register the runner with
@@ -18,7 +26,6 @@
 
 stages:
   - build
-  - release
 
 variables:
   PACKAGE_NAME: transfert
@@ -48,11 +55,9 @@ build-msi:
     - pnpm tauri build --bundles msi
     - $msi = Get-ChildItem -Path "src-tauri/target/release/bundle/msi" -Filter *.msi | Select-Object -First 1
     - Write-Host "Built $($msi.Name)"
-    - '"ASSET_NAME=" | Out-File -FilePath build.env -Encoding utf8'
-    - '"ASSET_URL=" | Out-File -FilePath build.env -Encoding utf8 -Append'
     - |
-      # Only tag pipelines publish a package + populate build.env for real -
-      # manual test runs (see `rules:` above) just keep the .msi artifact.
+      # Only tag pipelines publish anything - manual test runs (see `rules:`
+      # above) just keep the .msi artifact, no package/release created.
       if ($env:CI_COMMIT_TAG) {
         $url = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/packages/generic/$env:PACKAGE_NAME/$env:CI_COMMIT_TAG/$($msi.Name)"
         curl.exe --fail -sS -w "`nHTTP status: %{http_code}`n" --header "JOB-TOKEN: $env:CI_JOB_TOKEN" --upload-file $msi.FullName $url
@@ -60,42 +65,24 @@ build-msi:
           Write-Host "Upload to the package registry failed (curl exit $LASTEXITCODE) - see the response above."
           exit 1
         }
-        "ASSET_NAME=$($msi.Name)" | Out-File -FilePath build.env -Encoding utf8
-        "ASSET_URL=$url" | Out-File -FilePath build.env -Encoding utf8 -Append
+
+        $description = "Standalone Windows installer (MSI).`n`nThis is also the Microsoft Store `"Package URL`" for this version:`n$url"
+        $releaseBody = @{
+          tag_name    = $env:CI_COMMIT_TAG
+          name        = "Transfert $env:CI_COMMIT_TAG"
+          description = $description
+          assets      = @{ links = @(@{ name = $msi.Name; url = $url }) }
+        } | ConvertTo-Json -Depth 5
+        $releaseBody | Out-File -FilePath release.json -Encoding utf8NoBOM
+
+        $releaseUrl = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/releases"
+        curl.exe --fail -sS -w "`nHTTP status: %{http_code}`n" --header "JOB-TOKEN: $env:CI_JOB_TOKEN" --header "Content-Type: application/json" --data "@release.json" $releaseUrl
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "Release creation failed (curl exit $LASTEXITCODE) - see the response above."
+          exit 1
+        }
       }
   artifacts:
     paths:
       - src-tauri/target/release/bundle/msi/*.msi
-    reports:
-      dotenv: build.env
     expire_in: 1 week
-
-release:
-  stage: release
-  needs:
-    - job: build-msi
-      artifacts: true
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  tags:
-    - saas-linux-small-amd64 # any Linux runner works here - GitLab.com's free shared one is fine
-  rules:
-    - if: $CI_COMMIT_TAG
-  script:
-    - echo "Publishing $ASSET_NAME for $CI_COMMIT_TAG"
-    # The upload in build-msi gets a 201 back immediately, but the package
-    # registry's read path (what this job's release-cli "stat" check hits)
-    # lags a few seconds behind that write - give it a moment before
-    # step_release runs, or the stat fails with a false "not found".
-    - sleep 15
-  release:
-    tag_name: $CI_COMMIT_TAG
-    name: "Transfert $CI_COMMIT_TAG"
-    description: |
-      Standalone Windows installer (MSI).
-
-      This is also the Microsoft Store "Package URL" for this version:
-      $ASSET_URL
-    assets:
-      links:
-        - name: "$ASSET_NAME"
-          url: "$ASSET_URL"
