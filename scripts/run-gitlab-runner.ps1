@@ -1,6 +1,6 @@
 # Launches a local GitLab Runner for this project's CI (see .gitlab-ci.yml).
 # Meant to be started before pushing a version tag, and left running until
-# the "build-msi" job finishes — this machine has no CI job queue to poll,
+# the "build-msi" job finishes - this machine has no CI job queue to poll,
 # it just needs to be up while a pipeline is actually running.
 #
 # First run: downloads the gitlab-runner binary and walks you through
@@ -18,7 +18,7 @@ if (-not (Test-Path $RunnerDir)) {
 }
 
 if (-not (Test-Path $RunnerExe)) {
-    Write-Host "gitlab-runner.exe not found — downloading it to $RunnerDir..."
+    Write-Host "gitlab-runner.exe not found - downloading it to $RunnerDir..."
     $downloadUrl = "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-amd64.exe"
     Invoke-WebRequest -Uri $downloadUrl -OutFile $RunnerExe
 }
