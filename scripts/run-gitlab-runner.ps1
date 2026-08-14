@@ -31,13 +31,22 @@ if (-not (Test-Path $ConfigFile)) {
     Write-Host ""
     $token = Read-Host "Paste the registration token"
 
+    # Tags aren't passed here on purpose: with a runner-authentication token
+    # (the kind "New project runner" gives you), tags/locked/access-level
+    # etc. are configured server-side when you created the runner in
+    # GitLab's UI, and gitlab-runner now refuses to also set them here.
     & $RunnerExe register `
         --url "https://gitlab.com" `
         --token $token `
         --executor "shell" `
-        --tag-list "windows" `
         --description "windows-local" `
         --config $ConfigFile
+
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $ConfigFile)) {
+        Write-Host ""
+        Write-Host "Registration failed - see the error above. Re-run this script to try again."
+        exit 1
+    }
 
     Write-Host ""
     Write-Host "Registered. Re-run this script whenever you want the runner up."
