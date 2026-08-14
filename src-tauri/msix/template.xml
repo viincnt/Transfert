@@ -299,5 +299,5 @@
   <PrepareComputer DisableWindowsSearchService="false" DisableWindowsUpdateService="false" />
   <SaveLocation PackagePath="__PACKAGE_PATH__" TemplatePath="__TEMPLATE_SAVE_PATH__" />
   <Installer Path="__INSTALLER_PATH__" />
-  <PackageInformation PackageName="Transfert" PackageDisplayName="Transfert" PublisherName="CN=F5F859CE-A129-40E8-9B6A-2FDF61583342" PublisherDisplayName="viincnt" Version="__VERSION__" p4:PackageDescription="Local-first file conversion toolbox — no cloud, no accounts, no telemetry." xmlns:p4="http://schemas.microsoft.com/msix/msixpackagingtool/template/1910" />
+  <PackageInformation PackageName="viincnt.Transfert" PackageDisplayName="Transfert" PublisherName="CN=F5F859CE-A129-40E8-9B6A-2FDF61583342" PublisherDisplayName="viincnt" Version="__VERSION__" p4:PackageDescription="Local-first file conversion toolbox — no cloud, no accounts, no telemetry." xmlns:p4="http://schemas.microsoft.com/msix/msixpackagingtool/template/1910" />
 </MsixPackagingToolTemplate>
