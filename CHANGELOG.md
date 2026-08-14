@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-14
+
+### Fixed
+
+- Windows MSI now installs per-user (to `%LOCALAPPDATA%`) instead of per-machine (`Program Files`), so installation no longer needs an admin prompt. The per-machine install was silently requiring UAC elevation, which fails Microsoft Store's requirement that unpackaged app installers run fully silently.
+
 ## [0.1.0] - 2026-08-13
 
 ### Added
@@ -16,5 +22,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.0...main
+[unreleased]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.1...main
+[0.1.1]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://gitlab.com/viincnt/transfert/-/tags/v0.1.0
