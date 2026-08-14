@@ -1,0 +1,79 @@
+# Builds the MSI on a version tag and publishes it to this project's Generic
+# Package Registry, which gives a stable, versioned, unauthenticated-download
+# HTTPS URL — exactly what the Microsoft Store's "unpackaged app" submission
+# wants for its Package URL field (it downloads straight from that URL, no
+# file upload to Partner Center). No updater in the app, so a new version
+# just means a new tag -> a new URL to paste into Partner Center.
+#
+# Runs on a self-hosted Windows runner using the `shell` executor, so it
+# reuses whatever's already installed on that machine (Rust, Node, pnpm)
+# instead of reinstalling a toolchain on every run. Register the runner with
+# a tag matching the one below (or edit the tag to match what you used):
+#
+#   gitlab-runner register --executor shell --tag-list windows
+#
+# Register/run the service under your own Windows user account, not the
+# default LocalSystem account — LocalSystem won't see rustup/pnpm on PATH
+# even though your interactive shell does.
+
+stages:
+  - build
+  - release
+
+variables:
+  PACKAGE_NAME: transfert
+
+build-msi:
+  stage: build
+  tags:
+    - windows # must match the tag your self-hosted runner registered with
+  rules:
+    - if: $CI_COMMIT_TAG
+    - when: manual # smoke-test the pipeline without cutting a tag
+  script:
+    - pnpm install --frozen-lockfile
+    - pnpm tauri build --bundles msi
+    - $msi = Get-ChildItem -Path "src-tauri/target/release/bundle/msi" -Filter *.msi | Select-Object -First 1
+    - Write-Host "Built $($msi.Name)"
+    - '"ASSET_NAME=" | Out-File -FilePath build.env -Encoding utf8'
+    - '"ASSET_URL=" | Out-File -FilePath build.env -Encoding utf8 -Append'
+    - |
+      # Only tag pipelines publish a package + populate build.env for real —
+      # manual test runs (see `rules:` above) just keep the .msi artifact.
+      if ($env:CI_COMMIT_TAG) {
+        $url = "$env:CI_API_V4_URL/projects/$env:CI_PROJECT_ID/packages/generic/$env:PACKAGE_NAME/$env:CI_COMMIT_TAG/$($msi.Name)"
+        curl.exe --fail --header "JOB-TOKEN: $env:CI_JOB_TOKEN" --upload-file $msi.FullName $url
+        "ASSET_NAME=$($msi.Name)" | Out-File -FilePath build.env -Encoding utf8
+        "ASSET_URL=$url" | Out-File -FilePath build.env -Encoding utf8 -Append
+      }
+  artifacts:
+    paths:
+      - src-tauri/target/release/bundle/msi/*.msi
+    reports:
+      dotenv: build.env
+    expire_in: 1 week
+
+release:
+  stage: release
+  needs:
+    - job: build-msi
+      artifacts: true
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  tags:
+    - saas-linux-small-amd64 # any Linux runner works here — GitLab.com's free shared one is fine
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo "Publishing $ASSET_NAME for $CI_COMMIT_TAG"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: "Transfert $CI_COMMIT_TAG"
+    description: |
+      Standalone Windows installer (MSI).
+
+      This is also the Microsoft Store "Package URL" for this version:
+      $ASSET_URL
+    assets:
+      links:
+        - name: "$ASSET_NAME"
+          url: "$ASSET_URL"
