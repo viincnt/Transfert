@@ -24,6 +24,20 @@ Every conversion decodes, re-encodes and then **verifies its own output** before
 
 ---
 
+## 🚀 Installation
+
+**Windows** — via [Microsoft Store](https://apps.microsoft.com/detail/9PG711NS9JVS) or winget, no admin rights needed:
+
+```powershell
+winget install --id 9PG711NS9JVS --source msstore
+```
+
+To grab the `.msi` by hand instead, it's on the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) page. Either way you'll need Windows 10 (1809+) or Windows 11, x64, and the WebView2 Runtime — already on Windows 11 and most up-to-date Windows 10 machines; the installer pulls it automatically if it's missing.
+
+**macOS / Linux** — not packaged yet. macOS support is in progress — the app icon and `.icns` bundle asset already exist (`src-tauri/icons/`), but no macOS build target is wired up yet.
+
+---
+
 ## 🧰 Tools
 
 | Category | Tool | Status |
@@ -44,29 +58,9 @@ Every conversion decodes, re-encodes and then **verifies its own output** before
 
 ---
 
-## 🧩 Requirements
+## 🛠️ Build from source
 
-**To run the packaged app:** Windows 10 (1809+) or Windows 11, x64. Needs the WebView2 Runtime — already on Windows 11 and most up-to-date Windows 10 machines; the installer pulls it automatically if it's missing.
-
-macOS support is in progress — the app icon and `.icns` bundle asset already exist (`src-tauri/icons/`), but no macOS build target is wired up yet.
-
-**To build from source:** Node.js 18+, [pnpm](https://pnpm.io), and the Rust stable toolchain (via [rustup](https://rustup.rs)). On Windows you'll also need the MSVC build tools (Tauri's own setup guide covers this: [tauri.app/start/prerequisites](https://tauri.app/start/prerequisites)).
-
----
-
-## 🚀 Installation
-
-**Windows** — via [Microsoft Store](https://apps.microsoft.com/detail/9PG711NS9JVS) or winget, no admin rights needed:
-
-```powershell
-winget install --id 9PG711NS9JVS --source msstore
-```
-
-To grab the `.msi` by hand instead, it's on the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) page.
-
-**macOS / Linux** — not packaged yet.
-
-**From source:**
+**Requirements:** Node.js 18+, [pnpm](https://pnpm.io), and the Rust stable toolchain (via [rustup](https://rustup.rs)). On Windows you'll also need the MSVC build tools (Tauri's own setup guide covers this: [tauri.app/start/prerequisites](https://tauri.app/start/prerequisites)).
 
 ```bash
 git clone https://gitlab.com/viincnt/transfert.git
@@ -75,9 +69,7 @@ pnpm install
 pnpm tauri dev
 ```
 
----
-
-## 📦 Packaging
+**Packaging:**
 
 ```bash
 pnpm tauri build --bundles msi
