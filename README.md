@@ -56,17 +56,15 @@ macOS support is in progress — the app icon and `.icns` bundle asset already e
 
 ## 🚀 Installation
 
-**Windows** — one-liner, no admin rights needed (the MSI installs per-user):
+**Windows** — via [Microsoft Store](https://apps.microsoft.com/detail/9PG711NS9JVS) or winget, no admin rights needed:
 
 ```powershell
-irm https://gitlab.com/viincnt/transfert/-/raw/main/scripts/install.ps1 | iex
+winget install --id 9PG711NS9JVS --source msstore
 ```
 
-Downloads whatever the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) is and installs it silently. To grab the `.msi` by hand instead, it's on that same release page.
+To grab the `.msi` by hand instead, it's on the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) page.
 
-**Microsoft Store** — submitted, awaiting review.
-
-**macOS / Linux** — not packaged yet. `install.ps1` gets siblings once those targets exist.
+**macOS / Linux** — not packaged yet.
 
 **From source:**
 
@@ -87,7 +85,7 @@ pnpm tauri build --bundles msi
 
 Produces `src-tauri/target/release/bundle/msi/Transfert_<version>_x64_en-US.msi` — installs per-user, no elevation (see [src-tauri/wix/main.wxs](src-tauri/wix/main.wxs), a custom WiX template; Tauri's own default installs per-machine and needs admin).
 
-Pushing a version tag (`vX.Y.Z`) runs this on a self-hosted runner via [.gitlab-ci.yml](.gitlab-ci.yml), publishes the MSI to this project's package registry, and creates a GitLab Release pointing at it — that's the same MSI both `install.ps1` and the Microsoft Store submission use.
+Pushing a version tag (`vX.Y.Z`) runs this on a self-hosted runner via [.gitlab-ci.yml](.gitlab-ci.yml), publishes the MSI to this project's package registry, and creates a GitLab Release pointing at it — that's the same MSI both the direct `.msi` download and the Microsoft Store listing use.
 
 ---
 
