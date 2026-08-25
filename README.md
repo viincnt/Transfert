@@ -40,21 +40,25 @@ To grab the `.msi` by hand instead, it's on the [latest release](https://gitlab.
 
 ## 🧰 Tools
 
-| Category | Tool | Status |
-|---|---|---|
-| File Converter | Image | ✅ Available |
-| File Converter | Document | 🔜 Planned |
-| File Converter | Audio | 🔜 Planned |
-| File Converter | Video | 🔜 Planned |
-| PDF Tools | Merge & Split | 🔜 Planned |
-| PDF Tools | Compress | 🔜 Planned |
-| PDF Tools | Edit & Annotate | 🔜 Planned |
-| OCR | Image → Text | 🔜 Planned |
-| OCR | PDF → Text | 🔜 Planned |
-| Metadata | Strip | 🔜 Planned |
-| Metadata | Edit | 🔜 Planned |
+| Category       | Tool            | Status       |
+| -------------- | --------------- | ------------ |
+| File Converter | Image           | ✅ Available |
+| File Converter | Document        | 🔜 Planned   |
+| File Converter | Audio           | 🔜 Planned   |
+| File Converter | Video           | 🔜 Planned   |
+| PDF Tools      | Merge & Split   | 🔜 Planned   |
+| PDF Tools      | Compress        | 🔜 Planned   |
+| PDF Tools      | Edit & Annotate | 🔜 Planned   |
+| OCR            | Image → Text    | 🔜 Planned   |
+| OCR            | PDF → Text      | 🔜 Planned   |
+| Metadata       | Strip           | ✅ Available |
+| Metadata       | Edit            | ✅ Available |
 
 **Image Converter** — converts between `PNG`, `JPG`, `WEBP`, `GIF`, `BMP`, `TIFF`, `AVIF`, `ICO` and `SVG` (SVG output wraps the raster image in an SVG document rather than tracing it into vector paths — the same thing most "convert to SVG" tools do for photos). Drag-and-drop or file picker, batch conversion, optional zip bundling, and custom output naming with token support.
+
+**Strip Metadata** — removes EXIF metadata from `JPG`, `PNG`, `TIFF` and lossless/extended `WEBP` files without touching the pixels — no decode/re-encode, so nothing gets recompressed as a side effect of "cleaning" it. Batch, same drag-and-drop/naming controls as the converter.
+
+**Edit Metadata** — views and edits the EXIF fields people actually go looking for (Author, Copyright, Description, Date taken, Device make/model) on a single `JPG`, `PNG`, `TIFF` or lossless/extended `WEBP` file, and saves a verified copy — the app re-reads what it just wrote and confirms it matches before calling it done. GPS coordinates aren't editable here — use Strip Metadata to remove location data along with everything else.
 
 ---
 

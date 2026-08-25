@@ -5,7 +5,9 @@ import {
   Component,
   Feather,
   Languages,
+  Maximize2,
   Route,
+  Tags,
   Type,
   Wind,
   Zap,
@@ -93,6 +95,20 @@ export const credits: Credit[] = [
     license: "OFL-1.1",
     url: "https://vercel.com/font",
     icon: Type,
+  },
+  {
+    name: "little_exif",
+    description: "EXIF metadata read/write",
+    license: "MIT / Apache-2.0",
+    url: "https://github.com/TechnikTobi/little_exif",
+    icon: Tags,
+  },
+  {
+    name: "tauri-plugin-window-state",
+    description: "Remembers window size & position",
+    license: "MIT / Apache-2.0",
+    url: "https://github.com/tauri-apps/plugins-workspace",
+    icon: Maximize2,
   },
 ];
 

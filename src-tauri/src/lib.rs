@@ -1,11 +1,13 @@
 mod bundling;
 mod conversion;
 mod delivery;
+mod metadata;
 mod naming;
 
 use std::path::PathBuf;
 
 use conversion::{convert_to_bytes, ConvertedImage, OutputFormat};
+use metadata::MetadataFields;
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -171,14 +173,74 @@ async fn convert_images_to_zip_command(
     .map_err(|e| e.to_string())?
 }
 
+#[tauri::command]
+async fn strip_metadata_command(
+    bytes: Vec<u8>,
+    file_name: String,
+    destination_dir: String,
+    name_override: Option<String>,
+) -> Result<DeliveredFileResponse, String> {
+    let destination_dir = PathBuf::from(destination_dir);
+
+    tauri::async_runtime::spawn_blocking(move || {
+        let stripped = metadata::strip_bytes(bytes, &file_name).map_err(|e| e.to_string())?;
+        let out_name = metadata::renamed(&file_name, name_override.as_deref());
+        let delivered = delivery::write_verified(&stripped, &destination_dir, &out_name)
+            .map_err(|e| e.to_string())?;
+
+        Ok(delivered.into())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn read_metadata_command(
+    bytes: Vec<u8>,
+    file_name: String,
+) -> Result<MetadataFields, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        metadata::read_fields(&bytes, &file_name).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn write_metadata_command(
+    bytes: Vec<u8>,
+    file_name: String,
+    destination_dir: String,
+    fields: MetadataFields,
+    name_override: Option<String>,
+) -> Result<DeliveredFileResponse, String> {
+    let destination_dir = PathBuf::from(destination_dir);
+
+    tauri::async_runtime::spawn_blocking(move || {
+        let edited =
+            metadata::write_fields(bytes, &file_name, &fields).map_err(|e| e.to_string())?;
+        let out_name = metadata::renamed(&file_name, name_override.as_deref());
+        let delivered = delivery::write_verified(&edited, &destination_dir, &out_name)
+            .map_err(|e| e.to_string())?;
+
+        Ok(delivered.into())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             convert_image_command,
-            convert_images_to_zip_command
+            convert_images_to_zip_command,
+            strip_metadata_command,
+            read_metadata_command,
+            write_metadata_command
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

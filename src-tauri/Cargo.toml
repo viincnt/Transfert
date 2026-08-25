@@ -33,4 +33,6 @@ tiny-skia = "0.12"
 zip = "8"
 rayon = "1"
 base64 = "0.23"
+little_exif = "0.6.23"
+tauri-plugin-window-state = "2.4.1"
 

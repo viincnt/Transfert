@@ -158,7 +158,7 @@ export const toolEntries: ToolEntry[] = [
         descriptionKey: "tools.metadata.strip.description",
         icon: ShieldOff,
         path: "/metadata/strip",
-        available: false,
+        available: true,
       },
       {
         id: "metadata-edit",
@@ -166,7 +166,7 @@ export const toolEntries: ToolEntry[] = [
         descriptionKey: "tools.metadata.edit.description",
         icon: Tags,
         path: "/metadata/edit",
-        available: false,
+        available: true,
       },
     ],
   },

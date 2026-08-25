@@ -12,6 +12,8 @@ import { useNativeAppGuards } from "@/hooks/use-native-app-guards";
 import { About } from "@/pages/about";
 import { Home } from "@/pages/home";
 import { ImageConverter } from "@/pages/image-converter";
+import { MetadataEdit } from "@/pages/metadata-edit";
+import { MetadataStrip } from "@/pages/metadata-strip";
 import { Settings } from "@/pages/settings";
 
 // Bundles the full GPL text, so it's split into its own chunk and only
@@ -35,6 +37,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/converter/image" element={<ImageConverter />} />
+              <Route path="/metadata/strip" element={<MetadataStrip />} />
+              <Route path="/metadata/edit" element={<MetadataEdit />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/settings/about" element={<About />} />
               <Route

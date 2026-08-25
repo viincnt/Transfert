@@ -102,6 +102,33 @@
     },
     "svgNotice": "SVG output wraps the image as-is — it's not vectorized yet. Real vector tracing is planned for a future update."
   },
+  "metadataStrip": {
+    "dropzone": {
+      "title": "Strip Metadata",
+      "description": "Drop images here, or browse, to remove hidden metadata from them."
+    },
+    "notice": "Only JPG, PNG, TIFF and lossless/extended WEBP are supported — the pixels are never touched, only the metadata is removed.",
+    "strip_one": "Strip {{count}} file",
+    "strip_other": "Strip {{count}} files"
+  },
+  "metadataEdit": {
+    "dropzone": {
+      "title": "Edit Metadata",
+      "description": "Drop an image here, or browse, to view and edit its metadata."
+    },
+    "chooseAnother": "Choose another file",
+    "reading": "Reading metadata…",
+    "fields": {
+      "artist": "Author",
+      "copyright": "Copyright",
+      "description": "Description",
+      "dateTaken": "Date taken",
+      "deviceMake": "Device make",
+      "deviceModel": "Device model"
+    },
+    "save": "Save edited copy",
+    "saved": "Saved as {{fileName}}"
+  },
   "queue": {
     "filesReady_one": "{{count}} file ready",
     "filesReady_other": "{{count}} files ready",

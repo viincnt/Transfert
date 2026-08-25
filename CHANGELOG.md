@@ -6,6 +6,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- Strip Metadata: removes EXIF metadata from `JPG`, `PNG`, `TIFF` and lossless/extended `WEBP` files in place, without decoding/re-encoding the pixels. Batch, same naming controls as the image converter.
+- Edit Metadata: view and edit the Author, Copyright, Description, Date taken and device Make/Model EXIF fields on a single image, then save a verified copy — the write is re-read and compared against what was requested before it's reported as successful.
+- Window size and position are now remembered between launches.
+
+### Changed
+
+- Default window size increased from 800×600 to 1100×700.
+
 ## [0.1.1] - 2026-08-14
 
 ### Fixed
@@ -22,6 +32,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.1...main
+[unreleased]: https://gitlab.com/viincnt/transfert/-/compare/v0.2.0...main
+[0.2.0]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.1...v0.2.0
 [0.1.1]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://gitlab.com/viincnt/transfert/-/tags/v0.1.0
