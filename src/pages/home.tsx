@@ -29,7 +29,7 @@ function ToolCard({
     <Card
       className={cn(
         "h-full transition-colors",
-        available ? "hover:border-primary/50" : "opacity-60",
+        available ? "cursor-pointer hover:ring-primary/50" : "opacity-60",
       )}
     >
       <CardHeader>

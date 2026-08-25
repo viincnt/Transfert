@@ -16,6 +16,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - Default window size increased from 800×600 to 1100×700.
 
+### Fixed
+
+- Tool cards on the home screen now visibly highlight on hover — they use a `ring` for their outline, not a `border`, so the hover style was changing a border color that was never actually drawn.
+
 ## [0.1.1] - 2026-08-14
 
 ### Fixed
