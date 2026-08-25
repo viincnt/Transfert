@@ -16,14 +16,13 @@
 
 **Transfert** is a local-first file toolbox: conversion, compression and
 cleanup tools that run entirely on your machine — no upload, no account, no
-telemetry. The full pitch lives on the website (`apps/web`, not yet deployed)
-or right here: [Installation](apps/web/content/docs/installation.mdx).
+telemetry. Full pitch, download and docs **[Here](https://usetransfert.vercel.app)!**.
 
 This is a pnpm monorepo with two apps:
 
-| App                          | What                                                    |
-| ----------------------------- | -------------------------------------------------------- |
-| [`apps/desktop`](apps/desktop) | The Tauri + React desktop app — this is the actual product. |
+| App                            | What                                                                                |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| [`apps/desktop`](apps/desktop) | The Tauri + React desktop app — this is the actual product.                         |
 | [`apps/web`](apps/web)         | The marketing site + docs, built with Next.js and [Fumadocs](https://fumadocs.dev). |
 
 ## Quick start
