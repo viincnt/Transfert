@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   BookOpen,
@@ -126,6 +127,19 @@ export default function HomePage() {
             <CopyCommand command={WINGET_COMMAND} />
           </Reveal>
         </div>
+
+        <Reveal delay={0.4} className="relative mx-auto w-full max-w-4xl px-6 pb-20 sm:pb-28">
+          <div className="overflow-hidden rounded-xl border border-fd-border/80 shadow-2xl shadow-black/50">
+            <Image
+              src="/Transfert-001.jpg"
+              alt="Transfert's Toolbox screen, listing every file conversion and cleanup tool"
+              width={1102}
+              height={701}
+              className="h-auto w-full"
+              priority
+            />
+          </div>
+        </Reveal>
       </section>
 
       {/* Pitch */}
@@ -150,6 +164,44 @@ export default function HomePage() {
               ))}
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* Workflow */}
+      <section className="relative overflow-hidden border-t border-fd-border/60">
+        <div aria-hidden className="line-grid-center absolute inset-0" />
+        <div className="relative mx-auto w-full max-w-5xl px-6 py-20 sm:py-28">
+          <Reveal className="mb-10 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Drop it in. Get it back.
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-fd-muted-foreground">
+              No settings to hunt for — pick a format, convert, done.
+            </p>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {[
+              {
+                src: "/Transfert-002.jpg",
+                alt: "The Image Converter's drag-and-drop screen, listing supported formats",
+                label: "1. Drop your files",
+              },
+              {
+                src: "/Transfert-003.jpg",
+                alt: "A file queued for conversion, with format, destination and naming options",
+                label: "2. Pick a format, convert",
+              },
+            ].map(({ src, alt, label }, i) => (
+              <Reveal key={src} delay={i * 0.1} className="flex flex-col gap-3">
+                <div className="overflow-hidden rounded-xl border border-fd-border/80 shadow-xl shadow-black/40">
+                  <Image src={src} alt={alt} width={1102} height={701} className="h-auto w-full" />
+                </div>
+                <p className="text-center text-sm font-medium text-fd-muted-foreground">
+                  {label}
+                </p>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
