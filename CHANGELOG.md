@@ -6,6 +6,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-24
+
 ### Added
 
 - Strip Metadata: removes EXIF metadata from `JPG`, `PNG`, `TIFF` and lossless/extended `WEBP` files in place, without decoding/re-encoding the pixels. Batch, same naming controls as the image converter.
