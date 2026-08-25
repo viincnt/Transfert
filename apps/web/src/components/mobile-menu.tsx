@@ -1,0 +1,69 @@
+"use client";
+
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Menu, X, Download } from "lucide-react";
+import Link from "next/link";
+
+type NavLink = { href: string; label: string; external?: boolean };
+
+export function MobileMenu({
+  links,
+  storeUrl,
+}: {
+  links: NavLink[];
+  storeUrl: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="sm:hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        className="flex size-8 items-center justify-center rounded-md text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground"
+      >
+        {open ? <X className="size-5" /> : <Menu className="size-5" />}
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute inset-x-0 top-full overflow-hidden border-b border-fd-border/60 bg-fd-background/95 backdrop-blur-md"
+          >
+            <nav className="flex flex-col gap-1 px-6 py-4">
+              {links.map(({ href, label, external }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noreferrer" : undefined}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-2 py-2 text-sm text-fd-muted-foreground transition-colors hover:bg-fd-accent hover:text-fd-foreground"
+                >
+                  {label}
+                </Link>
+              ))}
+              <a
+                href={storeUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+                className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-fd-primary px-3.5 py-2 text-sm font-medium text-fd-primary-foreground"
+              >
+                <Download className="size-3.5" />
+                Download
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

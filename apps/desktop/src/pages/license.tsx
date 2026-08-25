@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 
-import licenseText from "../../LICENSE?raw";
+import licenseText from "../../../../LICENSE?raw";
 
 const LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html";
 

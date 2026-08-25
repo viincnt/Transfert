@@ -1,0 +1,34 @@
+---
+title: Image Converter
+description: Convert between raster and SVG image formats, locally
+---
+
+Converts between `PNG`, `JPG`, `WEBP`, `GIF`, `BMP`, `TIFF`, `AVIF`, `ICO` and
+`SVG`.
+
+<Callout title="About SVG output">
+  "Convert to SVG" wraps the raster image in an SVG document rather than
+  tracing it into vector paths — the same thing most "convert to SVG" tools
+  do for photos. It doesn't turn a photo into scalable vector art.
+</Callout>
+
+## How to use it
+
+1. Drag and drop files onto the converter, or use the file picker.
+2. Pick a target format.
+3. Convert one file or a whole batch at once.
+4. Optionally bundle the results into a `.zip`.
+
+Every file is decoded, re-encoded, then re-decoded and compared against the
+source before being written to disk — see [Introduction](/docs) for why.
+
+## Output naming
+
+Three naming modes are available for the output files:
+
+- **Keep original name** — same name as the source, new extension.
+- **Add a suffix** — `<name>-converted.<ext>`.
+- **Custom pattern** — write your own pattern using tokens:
+  - `{name}` — the source file's name (without extension)
+  - `{ext}` — the target extension
+  - `{index}` — the file's position in the batch, useful for numbering

@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Next.js / Fumadocs (apps/web)
+.next
+.source
+next-env.d.ts
+.vercel
+
 # In case a local GitLab Runner is ever pointed at this repo without an
 # explicit builds_dir/cache_dir in its config.toml (see scripts/run-gitlab-runner.ps1)
 scripts/builds/
@@ -27,3 +33,8 @@ scripts/cache/
 *.njsproj
 *.sln
 *.sw?
+
+# Claude Code local tooling (auto-installed skills, not project config)
+.agents/
+.claude/
+skills-lock.json

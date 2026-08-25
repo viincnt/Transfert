@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/black.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Soft radial glow used behind the hero — a single reusable utility so it
+   doesn't need to be redefined inline wherever a section wants one. */
+.glow-backdrop {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 0%,
+    hsl(0 0% 100% / 0.08),
+    transparent 70%
+  );
+}
+
+/* Faint line grid, used as background texture. Two fade shapes: from the
+   top edge (hero) or centered (mid-page sections not anchored to an edge). */
+.line-grid {
+  background-image:
+    linear-gradient(to right, hsl(0 0% 100% / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%);
+}
+
+.line-grid-center {
+  background-image:
+    linear-gradient(to right, hsl(0 0% 100% / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 60% 80% at 50% 50%, black, transparent 80%);
+}
