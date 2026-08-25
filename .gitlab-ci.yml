@@ -133,7 +133,25 @@ build-msi:
           exit 1
         }
 
-        $description = "Standalone Windows installer (MSI) and Microsoft Store package (MSIX).`n`nThe MSI is also the Microsoft Store `"Package URL`" for the unpackaged submission:`n$url"
+        # Pull this version's own section out of CHANGELOG.md (everything
+        # between its "## [x.y.z]" heading and the next one) instead of a
+        # generic blurb, so the GitLab Release notes actually say what
+        # changed - falls back to the old blurb if the tag has no matching
+        # heading (e.g. someone tags before updating the changelog).
+        $changelogVersion = $env:CI_COMMIT_TAG.TrimStart("v")
+        $changelogLines = @(Get-Content "CHANGELOG.md")
+        $headingPattern = "^## \[" + [regex]::Escape($changelogVersion) + "\]"
+        $startIndex = ($changelogLines | Select-String -Pattern $headingPattern | Select-Object -First 1).LineNumber
+        if ($startIndex) {
+          $endOffset = ($changelogLines[$startIndex..($changelogLines.Count - 1)] | Select-String -Pattern "^## \[" | Select-Object -First 1).LineNumber
+          $endIndex = if ($endOffset) { $startIndex + $endOffset - 1 } else { $changelogLines.Count }
+          $releaseNotes = ($changelogLines[$startIndex..($endIndex - 1)] -join "`n").Trim()
+        } else {
+          Write-Host "No CHANGELOG.md entry found for $changelogVersion - falling back to generic release notes."
+          $releaseNotes = "Standalone Windows installer (MSI) and Microsoft Store package (MSIX)."
+        }
+
+        $description = "$releaseNotes`n`n---`n`nThe MSI is also the Microsoft Store `"Package URL`" for the unpackaged submission:`n$url"
         $releaseBody = @{
           tag_name    = $env:CI_COMMIT_TAG
           name        = "Transfert $env:CI_COMMIT_TAG"
