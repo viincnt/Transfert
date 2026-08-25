@@ -1,0 +1,45 @@
+---
+title: Introduction
+description: What Transfert is, and how it handles your files
+---
+
+**Transfert** is a local-first file toolbox: conversion, compression and cleanup
+tools that run entirely on your machine. Nothing is uploaded anywhere to get a
+file converted — no server round-trip, no account, no telemetry. If your
+computer can already do the job, Transfert just gives it a decent interface
+for doing it.
+
+## How it works
+
+Every conversion decodes, re-encodes and then **verifies its own output**
+before handing it back:
+
+- writes get re-read and re-hashed
+- encodes get re-decoded and compared against the source
+
+A corrupted or truncated result is caught and discarded instead of silently
+landing in your folder.
+
+## What's available today
+
+<Cards>
+  <Card
+    title="Image Converter"
+    description="Convert between PNG, JPG, WEBP, GIF, BMP, TIFF, AVIF, ICO and SVG"
+    href="/docs/tools/image-converter"
+  />
+  <Card
+    title="Metadata tools"
+    description="Strip or edit EXIF metadata without recompressing your files"
+    href="/docs/tools/metadata"
+  />
+</Cards>
+
+Document, audio, video conversion, PDF tools and OCR are planned — see the
+[GitLab project](https://gitlab.com/viincnt/transfert) for progress.
+
+## Platform
+
+Transfert currently ships for **Windows** (10 1809+ or 11, x64). macOS support
+is in progress — the app icon and `.icns` bundle asset already exist, but no
+macOS build target is wired up yet. Linux isn't packaged either.

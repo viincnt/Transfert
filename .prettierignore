@@ -1,5 +1,7 @@
 node_modules
 dist
 dist-ssr
-src-tauri/target
+.next
+.source
+apps/desktop/src-tauri/target
 pnpm-lock.yaml

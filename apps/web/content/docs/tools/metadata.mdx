@@ -1,0 +1,33 @@
+---
+title: Metadata (Strip & Edit)
+description: Remove or edit EXIF metadata without recompressing your files
+---
+
+Two related tools, both working on `JPG`, `PNG`, `TIFF` and lossless/extended
+`WEBP` files.
+
+## Strip Metadata
+
+Removes EXIF metadata — including GPS location data — without touching the
+pixels. There's no decode/re-encode step, so nothing gets recompressed as a
+side effect of "cleaning" a file. Same batch, drag-and-drop, file picker and
+output naming controls as the [Image Converter](/docs/tools/image-converter).
+
+## Edit Metadata
+
+Views and edits the EXIF fields people actually go looking for on a single
+file:
+
+- Author
+- Copyright
+- Description
+- Date taken
+- Device make/model
+
+The app saves a **verified copy** — it re-reads what it just wrote and
+confirms it matches before calling the edit done.
+
+<Callout title="GPS coordinates" type="warn">
+  GPS coordinates aren't editable in Edit Metadata. Use Strip Metadata to
+  remove location data along with everything else.
+</Callout>

@@ -1,6 +1,6 @@
 <div align="center">
 
-# <img src="src-tauri/icons/icon.png" alt="" width="32" height="32" align="center" /> Transfert
+# <img src="apps/desktop/src-tauri/icons/icon.png" alt="" width="32" height="32" align="center" /> Transfert
 
 > Your computer can already do most of this. So let it.
 
@@ -10,83 +10,40 @@
   <img alt="license" src="https://img.shields.io/badge/license-GPL--3.0-3f3f46?style=for-the-badge&labelColor=18181b" />
 </a>
 
-<!-- Screenshot pending. -->
-
 </div>
 
 ---
 
-## 📌 Overview
+**Transfert** is a local-first file toolbox: conversion, compression and
+cleanup tools that run entirely on your machine — no upload, no account, no
+telemetry. The full pitch lives on the website (`apps/web`, not yet deployed)
+or right here: [Installation](apps/web/content/docs/installation.mdx).
 
-**Transfert** is a local-first file toolbox: conversion, compression and cleanup tools that run entirely on your machine. Nothing is uploaded anywhere to get a file converted — no server round-trip, no account, no telemetry. If your computer can already do the job, Transfert just gives it a decent interface for doing it.
+This is a pnpm monorepo with two apps:
 
-Every conversion decodes, re-encodes and then **verifies its own output** before handing it back — writes get re-read and re-hashed, encodes get re-decoded and compared — so a corrupted or truncated result is caught and discarded instead of silently landing in your folder.
+| App                          | What                                                    |
+| ----------------------------- | -------------------------------------------------------- |
+| [`apps/desktop`](apps/desktop) | The Tauri + React desktop app — this is the actual product. |
+| [`apps/web`](apps/web)         | The marketing site + docs, built with Next.js and [Fumadocs](https://fumadocs.dev). |
 
----
-
-## 🚀 Installation
-
-**Windows** — via [Microsoft Store](https://apps.microsoft.com/detail/9PG711NS9JVS) or winget, no admin rights needed:
-
-```powershell
-winget install --id 9PG711NS9JVS --source msstore
-```
-
-To grab the `.msi` by hand instead, it's on the [latest release](https://gitlab.com/viincnt/transfert/-/releases/permalink/latest) page. Either way you'll need Windows 10 (1809+) or Windows 11, x64, and the WebView2 Runtime — already on Windows 11 and most up-to-date Windows 10 machines; the installer pulls it automatically if it's missing.
-
-**macOS / Linux** — not packaged yet. macOS support is in progress — the app icon and `.icns` bundle asset already exist (`src-tauri/icons/`), but no macOS build target is wired up yet.
-
----
-
-## 🧰 Tools
-
-| Category       | Tool            | Status       |
-| -------------- | --------------- | ------------ |
-| File Converter | Image           | ✅ Available |
-| File Converter | Document        | 🔜 Planned   |
-| File Converter | Audio           | 🔜 Planned   |
-| File Converter | Video           | 🔜 Planned   |
-| PDF Tools      | Merge & Split   | 🔜 Planned   |
-| PDF Tools      | Compress        | 🔜 Planned   |
-| PDF Tools      | Edit & Annotate | 🔜 Planned   |
-| OCR            | Image → Text    | 🔜 Planned   |
-| OCR            | PDF → Text      | 🔜 Planned   |
-| Metadata       | Strip           | ✅ Available |
-| Metadata       | Edit            | ✅ Available |
-
-**Image Converter** — converts between `PNG`, `JPG`, `WEBP`, `GIF`, `BMP`, `TIFF`, `AVIF`, `ICO` and `SVG` (SVG output wraps the raster image in an SVG document rather than tracing it into vector paths — the same thing most "convert to SVG" tools do for photos). Drag-and-drop or file picker, batch conversion, optional zip bundling, and custom output naming with token support.
-
-**Strip Metadata** — removes EXIF metadata from `JPG`, `PNG`, `TIFF` and lossless/extended `WEBP` files without touching the pixels — no decode/re-encode, so nothing gets recompressed as a side effect of "cleaning" it. Batch, same drag-and-drop/naming controls as the converter.
-
-**Edit Metadata** — views and edits the EXIF fields people actually go looking for (Author, Copyright, Description, Date taken, Device make/model) on a single `JPG`, `PNG`, `TIFF` or lossless/extended `WEBP` file, and saves a verified copy — the app re-reads what it just wrote and confirms it matches before calling it done. GPS coordinates aren't editable here — use Strip Metadata to remove location data along with everything else.
-
----
-
-## 🛠️ Build from source
-
-**Requirements:** Node.js 18+, [pnpm](https://pnpm.io), and the Rust stable toolchain (via [rustup](https://rustup.rs)). On Windows you'll also need the MSVC build tools (Tauri's own setup guide covers this: [tauri.app/start/prerequisites](https://tauri.app/start/prerequisites)).
+## Quick start
 
 ```bash
-git clone https://gitlab.com/viincnt/transfert.git
-cd transfert
 pnpm install
-pnpm tauri dev
+pnpm dev:desktop   # the desktop app (Tauri)
+pnpm dev:web       # the website
 ```
 
-**Packaging:**
+See each app's own README for details: [apps/desktop](apps/desktop/README.md),
+[apps/web](apps/web/README.md).
 
-```bash
-pnpm tauri build --bundles msi
-```
+## Docs
 
-Produces `src-tauri/target/release/bundle/msi/Transfert_<version>_x64_en-US.msi` — installs per-user, no elevation (see [src-tauri/wix/main.wxs](src-tauri/wix/main.wxs), a custom WiX template; Tauri's own default installs per-machine and needs admin).
+User-facing documentation (installation, tools, privacy) lives in
+[apps/web/content/docs](apps/web/content/docs) and is published on the
+website's `/docs` section.
 
-Pushing a version tag (`vX.Y.Z`) runs this on a self-hosted runner via [.gitlab-ci.yml](.gitlab-ci.yml), publishes the MSI to this project's package registry, and creates a GitLab Release pointing at it — that's the same MSI both the direct `.msi` download and the Microsoft Store listing use.
+## License
 
----
-
-## 📄 License
-
-Distributed under the [GNU General Public License v3.0](LICENSE).
-
-Built with Tauri, React and a handful of Rust crates for the actual conversion work — the full list, with individual licenses, is in the app itself under **Settings → About**.
+Distributed under the [GNU General Public License v3.0](LICENSE). See
+[PRIVACY.md](PRIVACY.md) for the privacy policy.

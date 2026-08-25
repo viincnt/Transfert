@@ -15,7 +15,7 @@
 #
 # Also builds and signs an MSIX (for the Microsoft Store's packaged-app path)
 # from that same MSI, via the MSIX Packaging Tool's CLI and a template
-# checked in at src-tauri/msix/template.xml. That CLI hard-requires
+# checked in at apps/desktop/src-tauri/msix/template.xml. That CLI hard-requires
 # elevation - "The requested operation requires elevation" - no matter what
 # the template asks it to do, so scripts/run-gitlab-runner.ps1 self-elevates
 # the whole runner process for this reason (it doesn't affect what ships:
@@ -73,13 +73,13 @@ build-msi:
   cache:
     key:
       files:
-        - src-tauri/Cargo.lock
+        - apps/desktop/src-tauri/Cargo.lock
     paths:
-      - src-tauri/target/
+      - apps/desktop/src-tauri/target/
   script:
     - pnpm install --frozen-lockfile
-    - pnpm tauri build --bundles msi
-    - $msi = Get-ChildItem -Path "src-tauri/target/release/bundle/msi" -Filter *.msi | Select-Object -First 1
+    - pnpm --filter desktop tauri build --bundles msi
+    - $msi = Get-ChildItem -Path "apps/desktop/src-tauri/target/release/bundle/msi" -Filter *.msi | Select-Object -First 1
     - Write-Host "Built $($msi.Name)"
     - |
       # Only tag pipelines publish anything - manual test runs (see `rules:`
@@ -101,13 +101,13 @@ build-msi:
         while ($versionParts.Count -lt 4) { $versionParts += "0" }
         $msixVersion = ($versionParts[0..3] -join ".")
 
-        $msixDir = "src-tauri/target/release/bundle/msix"
+        $msixDir = "apps/desktop/src-tauri/target/release/bundle/msix"
         New-Item -ItemType Directory -Path $msixDir -Force | Out-Null
         $msixName = "Transfert_${msixVersion}_x64.msix"
         $msixPath = (Join-Path (Get-Location) "$msixDir/$msixName")
         $resolvedTemplatePath = (Join-Path (Get-Location) "msix-template-resolved.xml")
 
-        $msixTemplate = Get-Content "src-tauri/msix/template.xml" -Raw
+        $msixTemplate = Get-Content "apps/desktop/src-tauri/msix/template.xml" -Raw
         $msixTemplate = $msixTemplate.Replace("__VERSION__", $msixVersion)
         $msixTemplate = $msixTemplate.Replace("__INSTALLER_PATH__", $msi.FullName)
         $msixTemplate = $msixTemplate.Replace("__PACKAGE_PATH__", $msixPath)
@@ -139,7 +139,7 @@ build-msi:
         # changed - falls back to the old blurb if the tag has no matching
         # heading (e.g. someone tags before updating the changelog).
         $changelogVersion = $env:CI_COMMIT_TAG.TrimStart("v")
-        $changelogLines = @(Get-Content "CHANGELOG.md")
+        $changelogLines = @(Get-Content "apps/desktop/CHANGELOG.md")
         $headingPattern = "^## \[" + [regex]::Escape($changelogVersion) + "\]"
         $startIndex = ($changelogLines | Select-String -Pattern $headingPattern | Select-Object -First 1).LineNumber
         if ($startIndex) {
@@ -174,6 +174,6 @@ build-msi:
       }
   artifacts:
     paths:
-      - src-tauri/target/release/bundle/msi/*.msi
-      - src-tauri/target/release/bundle/msix/*.msix
+      - apps/desktop/src-tauri/target/release/bundle/msi/*.msi
+      - apps/desktop/src-tauri/target/release/bundle/msix/*.msix
     expire_in: 1 week
