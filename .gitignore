@@ -33,8 +33,3 @@ scripts/cache/
 *.njsproj
 *.sln
 *.sw?
-
-# Claude Code local tooling (auto-installed skills, not project config)
-.agents/
-.claude/
-skills-lock.json
