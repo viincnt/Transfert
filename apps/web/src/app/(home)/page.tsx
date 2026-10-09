@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   ArrowDownRight,
   ArrowRight,
@@ -17,6 +18,12 @@ import { Reveal } from "@/components/reveal";
 
 const STORE_URL = "https://apps.microsoft.com/detail/9PG711NS9JVS";
 const WINGET_COMMAND = "winget install --id 9PG711NS9JVS --source msstore";
+
+export const metadata: Metadata = {
+  title: "Private file tools that run on your machine",
+  description:
+    "Convert images and remove or edit metadata without uploading files, creating an account, or sending usage data anywhere.",
+};
 
 const tools = [
   {

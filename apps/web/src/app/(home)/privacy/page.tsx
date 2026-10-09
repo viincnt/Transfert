@@ -1,5 +1,13 @@
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy policy",
+  description:
+    "Learn how Transfert processes files locally and why it does not collect personal data, telemetry, or analytics.",
+  alternates: { canonical: "/privacy" },
+};
 
 const sections = [
   {
