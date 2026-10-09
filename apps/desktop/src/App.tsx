@@ -2,11 +2,7 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useNativeAppGuards } from "@/hooks/use-native-app-guards";
 import { About } from "@/pages/about";
@@ -30,8 +26,10 @@ function App() {
       <SidebarProvider className="h-svh overflow-hidden">
         <AppSidebar />
         <SidebarInset className="overflow-hidden">
-          <header className="flex h-14 shrink-0 items-center px-4">
-            <SidebarTrigger className="-ml-1" />
+          <header className="flex h-16 shrink-0 items-center border-b border-border/70 px-5">
+            <span className="font-mono text-[10px] font-medium tracking-[0.16em] text-muted-foreground uppercase">
+              Local file tools
+            </span>
           </header>
           <div className="flex-1 overflow-y-auto">
             <Routes>

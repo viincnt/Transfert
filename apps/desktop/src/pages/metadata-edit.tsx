@@ -132,106 +132,147 @@ export function MetadataEdit() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
-      <div className="flex items-center gap-3 rounded-lg border p-3">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-md bg-muted">
-          <FileIcon className="size-4 text-muted-foreground" />
+    <div className="flex h-full flex-col">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 px-6 py-4">
+        <div>
+          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+            Metadata editor
+          </p>
+          <p className="mt-1 text-sm font-medium">
+            Review the details before you share.
+          </p>
         </div>
-        <p className="min-w-0 flex-1 truncate text-sm font-medium">
-          {file.name}
-        </p>
         <Button variant="ghost" size="sm" onClick={reset}>
           <RotateCcw />
           {t("metadataEdit.chooseAnother")}
         </Button>
       </div>
 
-      {isLoading ? (
-        <div className="flex items-center justify-center gap-2 py-10 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" />
-          {t("metadataEdit.reading")}
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col gap-4 rounded-lg border p-4">
-            <Field
-              label={t("metadataEdit.fields.artist")}
-              value={fields.artist ?? ""}
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, artist: value }))
-              }
-            />
-            <Field
-              label={t("metadataEdit.fields.copyright")}
-              value={fields.copyright ?? ""}
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, copyright: value }))
-              }
-            />
-            <Field
-              label={t("metadataEdit.fields.description")}
-              value={fields.description ?? ""}
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, description: value }))
-              }
-            />
-            <Field
-              label={t("metadataEdit.fields.dateTaken")}
-              value={fields.dateTaken ?? ""}
-              placeholder="YYYY:MM:DD HH:MM:SS"
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, dateTaken: value }))
-              }
-            />
-            <Field
-              label={t("metadataEdit.fields.deviceMake")}
-              value={fields.deviceMake ?? ""}
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, deviceMake: value }))
-              }
-            />
-            <Field
-              label={t("metadataEdit.fields.deviceModel")}
-              value={fields.deviceModel ?? ""}
-              onChange={(value) =>
-                setFields((prev) => ({ ...prev, deviceModel: value }))
-              }
-            />
+      <div className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-6 py-6 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
+        <section className="min-w-0">
+          <div className="mb-3 flex items-center gap-3">
+            <h2 className="text-sm font-medium">Embedded details</h2>
+            <span className="h-px flex-1 bg-border" />
           </div>
-
-          <div className="flex flex-col gap-3 rounded-lg border p-4">
-            <Label>{t("queue.destination.label")}</Label>
-            <div className="flex gap-2">
-              <Input
-                readOnly
-                value={destinationDir ?? ""}
-                placeholder={t("queue.destination.placeholder")}
+          {isLoading ? (
+            <div className="flex min-h-72 items-center justify-center gap-2 rounded-2xl border border-border/80 bg-card text-sm text-muted-foreground shadow-sm">
+              <Loader2 className="size-4 animate-spin" />
+              {t("metadataEdit.reading")}
+            </div>
+          ) : (
+            <div className="grid gap-4 rounded-2xl border border-border/80 bg-card p-5 shadow-sm sm:grid-cols-2">
+              <Field
+                label={t("metadataEdit.fields.artist")}
+                value={fields.artist ?? ""}
+                onChange={(value) =>
+                  setFields((prev) => ({ ...prev, artist: value }))
+                }
               />
-              <Button
-                variant="outline"
-                className="shrink-0"
-                onClick={pickDestination}
-              >
-                {t("queue.destination.browse")}
-              </Button>
+              <Field
+                label={t("metadataEdit.fields.copyright")}
+                value={fields.copyright ?? ""}
+                onChange={(value) =>
+                  setFields((prev) => ({ ...prev, copyright: value }))
+                }
+              />
+              <div className="sm:col-span-2">
+                <Field
+                  label={t("metadataEdit.fields.description")}
+                  value={fields.description ?? ""}
+                  onChange={(value) =>
+                    setFields((prev) => ({ ...prev, description: value }))
+                  }
+                />
+              </div>
+              <Field
+                label={t("metadataEdit.fields.dateTaken")}
+                value={fields.dateTaken ?? ""}
+                placeholder="YYYY:MM:DD HH:MM:SS"
+                onChange={(value) =>
+                  setFields((prev) => ({ ...prev, dateTaken: value }))
+                }
+              />
+              <Field
+                label={t("metadataEdit.fields.deviceMake")}
+                value={fields.deviceMake ?? ""}
+                onChange={(value) =>
+                  setFields((prev) => ({ ...prev, deviceMake: value }))
+                }
+              />
+              <Field
+                label={t("metadataEdit.fields.deviceModel")}
+                value={fields.deviceModel ?? ""}
+                onChange={(value) =>
+                  setFields((prev) => ({ ...prev, deviceModel: value }))
+                }
+              />
+            </div>
+          )}
+        </section>
+
+        <aside className="flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm lg:sticky lg:top-6">
+          <div className="border-b border-border/80 bg-secondary/45 p-5">
+            <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+              Selected file
+            </p>
+            <div className="mt-3 flex items-center gap-3">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-card text-primary shadow-sm">
+                <FileIcon className="size-4" />
+              </div>
+              <p className="min-w-0 truncate text-sm font-medium">
+                {file.name}
+              </p>
             </div>
           </div>
 
-          {error && <p className="text-sm text-destructive">{error}</p>}
-
-          {saved && (
-            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <CircleCheck className="size-4 shrink-0 text-emerald-500" />
-              {t("metadataEdit.saved", { fileName: saved.fileName })}
+          <div className="flex flex-col gap-5 p-5">
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.destination.label")}</Label>
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  value={destinationDir ?? ""}
+                  placeholder={t("queue.destination.placeholder")}
+                />
+                <Button
+                  variant="outline"
+                  className="shrink-0"
+                  onClick={pickDestination}
+                >
+                  {t("queue.destination.browse")}
+                </Button>
+              </div>
+            </div>
+            <p className="rounded-lg bg-secondary/65 p-3 text-xs leading-relaxed text-muted-foreground">
+              A new copy is saved to your chosen folder. The original file is
+              never changed.
             </p>
-          )}
+            {error && (
+              <p className="rounded-lg bg-destructive/10 p-3 text-xs leading-relaxed text-destructive">
+                {error}
+              </p>
+            )}
+            {saved && (
+              <p className="flex items-start gap-2 rounded-lg bg-success/10 p-3 text-xs leading-relaxed text-success">
+                <CircleCheck className="mt-0.5 size-4 shrink-0" />
+                {t("metadataEdit.saved", { fileName: saved.fileName })}
+              </p>
+            )}
+          </div>
 
-          <Button size="lg" onClick={handleSave} disabled={isSaving}>
-            {isSaving && <Loader2 className="animate-spin" />}
-            {t("metadataEdit.save")}
-          </Button>
-        </>
-      )}
+          <div className="border-t border-border/80 p-4">
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={handleSave}
+              disabled={isSaving || isLoading}
+            >
+              {isSaving && <Loader2 className="animate-spin" />}
+              {t("metadataEdit.save")}
+            </Button>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

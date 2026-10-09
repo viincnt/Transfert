@@ -1,308 +1,333 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import {
+  ArrowDownRight,
   ArrowRight,
-  BookOpen,
-  CheckCircle2,
-  Clock3,
   Download,
-  ShieldCheck,
+  FileImage,
+  FilePenLine,
+  FileX2,
+  GitFork,
+  LockKeyhole,
+  MonitorDown,
   WifiOff,
 } from "lucide-react";
 import { CopyCommand } from "@/components/copy-command";
 import { Reveal } from "@/components/reveal";
-import { Flare } from "@/components/flare";
 
 const STORE_URL = "https://apps.microsoft.com/detail/9PG711NS9JVS";
 const WINGET_COMMAND = "winget install --id 9PG711NS9JVS --source msstore";
 
-const pitches = [
+const tools = [
   {
-    icon: WifiOff,
-    title: "Local-first",
-    body: "Every conversion, compression and cleanup runs entirely on your machine. No upload, no server round-trip, no account.",
+    icon: FileImage,
+    name: "Image conversion",
+    description:
+      "Move between formats without a browser tab or a temporary upload.",
+    status: "Available now",
   },
   {
-    icon: ShieldCheck,
-    title: "Verified writes",
-    body: "Encodes get re-decoded and compared, writes get re-read and re-hashed — a corrupted result is caught and discarded, never silently saved.",
+    icon: FileX2,
+    name: "Metadata removal",
+    description:
+      "Remove the data that travels with an image when it should not.",
+    status: "Available now",
   },
   {
-    icon: CheckCircle2,
-    title: "No telemetry",
-    body: "Nothing about your files or your usage leaves the app. If your computer can already do the job, Transfert just gives it a decent interface.",
-  },
-];
-
-const toolGroups = [
-  {
-    category: "File Converter",
-    tools: [
-      { name: "Image", available: true },
-      { name: "Document", available: false },
-      { name: "Audio", available: false },
-      { name: "Video", available: false },
-    ],
-  },
-  {
-    category: "PDF Tools",
-    tools: [
-      { name: "Merge & Split", available: false },
-      { name: "Compress", available: false },
-      { name: "Edit & Annotate", available: false },
-    ],
-  },
-  {
-    category: "OCR",
-    tools: [
-      { name: "Image → Text", available: false },
-      { name: "PDF → Text", available: false },
-    ],
-  },
-  {
-    category: "Metadata",
-    tools: [
-      { name: "Strip", available: true },
-      { name: "Edit", available: true },
-    ],
+    icon: FilePenLine,
+    name: "Metadata editing",
+    description: "Inspect and change embedded details before you share a file.",
+    status: "Available now",
   },
 ];
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 flex-col">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-fd-border/60">
-        <div aria-hidden className="absolute inset-0">
-          <div className="glow-backdrop line-grid absolute inset-0" />
-          <Flare className="-top-24 left-1/2 h-72 w-[42rem] -translate-x-1/2 bg-white/10" />
-          <Flare className="top-16 -right-24 h-64 w-64 bg-white/[0.06]" />
+    <main className="relative overflow-hidden bg-[#f3f1eb] text-[#172420]">
+      <div
+        aria-hidden
+        className="site-grain pointer-events-none fixed inset-0 z-20"
+      />
+
+      <section className="relative mx-auto max-w-[1400px] px-5 pt-12 pb-14 sm:px-8 sm:pt-16 lg:min-h-[calc(100dvh-4rem)] lg:pb-20">
+        <div
+          aria-hidden
+          className="absolute top-8 right-[-8rem] size-[28rem] rounded-full border border-[#172420]/10 sm:right-[4%]"
+        />
+        <div className="relative grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-16">
+          <div className="max-w-xl lg:pb-10">
+            <Reveal>
+              <p className="mb-7 flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] text-[#52605a] uppercase">
+                <span className="size-2 rounded-full bg-[#f06c53]" />{" "}
+                Local-first file tools
+              </p>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <h1 className="text-[clamp(3.25rem,7vw,6.5rem)] leading-[0.9] font-semibold tracking-[-0.07em] text-balance">
+                Your files <span className="text-[#f06c53]">stay</span> with
+                you.
+              </h1>
+            </Reveal>
+            <Reveal delay={0.16}>
+              <p className="mt-7 max-w-md text-lg leading-relaxed text-[#52605a] sm:text-xl">
+                Transfert is a desktop toolbox for converting and cleaning files
+                without sending them anywhere.
+              </p>
+            </Reveal>
+            <Reveal delay={0.24}>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <a
+                  href={STORE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#172420] px-5 py-3 text-sm font-medium text-[#fffaf2] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                >
+                  <Download className="size-4" /> Download for Windows
+                </a>
+                <a
+                  href="#how-it-works"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#172420]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#172420] hover:bg-[#fffaf2]"
+                >
+                  See it work <ArrowDownRight className="size-4" />
+                </a>
+              </div>
+            </Reveal>
+            <Reveal delay={0.32} className="mt-8">
+              <CopyCommand command={WINGET_COMMAND} />
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.2} className="relative lg:pt-10">
+            <div className="relative rotate-[-2deg] overflow-hidden rounded-[1.35rem] border border-[#172420]/15 bg-[#172420] p-2 shadow-[18px_20px_0_#d8d5cd] transition-transform duration-500 hover:rotate-0 sm:p-3">
+              <Image
+                src="/Transfert-001.jpg"
+                alt="The Transfert desktop toolbox with its file utilities"
+                width={1102}
+                height={701}
+                className="h-auto w-full rounded-[0.85rem]"
+                priority
+              />
+            </div>
+            <div className="absolute -bottom-7 -left-3 flex items-center gap-3 rounded-xl border border-[#172420]/15 bg-[#fffaf2] px-4 py-3 shadow-[8px_8px_0_#f06c53] sm:-left-8">
+              <span className="flex size-9 items-center justify-center rounded-full bg-[#e5eee5] text-[#172420]">
+                <LockKeyhole className="size-4" />
+              </span>
+              <span className="text-sm leading-tight font-medium">
+                Processed on your machine
+                <br />
+                <span className="font-normal text-[#52605a]">Always.</span>
+              </span>
+            </div>
+          </Reveal>
         </div>
-        <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-28">
+      </section>
+
+      <section className="border-y border-[#172420]/15 bg-[#172420] text-[#fffaf2]">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 divide-y divide-[#fffaf2]/15 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {[
+            [WifiOff, "No upload", "Files never leave your computer."],
+            [LockKeyhole, "No account", "No personal data to hand over."],
+            [MonitorDown, "No surveillance", "No telemetry in the background."],
+          ].map(([Icon, title, detail]) => {
+            const IconComponent = Icon as typeof WifiOff;
+            return (
+              <div
+                key={title as string}
+                className="flex items-center gap-4 px-5 py-6 sm:px-8"
+              >
+                <IconComponent
+                  className="size-5 text-[#f06c53]"
+                  strokeWidth={1.7}
+                />
+                <p className="text-sm leading-snug">
+                  <strong className="font-medium">{title as string}</strong>
+                  <br />
+                  <span className="text-[#fffaf2]/60">{detail as string}</span>
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section
+        id="how-it-works"
+        className="mx-auto max-w-[1400px] px-5 py-24 sm:px-8 sm:py-32"
+      >
+        <Reveal>
+          <div className="max-w-3xl">
+            <p className="font-mono text-[11px] font-medium tracking-[0.16em] text-[#f06c53] uppercase">
+              A shorter route
+            </p>
+            <h2 className="mt-5 text-4xl leading-[0.95] font-semibold tracking-[-0.055em] text-balance sm:text-6xl">
+              There is no cloud between you and a finished file.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="mt-14 grid gap-8 md:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] md:items-end">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-fd-border bg-fd-card/60 px-3 py-1 text-xs font-medium text-fd-muted-foreground backdrop-blur-sm">
-              <span className="size-1.5 rounded-full bg-fd-primary" />
-              Early development · Windows today
-            </span>
+            <div className="overflow-hidden rounded-[1.2rem] border border-[#172420]/15 bg-[#172420] p-2 shadow-[12px_14px_0_#d8d5cd]">
+              <Image
+                src="/Transfert-002.jpg"
+                alt="Transfert image converter ready for files to be dropped"
+                width={1102}
+                height={701}
+                className="h-auto w-full rounded-[0.8rem]"
+              />
+            </div>
           </Reveal>
-
-          <Reveal delay={0.08}>
-            <h1 className="text-balance text-4xl font-semibold sm:text-6xl">
-              Your computer can already
-              <br className="hidden sm:block" /> do most of this. So let it.
-            </h1>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <p className="max-w-xl text-pretty text-base text-fd-muted-foreground sm:text-lg">
-              <span className="font-medium text-fd-foreground">Transfert</span> is a
-              local-first file toolbox — conversion, compression and cleanup that runs
-              entirely on your machine. Nothing is uploaded anywhere to get a file
-              converted.
+          <Reveal delay={0.12} className="md:pb-5">
+            <p className="font-mono text-sm text-[#f06c53]">01 / DROP</p>
+            <h3 className="mt-3 text-3xl font-semibold tracking-[-0.045em]">
+              Start with the file you already have.
+            </h3>
+            <p className="mt-4 max-w-sm leading-relaxed text-[#52605a]">
+              Drag it in, or choose it from your machine. The app makes no copy
+              outside your device.
             </p>
           </Reveal>
+        </div>
+        <div className="mt-16 grid gap-8 md:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] md:items-center">
+          <Reveal className="md:order-2">
+            <div className="overflow-hidden rounded-[1.2rem] border border-[#172420]/15 bg-[#172420] p-2 shadow-[12px_14px_0_#d8d5cd]">
+              <Image
+                src="/Transfert-003.jpg"
+                alt="Transfert conversion queue with output settings"
+                width={1102}
+                height={701}
+                className="h-auto w-full rounded-[0.8rem]"
+              />
+            </div>
+          </Reveal>
+          <Reveal delay={0.12} className="md:order-1 md:pl-10">
+            <p className="font-mono text-sm text-[#f06c53]">02 / FINISH</p>
+            <h3 className="mt-3 text-3xl font-semibold tracking-[-0.045em]">
+              Pick an output. Keep moving.
+            </h3>
+            <p className="mt-4 max-w-sm leading-relaxed text-[#52605a]">
+              Set the format and destination. Transfert verifies what it writes
+              before it calls the job done.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
-          <Reveal delay={0.24}>
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+      <section
+        id="tools"
+        className="border-y border-[#172420]/15 bg-[#e5eee5] px-5 py-24 sm:px-8 sm:py-32"
+      >
+        <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
+          <Reveal>
+            <div className="sticky top-28 max-w-md">
+              <p className="font-mono text-[11px] font-medium tracking-[0.16em] text-[#f06c53] uppercase">
+                Built for the mundane
+              </p>
+              <h2 className="mt-5 text-5xl leading-[0.92] font-semibold tracking-[-0.06em]">
+                Useful tools. No ceremony.
+              </h2>
+              <p className="mt-6 leading-relaxed text-[#52605a]">
+                The first releases focus on the file work that should take
+                seconds, not a web search and an upload.
+              </p>
+            </div>
+          </Reveal>
+          <div className="border-t border-[#172420]/15">
+            {tools.map(({ icon: Icon, name, description, status }, index) => (
+              <Reveal key={name} delay={index * 0.08}>
+                <article className="group grid gap-4 border-b border-[#172420]/15 py-7 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-start">
+                  <span className="flex size-11 items-center justify-center rounded-xl bg-[#fffaf2] text-[#172420] transition-transform group-hover:-rotate-6">
+                    <Icon className="size-5" strokeWidth={1.6} />
+                  </span>
+                  <div>
+                    <h3 className="text-xl font-semibold tracking-[-0.03em]">
+                      {name}
+                    </h3>
+                    <p className="mt-2 max-w-md text-sm leading-relaxed text-[#52605a]">
+                      {description}
+                    </p>
+                  </div>
+                  <span className="font-mono text-[11px] font-medium text-[#52605a] sm:pt-1">
+                    {status}
+                  </span>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1400px] px-5 py-24 sm:px-8 sm:py-32">
+        <Reveal className="relative overflow-hidden rounded-[1.5rem] bg-[#f06c53] px-6 py-14 text-[#fffaf2] sm:px-12 sm:py-20">
+          <div
+            aria-hidden
+            className="absolute -top-28 -right-20 size-[26rem] rounded-full border border-[#fffaf2]/35"
+          />
+          <div
+            aria-hidden
+            className="absolute right-20 -bottom-32 size-[22rem] rounded-full border border-[#fffaf2]/25"
+          />
+          <div className="relative max-w-2xl">
+            <p className="font-mono text-[11px] font-medium tracking-[0.16em] text-[#fffaf2]/70 uppercase">
+              Free and open source
+            </p>
+            <h2 className="mt-5 text-4xl leading-[0.94] font-semibold tracking-[-0.055em] text-balance sm:text-6xl">
+              Let your computer do the work.
+            </h2>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-[#fffaf2]/80">
+              Get a quieter, more private way to handle everyday files.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
               <a
                 href={STORE_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-fd-primary px-5 py-2.5 text-sm font-medium text-fd-primary-foreground transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#fffaf2] px-5 py-3 text-sm font-medium text-[#172420] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
               >
-                <Download className="size-4" />
-                Download for Windows
+                <Download className="size-4" /> Download for Windows
               </a>
-              <Link
-                href="/docs"
-                className="inline-flex items-center gap-2 rounded-full border border-fd-border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground"
+              <a
+                href="https://github.com/viincnt/Transfert"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#fffaf2]/50 px-5 py-3 text-sm font-medium transition-colors hover:bg-[#fffaf2]/10"
               >
-                <BookOpen className="size-4" />
-                Read the docs
-              </Link>
+                View source <ArrowRight className="size-4" />
+              </a>
             </div>
-          </Reveal>
-
-          <Reveal delay={0.32} className="pt-4">
-            <CopyCommand command={WINGET_COMMAND} />
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.4} className="relative mx-auto w-full max-w-4xl px-6 pb-20 sm:pb-28">
-          <div className="overflow-hidden rounded-xl border border-fd-border/80 shadow-2xl shadow-black/50">
-            <Image
-              src="/Transfert-001.jpg"
-              alt="Transfert's Toolbox screen, listing every file conversion and cleanup tool"
-              width={1102}
-              height={701}
-              className="h-auto w-full"
-              priority
-            />
           </div>
         </Reveal>
       </section>
 
-      {/* Pitch */}
-      <section className="relative overflow-hidden">
-        <Flare className="top-1/2 -left-32 h-72 w-72 -translate-y-1/2 bg-white/[0.06]" />
-        <div className="relative mx-auto w-full max-w-5xl px-6 py-20 sm:py-28">
-          <Reveal>
-            <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-fd-border bg-fd-border sm:grid-cols-3">
-              {pitches.map(({ icon: Icon, title, body }) => (
-                <div
-                  key={title}
-                  className="flex flex-col gap-3 bg-fd-background p-6 transition-colors hover:bg-fd-card"
-                >
-                  <div className="flex size-9 items-center justify-center rounded-lg border border-fd-border bg-fd-card">
-                    <Icon className="size-4.5 text-fd-foreground" />
-                  </div>
-                  <h2 className="font-semibold">{title}</h2>
-                  <p className="text-sm leading-relaxed text-fd-muted-foreground">
-                    {body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Workflow */}
-      <section className="relative overflow-hidden border-t border-fd-border/60">
-        <div aria-hidden className="line-grid-center absolute inset-0" />
-        <div className="relative mx-auto w-full max-w-5xl px-6 py-20 sm:py-28">
-          <Reveal className="mb-10 text-center">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Drop it in. Get it back.
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-fd-muted-foreground">
-              No settings to hunt for — pick a format, convert, done.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {[
-              {
-                src: "/Transfert-002.jpg",
-                alt: "The Image Converter's drag-and-drop screen, listing supported formats",
-                label: "1. Drop your files",
-              },
-              {
-                src: "/Transfert-003.jpg",
-                alt: "A file queued for conversion, with format, destination and naming options",
-                label: "2. Pick a format, convert",
-              },
-            ].map(({ src, alt, label }, i) => (
-              <Reveal key={src} delay={i * 0.1} className="flex flex-col gap-3">
-                <div className="overflow-hidden rounded-xl border border-fd-border/80 shadow-xl shadow-black/40">
-                  <Image src={src} alt={alt} width={1102} height={701} className="h-auto w-full" />
-                </div>
-                <p className="text-center text-sm font-medium text-fd-muted-foreground">
-                  {label}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Tools */}
-      <section className="relative overflow-hidden border-t border-fd-border/60">
-        <div aria-hidden className="line-grid-center absolute inset-0" />
-        <Flare className="top-0 right-0 h-80 w-80 bg-white/[0.07]" />
-        <div className="relative mx-auto grid w-full max-w-5xl grid-cols-1 gap-10 px-6 py-20 sm:py-28 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-          <Reveal className="flex flex-col gap-4">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Tools</h2>
-            <p className="text-pretty text-fd-muted-foreground">
-              What's shipped today, and what's planned next. Every tool gets the same
-              treatment: local processing, verified output, no surprises.
-            </p>
-            <Link
-              href="/docs"
-              className="inline-flex w-fit items-center gap-1.5 text-sm font-medium underline decoration-fd-border underline-offset-4 hover:decoration-fd-foreground"
-            >
-              Details in the docs
-              <ArrowRight className="size-3.5" />
-            </Link>
-          </Reveal>
-
-          <div className="flex flex-col gap-8">
-            {toolGroups.map(({ category, tools }, groupIndex) => (
-              <Reveal key={category} delay={groupIndex * 0.06}>
-                <h3 className="mb-2 text-xs font-medium tracking-wide text-fd-muted-foreground uppercase">
-                  {category}
-                </h3>
-                <div className="rounded-xl border border-fd-border bg-fd-background/60 backdrop-blur-sm">
-                  {tools.map(({ name, available }, i) => (
-                    <div
-                      key={name}
-                      className={`flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-fd-card/60 ${
-                        i > 0 ? "border-t border-fd-border" : ""
-                      }`}
-                    >
-                      <span className="text-sm">{name}</span>
-                      {available ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-fd-primary/10 px-2.5 py-1 text-xs font-medium text-fd-primary">
-                          <CheckCircle2 className="size-3" />
-                          Available
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-fd-border px-2.5 py-1 text-xs text-fd-muted-foreground">
-                          <Clock3 className="size-3" />
-                          Planned
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Closing CTA */}
-      <section className="relative overflow-hidden border-t border-fd-border/60">
-        <Flare className="bottom-0 left-1/2 h-64 w-[36rem] -translate-x-1/2 bg-white/10" />
-        <Reveal className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-6 py-20 text-center sm:py-24">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Give your files back their privacy.
-          </h2>
-          <p className="max-w-md text-fd-muted-foreground">
-            Free, open-source, and it never asks where your files came from.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link
-              href="/docs/installation"
-              className="inline-flex items-center gap-2 rounded-full bg-fd-primary px-5 py-2.5 text-sm font-medium text-fd-primary-foreground transition-transform hover:scale-[1.03] active:scale-[0.98]"
-            >
-              Get started
-              <ArrowRight className="size-3.5" />
-            </Link>
+      <footer className="border-t border-[#172420]/15 px-5 py-8 sm:px-8">
+        <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-4 text-sm text-[#52605a] sm:flex-row sm:items-center">
+          <p>Transfert. A local-first file toolbox.</p>
+          <div className="flex items-center gap-5">
             <a
-              href="https://gitlab.com/viincnt/transfert"
+              className="transition-colors hover:text-[#172420]"
+              href="https://github.com/viincnt/Transfert"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-fd-border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground"
             >
-              View on GitLab
+              <GitFork className="mr-1.5 inline size-4" /> GitHub
             </a>
-          </div>
-          <p className="pt-6 text-xs text-fd-muted-foreground">
-            Distributed under the GNU General Public License v3.0.
-          </p>
-          <p className="text-xs text-fd-muted-foreground">
-            Made with <span className="text-fd-foreground">☕</span> by{" "}
+            <Link
+              className="transition-colors hover:text-[#172420]"
+              href="/privacy"
+            >
+              Privacy
+            </Link>
             <a
+              className="transition-colors hover:text-[#172420]"
               href="https://viincnt.com"
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-fd-foreground hover:underline"
             >
-              Vincent
+              By Vincent
             </a>
-          </p>
-        </Reveal>
-      </section>
+            <span>GPL-3.0</span>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -138,10 +138,15 @@ export function MetadataStripQueue({
     <div className="flex h-full flex-col">
       <input {...inputProps} />
 
-      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b bg-background px-6 py-4">
-        <p className="text-sm font-medium">
-          {t("queue.filesReady", { count: items.length })}
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 px-6 py-4">
+        <div>
+          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+            Privacy cleanup
+          </p>
+          <p className="mt-1 text-sm font-medium">
+            {t("queue.filesReady", { count: items.length })}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={openFilePicker}>
             <Plus />
@@ -155,7 +160,7 @@ export function MetadataStripQueue({
       </div>
 
       {rejected.length > 0 && (
-        <p className="border-b bg-background px-6 py-2 text-center text-xs text-destructive">
+        <p className="border-b border-border/80 bg-destructive/8 px-6 py-2 text-center text-xs text-destructive">
           {t("dropzone.unsupported", {
             count: rejected.length,
             name: rejected[0]?.name,
@@ -163,89 +168,103 @@ export function MetadataStripQueue({
         </p>
       )}
 
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-6 py-6">
-        <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
-          <Info className="mt-0.5 size-3.5 shrink-0" />
-          {t("metadataStrip.notice")}
-        </p>
-
-        <div className="flex flex-col gap-2">
-          {items.map((item) => (
-            <StripRow
-              key={item.id}
-              item={item}
-              status={statuses[item.id]}
-              onRemove={() => onRemoveItem(item.id)}
-            />
-          ))}
-        </div>
-
-        <div className="flex flex-col divide-y rounded-lg border">
-          <div className="flex flex-col gap-3 p-4">
-            <Label>{t("queue.destination.label")}</Label>
-            <div className="flex gap-2">
-              <Input
-                readOnly
-                value={destinationDir ?? ""}
-                placeholder={t("queue.destination.placeholder")}
+      <div className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-6 py-6 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
+        <section className="min-w-0">
+          <div className="mb-3 flex items-center gap-3">
+            <h2 className="text-sm font-medium">Files</h2>
+            <span className="h-px flex-1 bg-border" />
+            <span className="font-mono text-[10px] text-muted-foreground">
+              {items.length}
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {items.map((item) => (
+              <StripRow
+                key={item.id}
+                item={item}
+                status={statuses[item.id]}
+                onRemove={() => onRemoveItem(item.id)}
               />
-              <Button
-                variant="outline"
-                className="shrink-0"
-                onClick={pickDestination}
+            ))}
+          </div>
+        </section>
+
+        <aside className="flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm lg:sticky lg:top-6">
+          <div className="border-b border-border/80 bg-secondary/45 px-5 py-4">
+            <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+              Output setup
+            </p>
+            <p className="mt-2 text-sm font-medium">Clean copy, same pixels.</p>
+          </div>
+          <div className="flex flex-col gap-5 p-5">
+            <p className="flex items-start gap-2 rounded-lg bg-secondary/65 p-3 text-xs leading-relaxed text-muted-foreground">
+              <Info className="mt-0.5 size-3.5 shrink-0 text-primary" />
+              {t("metadataStrip.notice")}
+            </p>
+
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.destination.label")}</Label>
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  value={destinationDir ?? ""}
+                  placeholder={t("queue.destination.placeholder")}
+                />
+                <Button
+                  variant="outline"
+                  className="shrink-0"
+                  onClick={pickDestination}
+                >
+                  {t("queue.destination.browse")}
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.naming.label")}</Label>
+              <Select
+                value={namingMode}
+                onValueChange={(value) => setNamingMode(value as NamingMode)}
               >
-                {t("queue.destination.browse")}
-              </Button>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="keep">{t("queue.naming.keep")}</SelectItem>
+                  <SelectItem value="suffix">
+                    {t("queue.naming.suffix")}
+                  </SelectItem>
+                  <SelectItem value="custom">
+                    {t("queue.naming.custom")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {namingMode === "custom" && (
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    value={namingPattern}
+                    onChange={(event) => setNamingPattern(event.target.value)}
+                    placeholder={t("queue.naming.customPlaceholder")}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t("queue.naming.customHint")}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-
-          <div className="flex flex-col gap-3 p-4">
-            <Label>{t("queue.naming.label")}</Label>
-            <Select
-              value={namingMode}
-              onValueChange={(value) => setNamingMode(value as NamingMode)}
+          <div className="border-t border-border/80 p-4">
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={handleStrip}
+              disabled={isRunning}
             >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="keep">{t("queue.naming.keep")}</SelectItem>
-                <SelectItem value="suffix">
-                  {t("queue.naming.suffix")}
-                </SelectItem>
-                <SelectItem value="custom">
-                  {t("queue.naming.custom")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {namingMode === "custom" && (
-              <div className="flex flex-col gap-1.5">
-                <Input
-                  value={namingPattern}
-                  onChange={(event) => setNamingPattern(event.target.value)}
-                  placeholder={t("queue.naming.customPlaceholder")}
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t("queue.naming.customHint")}
-                </p>
-              </div>
-            )}
+              {isRunning && <Loader2 className="animate-spin" />}
+              {t("metadataStrip.strip", { count: items.length })}
+            </Button>
           </div>
-        </div>
-      </div>
-
-      <div className="sticky bottom-0 border-t bg-background px-6 py-4">
-        <div className="mx-auto flex w-full max-w-2xl">
-          <Button
-            className="w-full"
-            size="lg"
-            onClick={handleStrip}
-            disabled={isRunning}
-          >
-            {isRunning && <Loader2 className="animate-spin" />}
-            {t("metadataStrip.strip", { count: items.length })}
-          </Button>
-        </div>
+        </aside>
       </div>
     </div>
   );
@@ -263,7 +282,7 @@ function StripRow({
   const isBusy = status?.state === "converting";
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border p-2.5">
+    <div className="flex items-center gap-3 rounded-xl border border-border/80 bg-card p-2.5 shadow-sm">
       <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-md bg-muted">
         <FileIcon className="size-4 text-muted-foreground" />
       </div>
@@ -287,7 +306,7 @@ function StripRow({
         <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />
       )}
       {status?.state === "done" && (
-        <CircleCheck className="size-4 shrink-0 text-emerald-500" />
+        <CircleCheck className="size-4 shrink-0 text-success" />
       )}
       {status?.state === "error" && (
         <CircleAlert className="size-4 shrink-0 text-destructive" />

@@ -1,5 +1,6 @@
 import {
   ChevronRight,
+  CircleHelp,
   Languages,
   Laptop,
   Moon,
@@ -10,8 +11,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { useTheme } from "@/components/theme-provider";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -22,11 +21,11 @@ import {
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-function SettingIcon({ children }: { children: React.ReactNode }) {
+function SettingMark({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
       {children}
-    </div>
+    </span>
   );
 }
 
@@ -35,97 +34,118 @@ export function Settings() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10 lg:py-12">
+      <header className="mx-auto max-w-3xl border-b border-border pb-8">
+        <p className="font-mono text-[10px] font-medium tracking-[0.16em] text-primary uppercase">
+          Workspace
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.045em]">
           {t("settings.title")}
         </h1>
-        <p className="text-muted-foreground">{t("settings.subtitle")}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          {t("settings.subtitle")}
+        </p>
+      </header>
+
+      <div className="mx-auto mt-8 max-w-3xl">
+        <div className="mb-4">
+          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+            Preferences
+          </p>
+        </div>
+        <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
+          <section className="flex flex-wrap items-center justify-between gap-5 p-5">
+            <div className="flex items-start gap-3">
+              <SettingMark>
+                <SunMoon className="size-4.5" strokeWidth={1.6} />
+              </SettingMark>
+              <div>
+                <Label>{t("settings.appearance.label")}</Label>
+                <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                  {t("settings.appearance.description")}
+                </p>
+              </div>
+            </div>
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={theme}
+              onValueChange={(value) => {
+                if (value) setTheme(value as "light" | "dark" | "system");
+              }}
+              className="rounded-xl bg-muted/55 p-1"
+            >
+              <ToggleGroupItem
+                value="light"
+                aria-label={t("theme.light")}
+                className="rounded-lg px-3"
+              >
+                <Sun />
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="dark"
+                aria-label={t("theme.dark")}
+                className="rounded-lg px-3"
+              >
+                <Moon />
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="system"
+                aria-label={t("theme.system")}
+                className="rounded-lg px-3"
+              >
+                <Laptop />
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </section>
+
+          <section className="flex flex-wrap items-center justify-between gap-5 border-t border-border/80 p-5">
+            <div className="flex items-start gap-3">
+              <SettingMark>
+                <Languages className="size-4.5" strokeWidth={1.6} />
+              </SettingMark>
+              <div>
+                <Label>{t("settings.language.label")}</Label>
+                <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                  {t("settings.language.description")}
+                </p>
+              </div>
+            </div>
+            <Select value="en" disabled>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+              </SelectContent>
+            </Select>
+          </section>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-6">
-        <Card className="py-0">
-          <CardContent className="flex flex-col divide-y p-0">
-            <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
-              <div className="flex items-center gap-3">
-                <SettingIcon>
-                  <SunMoon className="size-4.5" />
-                </SettingIcon>
-                <div>
-                  <Label>{t("settings.appearance.label")}</Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t("settings.appearance.description")}
-                  </p>
-                </div>
-              </div>
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                value={theme}
-                onValueChange={(value) => {
-                  if (value) setTheme(value as "light" | "dark" | "system");
-                }}
-              >
-                <ToggleGroupItem
-                  value="light"
-                  aria-label={t("theme.light")}
-                  className="px-3"
-                >
-                  <Sun />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="dark"
-                  aria-label={t("theme.dark")}
-                  className="px-3"
-                >
-                  <Moon />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="system"
-                  aria-label={t("theme.system")}
-                  className="px-3"
-                >
-                  <Laptop />
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
-              <div className="flex items-center gap-3">
-                <SettingIcon>
-                  <Languages className="size-4.5" />
-                </SettingIcon>
-                <div>
-                  <Label>{t("settings.language.label")}</Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t("settings.language.description")}
-                  </p>
-                </div>
-              </div>
-              <Select value="en" disabled>
-                <SelectTrigger className="w-40">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Button
-          variant="ghost"
-          className="h-auto justify-start px-3 py-2"
-          asChild
+      <div className="mx-auto mt-10 max-w-3xl">
+        <div className="mb-4">
+          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+            Application
+          </p>
+        </div>
+        <Link
+          to="/settings/about"
+          className="group flex items-center gap-4 rounded-2xl border border-border/80 bg-card p-5 shadow-sm transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
-          <Link to="/settings/about">
-            <span className="text-muted-foreground">
+          <SettingMark>
+            <CircleHelp className="size-4.5" strokeWidth={1.6} />
+          </SettingMark>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-medium">
               {t("settings.about.cta")}
             </span>
-            <ChevronRight className="ml-auto size-4 text-muted-foreground" />
-          </Link>
-        </Button>
+            <span className="mt-1 block text-sm text-muted-foreground">
+              Version, source code, license and open source credits.
+            </span>
+          </span>
+          <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+        </Link>
       </div>
     </div>
   );

@@ -1,6 +1,4 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/black.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
@@ -9,6 +7,7 @@
 
 html {
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
 }
 
 html > body[data-scroll-locked] {
@@ -16,36 +15,28 @@ html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
 }
 
-h1,
-h2,
-h3 {
-  letter-spacing: -0.02em;
+body {
+  background: #f3f1eb;
+  color: #172420;
+  text-rendering: optimizeLegibility;
 }
 
-/* Soft radial glow used behind the hero — a single reusable utility so it
-   doesn't need to be redefined inline wherever a section wants one. */
-.glow-backdrop {
-  background: radial-gradient(
-    ellipse 60% 50% at 50% 0%,
-    hsl(0 0% 100% / 0.08),
-    transparent 70%
-  );
+::selection {
+  background: #f06c53;
+  color: #fffaf2;
 }
 
-/* Faint line grid, used as background texture. Two fade shapes: from the
-   top edge (hero) or centered (mid-page sections not anchored to an edge). */
-.line-grid {
-  background-image:
-    linear-gradient(to right, hsl(0 0% 100% / 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, hsl(0 0% 100% / 0.06) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%);
+.site-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.26'/%3E%3C/svg%3E");
+  opacity: 0.055;
 }
 
-.line-grid-center {
-  background-image:
-    linear-gradient(to right, hsl(0 0% 100% / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, hsl(0 0% 100% / 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 60% 80% at 50% 50%, black, transparent 80%);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

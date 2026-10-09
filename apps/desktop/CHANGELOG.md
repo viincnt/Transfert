@@ -38,7 +38,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://gitlab.com/viincnt/transfert/-/compare/v0.2.0...main
-[0.2.0]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.1...v0.2.0
-[0.1.1]: https://gitlab.com/viincnt/transfert/-/compare/v0.1.0...v0.1.1
-[0.1.0]: https://gitlab.com/viincnt/transfert/-/tags/v0.1.0
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.2.0...main
+[0.2.0]: https://github.com/viincnt/Transfert/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/viincnt/Transfert/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/viincnt/Transfert/tags/v0.1.0

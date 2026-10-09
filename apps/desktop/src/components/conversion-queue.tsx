@@ -231,10 +231,15 @@ export function ConversionQueue({
     <div className="flex h-full flex-col">
       <input {...inputProps} />
 
-      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b bg-background px-6 py-4">
-        <p className="text-sm font-medium">
-          {t("queue.filesReady", { count: items.length })}
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 px-6 py-4">
+        <div>
+          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+            Conversion queue
+          </p>
+          <p className="mt-1 text-sm font-medium">
+            {t("queue.filesReady", { count: items.length })}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={openFilePicker}>
             <Plus />
@@ -248,7 +253,7 @@ export function ConversionQueue({
       </div>
 
       {rejected.length > 0 && (
-        <p className="border-b bg-background px-6 py-2 text-center text-xs text-destructive">
+        <p className="border-b border-border/80 bg-destructive/8 px-6 py-2 text-center text-xs text-destructive">
           {t("dropzone.unsupported", {
             count: rejected.length,
             name: rejected[0]?.name,
@@ -256,139 +261,156 @@ export function ConversionQueue({
         </p>
       )}
 
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-6 py-6">
-        <div className="flex items-center justify-between gap-4 rounded-lg border px-4 py-3">
-          <Label className="shrink-0">{t("queue.convertAllTo")}</Label>
-          <Select value={globalFormat} onValueChange={setGlobalFormat}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {formats.map((format) => (
-                <SelectItem key={format} value={format}>
-                  {format}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {Object.entries(formatNotices ?? {}).map(
-          ([format, notice]) =>
-            items.some(
-              (item) => (perFileFormat[item.id] ?? globalFormat) === format,
-            ) && (
-              <p
-                key={format}
-                className="flex items-start gap-1.5 text-xs text-muted-foreground"
-              >
-                <Info className="mt-0.5 size-3.5 shrink-0" />
-                {notice}
-              </p>
-            ),
-        )}
-
-        <div className="flex flex-col gap-2">
-          {items.map((item) => (
-            <FileRow
-              key={item.id}
-              item={item}
-              formats={formats}
-              value={perFileFormat[item.id] ?? globalFormat}
-              status={statuses[item.id]}
-              onFormatChange={(format) =>
-                setPerFileFormat((prev) => ({ ...prev, [item.id]: format }))
-              }
-              onRemove={() => onRemoveItem(item.id)}
-            />
-          ))}
-        </div>
-
-        <div className="flex flex-col divide-y rounded-lg border">
-          <div className="flex flex-col gap-3 p-4">
-            <Label>{t("queue.destination.label")}</Label>
-            <div className="flex gap-2">
-              <Input
-                readOnly
-                value={destinationDir ?? ""}
-                placeholder={t("queue.destination.placeholder")}
+      <div className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-6 py-6 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start">
+        <section className="min-w-0">
+          <div className="mb-3 flex items-center gap-3">
+            <h2 className="text-sm font-medium">Files</h2>
+            <span className="h-px flex-1 bg-border" />
+            <span className="font-mono text-[10px] text-muted-foreground">
+              {items.length}
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {items.map((item) => (
+              <FileRow
+                key={item.id}
+                item={item}
+                formats={formats}
+                value={perFileFormat[item.id] ?? globalFormat}
+                status={statuses[item.id]}
+                onFormatChange={(format) =>
+                  setPerFileFormat((prev) => ({ ...prev, [item.id]: format }))
+                }
+                onRemove={() => onRemoveItem(item.id)}
               />
-              <Button
-                variant="outline"
-                className="shrink-0"
-                onClick={pickDestination}
-              >
-                {t("queue.destination.browse")}
-              </Button>
+            ))}
+          </div>
+        </section>
+
+        <aside className="flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm lg:sticky lg:top-6">
+          <div className="border-b border-border/80 bg-secondary/45 px-5 py-4">
+            <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-primary uppercase">
+              Output setup
+            </p>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <Label>{t("queue.convertAllTo")}</Label>
+              <Select value={globalFormat} onValueChange={setGlobalFormat}>
+                <SelectTrigger className="w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {formats.map((format) => (
+                    <SelectItem key={format} value={format}>
+                      {format}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4">
-            <Label>{t("queue.saveMode.label")}</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              value={saveMode}
-              onValueChange={(value) => {
-                if (value) setSaveMode(value as SaveMode);
-              }}
-            >
-              <ToggleGroupItem value="individual" className="px-3 text-xs">
-                {t("queue.saveMode.individual")}
-              </ToggleGroupItem>
-              <ToggleGroupItem value="zip" className="px-3 text-xs">
-                {t("queue.saveMode.zip")}
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-
-          <div className="flex flex-col gap-3 p-4">
-            <Label>{t("queue.naming.label")}</Label>
-            <Select
-              value={namingMode}
-              onValueChange={(value) => setNamingMode(value as NamingMode)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="keep">{t("queue.naming.keep")}</SelectItem>
-                <SelectItem value="suffix">
-                  {t("queue.naming.suffix")}
-                </SelectItem>
-                <SelectItem value="custom">
-                  {t("queue.naming.custom")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {namingMode === "custom" && (
-              <div className="flex flex-col gap-1.5">
-                <Input
-                  value={namingPattern}
-                  onChange={(event) => setNamingPattern(event.target.value)}
-                  placeholder={t("queue.naming.customPlaceholder")}
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t("queue.naming.customHint")}
-                </p>
-              </div>
+          <div className="flex flex-col gap-5 p-5">
+            {Object.entries(formatNotices ?? {}).map(
+              ([format, notice]) =>
+                items.some(
+                  (item) => (perFileFormat[item.id] ?? globalFormat) === format,
+                ) && (
+                  <p
+                    key={format}
+                    className="flex items-start gap-1.5 rounded-lg bg-secondary/65 p-3 text-xs leading-relaxed text-muted-foreground"
+                  >
+                    <Info className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                    {notice}
+                  </p>
+                ),
             )}
-          </div>
-        </div>
-      </div>
 
-      <div className="sticky bottom-0 border-t bg-background px-6 py-4">
-        <div className="mx-auto flex w-full max-w-2xl">
-          <Button
-            className="w-full"
-            size="lg"
-            onClick={handleConvert}
-            disabled={isConverting}
-          >
-            {isConverting && <Loader2 className="animate-spin" />}
-            {t("queue.convert", { count: items.length })}
-          </Button>
-        </div>
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.destination.label")}</Label>
+              <div className="flex gap-2">
+                <Input
+                  readOnly
+                  value={destinationDir ?? ""}
+                  placeholder={t("queue.destination.placeholder")}
+                />
+                <Button
+                  variant="outline"
+                  className="shrink-0"
+                  onClick={pickDestination}
+                >
+                  {t("queue.destination.browse")}
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.saveMode.label")}</Label>
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                value={saveMode}
+                onValueChange={(value) => {
+                  if (value) setSaveMode(value as SaveMode);
+                }}
+              >
+                <ToggleGroupItem
+                  value="individual"
+                  className="flex-1 px-3 text-xs"
+                >
+                  {t("queue.saveMode.individual")}
+                </ToggleGroupItem>
+                <ToggleGroupItem value="zip" className="flex-1 px-3 text-xs">
+                  {t("queue.saveMode.zip")}
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>{t("queue.naming.label")}</Label>
+              <Select
+                value={namingMode}
+                onValueChange={(value) => setNamingMode(value as NamingMode)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="keep">{t("queue.naming.keep")}</SelectItem>
+                  <SelectItem value="suffix">
+                    {t("queue.naming.suffix")}
+                  </SelectItem>
+                  <SelectItem value="custom">
+                    {t("queue.naming.custom")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {namingMode === "custom" && (
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    value={namingPattern}
+                    onChange={(event) => setNamingPattern(event.target.value)}
+                    placeholder={t("queue.naming.customPlaceholder")}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t("queue.naming.customHint")}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="border-t border-border/80 p-4">
+            <Button
+              className="w-full"
+              size="lg"
+              onClick={handleConvert}
+              disabled={isConverting}
+            >
+              {isConverting && <Loader2 className="animate-spin" />}
+              {t("queue.convert", { count: items.length })}
+            </Button>
+          </div>
+        </aside>
       </div>
     </div>
   );
@@ -425,7 +447,7 @@ function FileRow({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-lg border p-2.5",
+        "flex items-center gap-3 rounded-xl border border-border/80 bg-card p-2.5 shadow-sm",
         status?.state === "error" && "border-destructive/40",
       )}
     >
@@ -469,7 +491,7 @@ function FileRow({
         <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />
       )}
       {status?.state === "done" && (
-        <CircleCheck className="size-4 shrink-0 text-emerald-500" />
+        <CircleCheck className="size-4 shrink-0 text-success" />
       )}
       {status?.state === "error" && (
         <CircleAlert className="size-4 shrink-0 text-destructive" />
