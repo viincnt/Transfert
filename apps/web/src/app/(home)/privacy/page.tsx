@@ -34,17 +34,17 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-[calc(100dvh-4rem)] bg-[#f3f1eb] px-5 py-12 text-[#172420] sm:px-8 sm:py-20">
+    <main className="min-h-[calc(100dvh-4rem)] bg-[#f4f3f1] px-5 py-12 text-[#18191d] sm:px-8 sm:py-20">
       <article className="mx-auto max-w-3xl">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-medium text-[#52605a] transition-colors hover:text-[#172420]"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[#62636a] transition-colors hover:text-[#18191d]"
         >
           <ArrowLeft className="size-4" /> Back to Transfert
         </Link>
 
-        <header className="mt-12 border-b border-[#172420]/15 pb-10">
-          <span className="flex size-12 items-center justify-center rounded-2xl bg-[#172420] text-[#fffaf2]">
+        <header className="mt-12 border-b border-[#18191d]/15 pb-10">
+          <span className="flex size-12 items-center justify-center rounded-2xl bg-[#18191d] text-[#fbfaf8]">
             <ShieldCheck className="size-6" strokeWidth={1.6} />
           </span>
           <p className="mt-7 font-mono text-[11px] font-medium tracking-[0.16em] text-[#f06c53] uppercase">
@@ -53,15 +53,15 @@ export default function PrivacyPage() {
           <h1 className="mt-4 text-5xl font-semibold tracking-[-0.055em] text-balance sm:text-6xl">
             Your files are your business.
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-[#52605a]">
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-[#62636a]">
             A plain-language policy for a local-first application.
           </p>
-          <p className="mt-8 font-mono text-xs text-[#52605a]">
+          <p className="mt-8 font-mono text-xs text-[#62636a]">
             Last updated: August 13, 2026
           </p>
         </header>
 
-        <div className="divide-y divide-[#172420]/15">
+        <div className="divide-y divide-[#18191d]/15">
           {sections.map(({ title, body }) => (
             <section
               key={title}
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               <h2 className="text-lg font-semibold tracking-[-0.025em]">
                 {title}
               </h2>
-              <p className="mt-3 leading-relaxed text-[#52605a] sm:mt-0">
+              <p className="mt-3 leading-relaxed text-[#62636a] sm:mt-0">
                 {body}
               </p>
             </section>
@@ -79,10 +79,10 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-semibold tracking-[-0.025em]">
               Contact
             </h2>
-            <p className="mt-3 leading-relaxed text-[#52605a] sm:mt-0">
+            <p className="mt-3 leading-relaxed text-[#62636a] sm:mt-0">
               Questions about this policy:{" "}
               <a
-                className="font-medium text-[#172420] underline decoration-[#f06c53] underline-offset-4"
+                className="font-medium text-[#18191d] underline decoration-[#f06c53] underline-offset-4"
                 href="https://viincnt.com"
                 target="_blank"
                 rel="noreferrer"

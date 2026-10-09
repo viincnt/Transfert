@@ -16,14 +16,14 @@ html > body[data-scroll-locked] {
 }
 
 body {
-  background: #f3f1eb;
-  color: #172420;
+  background: #f4f3f1;
+  color: #18191d;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
   background: #f06c53;
-  color: #fffaf2;
+  color: #fbfaf8;
 }
 
 .site-grain {

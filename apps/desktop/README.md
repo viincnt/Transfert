@@ -1,42 +1,41 @@
-# Transfert (desktop)
+# Transfert desktop
 
-The Tauri + React desktop app. See the [repo root README](../../README.md) for
-the project overview, and [docs](../web/content/docs) for user-facing
-documentation.
+The local-first desktop application for Transfert, built with Tauri, React, and
+TypeScript. The application runs conversions and metadata tools on the user's
+machine without uploading files or collecting usage data.
 
-## Build from source
+See the [root README](../../README.md) for the product overview and
+[PRIVACY.md](../../PRIVACY.md) for the privacy policy.
 
-**Requirements:** Node.js 18+, [pnpm](https://pnpm.io), and the Rust stable
-toolchain (via [rustup](https://rustup.rs)). On Windows you'll also need the
-MSVC build tools (Tauri's own setup guide covers this:
-[tauri.app/start/prerequisites](https://tauri.app/start/prerequisites)).
+## Development
 
-From the repo root:
+Requirements: Node.js 18+, [pnpm](https://pnpm.io), and Rust stable via
+[rustup](https://rustup.rs). Windows builds also require the MSVC Build Tools;
+see Tauri's [prerequisites guide](https://tauri.app/start/prerequisites/).
+
+From the repository root:
 
 ```bash
 pnpm install
 pnpm dev:desktop
 ```
 
-Or from this directory directly:
+Or run the Tauri application directly from this directory:
 
 ```bash
-cd apps/desktop
 pnpm tauri dev
 ```
 
-## Packaging
+## Build
+
+```bash
+pnpm --filter desktop build
+```
+
+To create a Windows installer:
 
 ```bash
 pnpm --filter desktop tauri build --bundles msi
 ```
 
-Produces `src-tauri/target/release/bundle/msi/Transfert_<version>_x64_en-US.msi`
-— installs per-user, no elevation (see [src-tauri/wix/main.wxs](src-tauri/wix/main.wxs),
-a custom WiX template; Tauri's own default installs per-machine and needs admin).
-
-Pushing a version tag (`vX.Y.Z`) runs this on a self-hosted runner via
-[../../.gitlab-ci.yml](../../.gitlab-ci.yml), publishes the MSI to this
-project's package registry, and creates a GitLab Release pointing at it —
-that's the same MSI both the direct `.msi` download and the Microsoft Store
-listing use.
+The MSI is produced under `src-tauri/target/release/bundle/msi/`.

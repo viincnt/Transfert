@@ -1,48 +1,70 @@
 <div align="center">
 
-# <img src="apps/desktop/src-tauri/icons/icon.png" alt="" width="32" height="32" align="center" /> Transfert
+# <img src="apps/desktop/src-tauri/icons/icon.png" alt="Transfert logo" width="32" height="32" align="center" /> Transfert
 
-> Your computer can already do most of this. So let it.
+> Your files stay with you.
 
-<img alt="platform" src="https://img.shields.io/badge/platform-Windows-3f3f46?style=for-the-badge&logo=windows&logoColor=white&labelColor=18181b" />
-<img alt="status" src="https://img.shields.io/badge/status-early%20development-3f3f46?style=for-the-badge&labelColor=18181b" />
-<a href="#-license">
-  <img alt="license" src="https://img.shields.io/badge/license-GPL--3.0-3f3f46?style=for-the-badge&labelColor=18181b" />
-</a>
+<img alt="desktop: Tauri" src="https://img.shields.io/badge/desktop-Tauri-e5eee5?style=for-the-badge&logo=tauri&logoColor=white&labelColor=000000" />
+<img alt="privacy: local only" src="https://img.shields.io/badge/privacy-local_only-e5eee5?style=for-the-badge&logo=privacyguides&logoColor=white&labelColor=000000" />
+<a href="https://github.com/viincnt/Transfert/blob/main/LICENSE"><img alt="license: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-e5eee5?style=for-the-badge&logo=gnu&logoColor=white&labelColor=000000" /></a>
 
 </div>
 
----
+## Local-first file tools
 
-**Transfert** is a local-first file toolbox: conversion, compression and
-cleanup tools that run entirely on your machine — no upload, no account, no
-telemetry. Full pitch, download and docs **[Here](https://usetransfert.vercel.app)!**.
+**Transfert** is a desktop toolbox for converting and cleaning files on your
+own machine. No file uploads, accounts, analytics, crash reporting, telemetry,
+or tracking.
 
-This is a pnpm monorepo with two apps:
+The first release includes:
 
-| App                            | What                                                                                |
-| ------------------------------ | ----------------------------------------------------------------------------------- |
-| [`apps/desktop`](apps/desktop) | The Tauri + React desktop app — this is the actual product.                         |
-| [`apps/web`](apps/web)         | The marketing site + docs, built with Next.js and [Fumadocs](https://fumadocs.dev). |
+- Image conversion between PNG, JPG, WebP, GIF, BMP, TIFF, AVIF, ICO, and SVG.
+- Metadata removal for JPG, PNG, TIFF, and supported WebP files.
+- Metadata editing for common image fields.
 
-## Quick start
+The project is in early development. More file tools are planned, but every one
+will follow the same local-first approach.
+
+## Project structure
+
+| Path                           | Purpose                                        |
+| ------------------------------ | ---------------------------------------------- |
+| [`apps/desktop`](apps/desktop) | The Tauri + React desktop application.         |
+| [`apps/web`](apps/web)         | The Next.js marketing site and privacy policy. |
+
+## Development
+
+### Requirements
+
+- Node.js 18 or later
+- [pnpm](https://pnpm.io)
+- Rust stable via [rustup](https://rustup.rs) for the desktop application
+- MSVC Build Tools on Windows, as required by [Tauri](https://tauri.app/start/prerequisites/)
+
+### Run locally
 
 ```bash
 pnpm install
-pnpm dev:desktop   # the desktop app (Tauri)
-pnpm dev:web       # the website
+
+# Desktop application
+pnpm dev:desktop
+
+# Marketing website
+pnpm dev:web
 ```
 
-See each app's own README for details: [apps/desktop](apps/desktop/README.md),
-[apps/web](apps/web/README.md).
+### Production builds
 
-## Docs
+```bash
+pnpm build:desktop
+pnpm build:web
+```
 
-User-facing documentation (installation, tools, privacy) lives in
-[apps/web/content/docs](apps/web/content/docs) and is published on the
-website's `/docs` section.
+## Privacy
+
+Transfert processes files locally. Read the full [privacy policy](PRIVACY.md),
+or view it on the website at `/privacy`.
 
 ## License
 
-Distributed under the [GNU General Public License v3.0](LICENSE). See
-[PRIVACY.md](PRIVACY.md) for the privacy policy.
+Distributed under the [GNU General Public License v3.0](LICENSE).

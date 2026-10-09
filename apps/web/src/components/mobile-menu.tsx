@@ -23,7 +23,7 @@ export function MobileMenu({
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        className="flex size-9 items-center justify-center rounded-full text-[#52605a] transition-colors hover:bg-[#172420]/8 hover:text-[#172420]"
+        className="flex size-9 items-center justify-center rounded-full text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d]"
       >
         {open ? <X className="size-5" /> : <Menu className="size-5" />}
       </button>
@@ -35,7 +35,7 @@ export function MobileMenu({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute inset-x-0 top-full overflow-hidden border-b border-[#172420]/10 bg-[#f3f1eb]/95 backdrop-blur-md"
+            className="absolute inset-x-0 top-full overflow-hidden border-b border-[#18191d]/10 bg-[#f4f3f1]/95 backdrop-blur-md"
           >
             <nav className="flex flex-col gap-1 px-6 py-4">
               {links.map(({ href, label, external }) => (
@@ -45,7 +45,7 @@ export function MobileMenu({
                   target={external ? "_blank" : undefined}
                   rel={external ? "noreferrer" : undefined}
                   onClick={() => setOpen(false)}
-                  className="rounded-md px-2 py-2 text-sm text-[#52605a] transition-colors hover:bg-[#172420]/8 hover:text-[#172420]"
+                  className="rounded-md px-2 py-2 text-sm text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d]"
                 >
                   {label}
                 </Link>
@@ -55,7 +55,7 @@ export function MobileMenu({
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => setOpen(false)}
-                className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#172420] px-3.5 py-2 text-sm font-medium text-[#fffaf2]"
+                className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#18191d] px-3.5 py-2 text-sm font-medium text-[#fbfaf8]"
               >
                 <Download className="size-3.5" />
                 Download
