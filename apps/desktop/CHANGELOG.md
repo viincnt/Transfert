@@ -6,6 +6,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-11
+
+### Added
+
+- Image Optimizer: resize and re-encode images to reduce file size.
+- Optional update checks against the latest public GitHub Release. They can be disabled in Settings to keep Transfert fully offline.
+- Direct Windows MSI and macOS DMG downloads.
+
+### Fixed
+
+- macOS DMG bundling no longer depends on compiling the macOS icon asset catalog.
+
 ## [0.2.0] - 2026-08-24
 
 ### Added
@@ -38,7 +50,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://github.com/viincnt/Transfert/compare/v0.2.0...main
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.2.1...main
+[0.2.1]: https://github.com/viincnt/Transfert/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/viincnt/Transfert/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/viincnt/Transfert/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/viincnt/Transfert/tags/v0.1.0
