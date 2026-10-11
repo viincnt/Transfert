@@ -19,6 +19,10 @@ const sections = [
     body: "Every conversion happens entirely on your computer. Files you drop into Transfert are read from disk, processed locally, and written to a destination you choose. They are never uploaded to a server, sent over a network, or shared with a third party.",
   },
   {
+    title: "One update request",
+    body: "When Transfert opens, it checks the latest public GitHub Release to see whether an update is available. This is the app's only network request. The request contains no files, account details, analytics, or usage data.",
+  },
+  {
     title: "No accounts, no sign-up",
     body: "Transfert does not require or offer account creation, login, or authentication. There is no user profile on your device or anywhere else.",
   },
@@ -28,7 +32,7 @@ const sections = [
   },
   {
     title: "Third parties",
-    body: "Transfert does not share data with third parties because it does not collect any. Links to the source repository, the author's site, and open-source projects are governed by each destination's own privacy policy.",
+    body: "The update check is made to GitHub's public Releases API. GitHub may process standard connection data under its own privacy policy. Links to the source repository, the author's site, and open-source projects are also governed by each destination's privacy policy.",
   },
   {
     title: "Children's privacy",
@@ -36,7 +40,7 @@ const sections = [
   },
   {
     title: "Changes to this policy",
-    body: "If this policy changes, for example if a future feature requires network access, this page and its last-updated date will be revised.",
+    body: "If this policy changes, for example if the app makes a new kind of network request, this page and its last-updated date will be revised.",
   },
 ];
 
@@ -65,7 +69,7 @@ export default function PrivacyPage() {
             A plain-language policy for a local-first application.
           </p>
           <p className="mt-8 font-mono text-xs text-[#62636a]">
-            Last updated: August 13, 2026
+            Last updated: October 11, 2026
           </p>
         </header>
 

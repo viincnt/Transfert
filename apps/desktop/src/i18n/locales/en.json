@@ -2,7 +2,7 @@
   "app": {
     "name": "Transfert",
     "taglines": [
-      "Offline by design.",
+      "Local by design.",
       "Runs on your machine.",
       "No cloud bullshit.",
       "Yours. Not ours.",
@@ -28,6 +28,10 @@
       "image": {
         "name": "Image",
         "description": "Convert images between formats."
+      },
+      "optimizer": {
+        "name": "Image Optimizer",
+        "description": "Resize and re-encode images to reduce file size."
       },
       "document": {
         "name": "Document",
@@ -102,6 +106,16 @@
     },
     "svgNotice": "SVG output wraps the image as-is — it's not vectorized yet. Real vector tracing is planned for a future update."
   },
+  "imageOptimizer": {
+    "dropzone": {
+      "title": "Image Optimizer",
+      "description": "Drop images here to resize and re-encode them for smaller files."
+    },
+    "maxDimension": {
+      "label": "Maximum dimensions",
+      "hint": "Images larger than this edge are resized proportionally. Smaller images are never enlarged."
+    }
+  },
   "metadataStrip": {
     "dropzone": {
       "title": "Strip Metadata",
@@ -167,6 +181,10 @@
     "language": {
       "label": "Language",
       "description": "More languages are coming soon."
+    },
+    "updates": {
+      "label": "Check for updates",
+      "description": "Checks the latest public GitHub Release when the app opens. Turn this off to keep Transfert fully offline."
     },
     "about": {
       "label": "About",

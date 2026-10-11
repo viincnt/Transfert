@@ -60,6 +60,21 @@ pnpm build:desktop
 pnpm build:web
 ```
 
+## Releases
+
+Push a version tag after setting the same version in
+`apps/desktop/package.json`, `apps/desktop/src-tauri/tauri.conf.json`, and
+`apps/desktop/src-tauri/Cargo.toml`:
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+GitHub Actions builds a Windows MSI and a macOS DMG, then attaches both to the
+GitHub Release. The app's About page checks that release when the user chooses
+to check for updates.
+
 ## Privacy
 
 Transfert processes files locally. Read the full [privacy policy](PRIVACY.md),

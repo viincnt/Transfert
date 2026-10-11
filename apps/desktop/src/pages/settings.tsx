@@ -4,9 +4,11 @@ import {
   Languages,
   Laptop,
   Moon,
+  RefreshCw,
   Sun,
   SunMoon,
 } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -20,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { areUpdateChecksEnabled, setUpdateChecksEnabled } from "@/lib/updates";
 
 function SettingMark({ children }: { children: React.ReactNode }) {
   return (
@@ -32,6 +35,9 @@ function SettingMark({ children }: { children: React.ReactNode }) {
 export function Settings() {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
+  const [updateChecksEnabled, setUpdateChecksEnabledState] = useState(
+    areUpdateChecksEnabled,
+  );
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10 lg:py-12">
@@ -119,6 +125,33 @@ export function Settings() {
                 <SelectItem value="en">English</SelectItem>
               </SelectContent>
             </Select>
+          </section>
+          <section className="flex flex-wrap items-center justify-between gap-5 border-t border-border/80 p-5">
+            <div className="flex items-start gap-3">
+              <SettingMark>
+                <RefreshCw className="size-4.5" strokeWidth={1.6} />
+              </SettingMark>
+              <div>
+                <Label>{t("settings.updates.label")}</Label>
+                <p className="mt-1 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                  {t("settings.updates.description")}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={updateChecksEnabled}
+              onClick={() => {
+                const enabled = !updateChecksEnabled;
+                setUpdateChecksEnabledState(enabled);
+                setUpdateChecksEnabled(enabled);
+              }}
+              className="group relative h-7 w-12 rounded-full bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-checked:bg-primary"
+            >
+              <span className="absolute top-1 left-1 size-5 rounded-full bg-background shadow-sm transition-transform group-aria-checked:translate-x-5" />
+              <span className="sr-only">{t("settings.updates.label")}</span>
+            </button>
           </section>
         </div>
       </div>

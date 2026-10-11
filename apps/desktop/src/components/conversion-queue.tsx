@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
 import {
@@ -83,6 +83,7 @@ type ConversionQueueProps = {
     destinationDir: string,
     zipName: string,
   ) => Promise<ZipBatchOutcome>;
+  outputControls?: ReactNode;
 };
 
 export function ConversionQueue({
@@ -95,6 +96,7 @@ export function ConversionQueue({
   onClear,
   onConvertItem,
   onConvertBatchToZip,
+  outputControls,
 }: ConversionQueueProps) {
   const { t } = useTranslation();
   const [globalFormat, setGlobalFormat] = useState(formats[0]);
@@ -310,6 +312,7 @@ export function ConversionQueue({
           </div>
 
           <div className="flex flex-col gap-5 p-5">
+            {outputControls}
             {Object.entries(formatNotices ?? {}).map(
               ([format, notice]) =>
                 items.some(

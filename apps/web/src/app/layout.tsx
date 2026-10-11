@@ -64,6 +64,11 @@ export default function Layout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-screen">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try { const theme = localStorage.getItem("transfert-site-theme"); if (theme === "dark" || theme === "light") document.documentElement.dataset.theme = theme; } catch {}`,
+          }}
+        />
         {children}
         <script
           type="application/ld+json"

@@ -5,6 +5,57 @@
   --font-mono: var(--font-geist-mono);
 }
 
+:root {
+  color-scheme: light;
+  --page: #f4f3f1;
+  --ink: #18191d;
+  --night: #18191d;
+  --muted: #62636a;
+  --surface: #fbfaf8;
+  --elevated: #ecebea;
+  --accent: #f06c53;
+  --line: color-mix(in srgb, var(--ink) 15%, transparent);
+  --offset-shadow: #dddcd9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --page: #111318;
+    --ink: #f1f0ed;
+    --night: #1b1e25;
+    --muted: #aaaab0;
+    --surface: #1c1f26;
+    --elevated: #171a20;
+    --line: color-mix(in srgb, var(--ink) 16%, transparent);
+    --offset-shadow: #090a0d;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #111318;
+  --ink: #f1f0ed;
+  --night: #1b1e25;
+  --muted: #aaaab0;
+  --surface: #1c1f26;
+  --elevated: #171a20;
+  --line: color-mix(in srgb, var(--ink) 16%, transparent);
+  --offset-shadow: #090a0d;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f4f3f1;
+  --ink: #18191d;
+  --night: #18191d;
+  --muted: #62636a;
+  --surface: #fbfaf8;
+  --elevated: #ecebea;
+  --line: color-mix(in srgb, var(--ink) 15%, transparent);
+  --offset-shadow: #dddcd9;
+}
+
 html {
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
@@ -16,14 +67,67 @@ html > body[data-scroll-locked] {
 }
 
 body {
-  background: #f4f3f1;
-  color: #18191d;
+  background: var(--page);
+  color: var(--ink);
   text-rendering: optimizeLegibility;
 }
 
+/* Existing utility classes map into the site palette, allowing both themes to
+   share the same component markup. */
+[class~="bg-[#f4f3f1]"] {
+  background-color: var(--page) !important;
+}
+
+[class~="bg-[#f4f3f1]/90"],
+[class~="bg-[#f4f3f1]/95"] {
+  background-color: color-mix(in srgb, var(--page) 90%, transparent) !important;
+}
+
+[class~="bg-[#18191d]"] {
+  background-color: var(--night) !important;
+}
+
+[class~="bg-[#fbfaf8]"] {
+  background-color: var(--surface) !important;
+}
+
+[class~="bg-[#ecebea]"] {
+  background-color: var(--elevated) !important;
+}
+
+[class~="text-[#18191d]"] {
+  color: var(--ink) !important;
+}
+
+[class~="text-[#62636a]"] {
+  color: var(--muted) !important;
+}
+
+[class~="border-[#18191d]/10"],
+[class~="border-[#18191d]/15"],
+[class~="border-[#18191d]/20"] {
+  border-color: var(--line) !important;
+}
+
+[class~="divide-[#18191d]/15"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--line) !important;
+}
+
+:root[data-theme="dark"] [class*="_#dddcd9"],
+:root[data-theme="dark"] [class*="_#d6d4d1"] {
+  box-shadow: 12px 14px 0 var(--offset-shadow) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) [class*="_#dddcd9"],
+  :root:not([data-theme]) [class*="_#d6d4d1"] {
+    box-shadow: 12px 14px 0 var(--offset-shadow) !important;
+  }
+}
+
 ::selection {
-  background: #f06c53;
-  color: #fbfaf8;
+  background: var(--accent);
+  color: var(--surface);
 }
 
 .site-grain {

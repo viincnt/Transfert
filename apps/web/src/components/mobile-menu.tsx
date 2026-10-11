@@ -9,10 +9,10 @@ type NavLink = { href: string; label: string; external?: boolean };
 
 export function MobileMenu({
   links,
-  storeUrl,
+  downloadUrl,
 }: {
   links: NavLink[];
-  storeUrl: string;
+  downloadUrl: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -51,9 +51,7 @@ export function MobileMenu({
                 </Link>
               ))}
               <a
-                href={storeUrl}
-                target="_blank"
-                rel="noreferrer"
+                href={downloadUrl}
                 onClick={() => setOpen(false)}
                 className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#18191d] px-3.5 py-2 text-sm font-medium text-[#fbfaf8]"
               >

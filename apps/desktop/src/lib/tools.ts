@@ -62,6 +62,14 @@ export const toolEntries: ToolEntry[] = [
         available: true,
       },
       {
+        id: "image-optimizer",
+        nameKey: "tools.fileConverter.optimizer.name",
+        descriptionKey: "tools.fileConverter.optimizer.description",
+        icon: Minimize2,
+        path: "/converter/optimizer",
+        available: true,
+      },
+      {
         id: "document",
         nameKey: "tools.fileConverter.document.name",
         descriptionKey: "tools.fileConverter.document.description",

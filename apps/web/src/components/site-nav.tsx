@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { ArrowUpRight, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { AppIcon } from "@/components/app-icon";
 import { MobileMenu } from "@/components/mobile-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { appName } from "@/lib/shared";
-
-const STORE_URL = "https://apps.microsoft.com/detail/9PG711NS9JVS";
 
 const links = [
   { href: "/#how-it-works", label: "How it works" },
@@ -47,16 +46,15 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href={STORE_URL}
-            target="_blank"
-            rel="noreferrer"
+          <ThemeToggle />
+          <Link
+            href="/download"
             className="hidden items-center gap-1.5 rounded-full bg-[#18191d] px-4 py-2 text-sm font-medium text-[#fbfaf8] transition-transform hover:-translate-y-0.5 active:scale-[0.98] sm:inline-flex"
           >
             <Download className="size-3.5" />
-            Download <ArrowUpRight className="size-3.5" />
-          </a>
-          <MobileMenu links={links} storeUrl={STORE_URL} />
+            Download
+          </Link>
+          <MobileMenu links={links} downloadUrl="/download" />
         </div>
       </div>
     </header>

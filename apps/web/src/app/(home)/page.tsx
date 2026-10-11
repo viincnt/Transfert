@@ -13,11 +13,7 @@ import {
   MonitorDown,
   WifiOff,
 } from "lucide-react";
-import { CopyCommand } from "@/components/copy-command";
 import { Reveal } from "@/components/reveal";
-
-const STORE_URL = "https://apps.microsoft.com/detail/9PG711NS9JVS";
-const WINGET_COMMAND = "winget install --id 9PG711NS9JVS --source msstore";
 
 export const metadata: Metadata = {
   title: "Private file tools that run on your machine",
@@ -83,14 +79,12 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={0.24}>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a
-                  href={STORE_URL}
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  href="/download"
                   className="inline-flex items-center gap-2 rounded-full bg-[#18191d] px-5 py-3 text-sm font-medium text-[#fbfaf8] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
                 >
-                  <Download className="size-4" /> Download for Windows
-                </a>
+                  <Download className="size-4" /> Download Transfert
+                </Link>
                 <a
                   href="#how-it-works"
                   className="inline-flex items-center gap-2 rounded-full border border-[#18191d]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#18191d] hover:bg-[#fbfaf8]"
@@ -98,9 +92,6 @@ export default function HomePage() {
                   See it work <ArrowDownRight className="size-4" />
                 </a>
               </div>
-            </Reveal>
-            <Reveal delay={0.32} className="mt-8">
-              <CopyCommand command={WINGET_COMMAND} />
             </Reveal>
           </div>
 
@@ -134,7 +125,11 @@ export default function HomePage() {
           {[
             [WifiOff, "No upload", "Files never leave your computer."],
             [LockKeyhole, "No account", "No personal data to hand over."],
-            [MonitorDown, "No surveillance", "No telemetry in the background."],
+            [
+              MonitorDown,
+              "No tracking",
+              "No telemetry. The only network request checks for updates on GitHub.",
+            ],
           ].map(([Icon, title, detail]) => {
             const IconComponent = Icon as typeof WifiOff;
             return (
@@ -284,14 +279,12 @@ export default function HomePage() {
               Get a quieter, more private way to handle everyday files.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <a
-                href={STORE_URL}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/download"
                 className="inline-flex items-center gap-2 rounded-full bg-[#fbfaf8] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
               >
-                <Download className="size-4" /> Download for Windows
-              </a>
+                <Download className="size-4" /> Download Transfert
+              </Link>
               <a
                 href="https://github.com/viincnt/Transfert"
                 target="_blank"

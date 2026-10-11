@@ -23,7 +23,7 @@ export function CopyCommand({ command }: { command: string }) {
       onClick={handleCopy}
       className="group flex w-full max-w-lg items-center justify-between gap-3 rounded-xl border border-[#18191d]/15 bg-[#fbfaf8] px-4 py-3 text-left font-mono text-xs text-[#62636a] transition-colors hover:border-[#f06c53] hover:text-[#18191d] sm:text-sm"
     >
-      <span className="flex items-center gap-2 overflow-x-auto">
+      <span className="flex min-w-0 items-center gap-2 overflow-x-auto whitespace-nowrap">
         <span className="text-[#f06c53] select-none">$</span>
         {command}
       </span>

@@ -6,7 +6,7 @@ mod naming;
 
 use std::path::PathBuf;
 
-use conversion::{convert_to_bytes, ConvertedImage, OutputFormat};
+use conversion::{convert_to_bytes_with_max_dimension, ConvertedImage, OutputFormat};
 use metadata::MetadataFields;
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -50,6 +50,7 @@ async fn convert_image_command(
     target_format: String,
     destination_dir: String,
     name_override: Option<String>,
+    max_dimension: Option<u32>,
 ) -> Result<ConvertImageResponse, String> {
     let format = OutputFormat::try_from(target_format.as_str()).map_err(|e| e.to_string())?;
     let destination_dir = PathBuf::from(destination_dir);
@@ -57,8 +58,14 @@ async fn convert_image_command(
     // Decoding/encoding is synchronous CPU work — run it on a blocking
     // thread so it can't stall the async runtime the IPC bridge runs on.
     tauri::async_runtime::spawn_blocking(move || {
-        let converted = convert_to_bytes(&bytes, &file_name, format, name_override.as_deref())
-            .map_err(|e| e.to_string())?;
+        let converted = convert_to_bytes_with_max_dimension(
+            &bytes,
+            &file_name,
+            format,
+            name_override.as_deref(),
+            max_dimension,
+        )
+        .map_err(|e| e.to_string())?;
         let delivered =
             delivery::write_verified(&converted.bytes, &destination_dir, &converted.file_name)
                 .map_err(|e| e.to_string())?;
@@ -83,6 +90,8 @@ struct ZipFileInput {
     target_format: String,
     #[serde(rename = "nameOverride")]
     name_override: Option<String>,
+    #[serde(rename = "maxDimension")]
+    max_dimension: Option<u32>,
 }
 
 #[derive(Serialize)]
@@ -117,11 +126,12 @@ async fn convert_images_to_zip_command(
             .map(|file| {
                 let outcome = OutputFormat::try_from(file.target_format.as_str())
                     .and_then(|format| {
-                        convert_to_bytes(
+                        convert_to_bytes_with_max_dimension(
                             &file.bytes,
                             &file.file_name,
                             format,
                             file.name_override.as_deref(),
+                            file.max_dimension,
                         )
                     })
                     .map_err(|e| e.to_string());

@@ -22,18 +22,26 @@ pub struct ConvertedImage {
 const ICO_MAX_DIMENSION: u32 = 256;
 
 /// Decodes `source_bytes` (rasterizing SVG first if that's what it is) and
-/// re-encodes to `target_format`, returning the validated result in
-/// memory. Nothing is written to any real destination here — that's the
-/// caller's job (see `delivery::write_verified`), which keeps this
-/// reusable for both "write straight to a folder" and "bundle into a zip"
-/// callers without duplicating the decode/encode/verify logic between them.
-pub fn convert_to_bytes(
+/// re-encodes to `target_format`, with an optional maximum edge length.
+/// Nothing is written to any real destination here — that's the caller's job
+/// (see `delivery::write_verified`), which keeps this reusable for both
+/// folder delivery and zip bundles.
+///
+/// Resizing uses the pure-Rust `image` crate, so this remains identical across
+/// supported operating systems and does not need a system image library.
+pub fn convert_to_bytes_with_max_dimension(
     source_bytes: &[u8],
     source_name: &str,
     target_format: OutputFormat,
     name_override: Option<&str>,
+    max_dimension: Option<u32>,
 ) -> Result<ConvertedImage, ConversionError> {
     let source_image = decode_source(source_bytes)?;
+
+    let source_image = match max_dimension {
+        Some(max_dimension) => fit_within_bounds(source_image, max_dimension),
+        None => source_image,
+    };
 
     if target_format == OutputFormat::Svg {
         return svg_wrap::encode(source_image, source_name, name_override);
@@ -47,8 +55,7 @@ pub fn convert_to_bytes(
     } else {
         source_image
     };
-    let (expected_width, expected_height) =
-        (image_to_encode.width(), image_to_encode.height());
+    let (expected_width, expected_height) = (image_to_encode.width(), image_to_encode.height());
 
     let workdir = tempfile::Builder::new().prefix("transfert-").tempdir()?;
     let temp_path = workdir
@@ -87,17 +94,21 @@ pub fn convert_to_bytes(
 }
 
 fn fit_within_ico_bounds(image: DynamicImage) -> DynamicImage {
-    let resized = if image.width() <= ICO_MAX_DIMENSION && image.height() <= ICO_MAX_DIMENSION {
-        image
-    } else {
-        image.resize(ICO_MAX_DIMENSION, ICO_MAX_DIMENSION, FilterType::Lanczos3)
-    };
+    let resized = fit_within_bounds(image, ICO_MAX_DIMENSION);
 
     // The `image` crate's own ICO *decoder* rejects PNG-backed frames
     // that aren't RGBA — a source without an alpha channel (most JPEGs)
     // would otherwise encode fine but fail our own re-decode check. Force
     // RGBA8 so the frame is always something the decoder accepts.
     DynamicImage::ImageRgba8(resized.to_rgba8())
+}
+
+fn fit_within_bounds(image: DynamicImage, max_dimension: u32) -> DynamicImage {
+    if max_dimension == 0 || (image.width() <= max_dimension && image.height() <= max_dimension) {
+        image
+    } else {
+        image.resize(max_dimension, max_dimension, FilterType::Lanczos3)
+    }
 }
 
 /// The `image` crate can *encode* AVIF (via `ravif`, pure Rust) but can't
