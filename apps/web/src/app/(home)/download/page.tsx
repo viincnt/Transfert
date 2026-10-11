@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 
 import { CopyCommand } from "@/components/copy-command";
-import { getLatestRelease } from "@/lib/releases";
 import { siteUrl } from "@/lib/shared";
 
 export const metadata: Metadata = {
@@ -21,10 +20,10 @@ export const metadata: Metadata = {
 
 const WINDOWS_COMMAND = `irm ${new URL("/install.ps1", siteUrl).href} | iex`;
 const MACOS_COMMAND = `curl -fsSL ${new URL("/install.sh", siteUrl).href} | bash`;
+const LATEST_RELEASE_URL =
+  "https://github.com/viincnt/Transfert/releases/latest";
 
-export default async function DownloadPage() {
-  const release = await getLatestRelease();
-
+export default function DownloadPage() {
   return (
     <main className="relative overflow-hidden bg-[#f4f3f1] text-[#18191d]">
       <div
@@ -87,7 +86,7 @@ export default async function DownloadPage() {
                 Latest release
               </p>
               <p className="mt-1 text-sm font-medium">
-                {release ? release.name : "Ready when you are"}
+                Always points to latest
               </p>
             </div>
           </div>
@@ -106,7 +105,7 @@ export default async function DownloadPage() {
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-[#62636a]">
-              The download buttons always point to the latest published release.
+              The download buttons always open the latest published release.
             </p>
           </div>
 
@@ -128,18 +127,12 @@ export default async function DownloadPage() {
                 latest MSI for you.
               </p>
               <div className="mt-7 min-h-10">
-                {release?.windows ? (
-                  <a
-                    href={release.windows.browser_download_url}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#f06c53] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
-                  >
-                    <Download className="size-4" /> Download MSI
-                  </a>
-                ) : (
-                  <span className="inline-flex items-center rounded-full border border-[#fbfaf8]/20 px-4 py-2.5 text-sm text-[#fbfaf8]/60">
-                    Installer publishing soon
-                  </span>
-                )}
+                <a
+                  href={LATEST_RELEASE_URL}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#f06c53] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                >
+                  <Download className="size-4" /> Download MSI
+                </a>
               </div>
               <div className="mt-auto pt-10">
                 <p className="mb-2 flex items-center gap-2 font-mono text-[10px] font-medium tracking-[0.14em] text-[#fbfaf8]/45 uppercase">
@@ -165,18 +158,12 @@ export default async function DownloadPage() {
                 Download the DMG, or install the latest release from Terminal.
               </p>
               <div className="mt-7 min-h-10">
-                {release?.macos ? (
-                  <a
-                    href={release.macos.browser_download_url}
-                    className="inline-flex items-center gap-2 rounded-full border border-[#18191d]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#18191d] hover:bg-[#ecebea]"
-                  >
-                    <Download className="size-4" /> Download DMG
-                  </a>
-                ) : (
-                  <span className="inline-flex items-center rounded-full border border-[#18191d]/15 px-4 py-2.5 text-sm text-[#62636a]">
-                    Installer publishing soon
-                  </span>
-                )}
+                <a
+                  href={LATEST_RELEASE_URL}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#18191d]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#18191d] hover:bg-[#ecebea]"
+                >
+                  <Download className="size-4" /> Download DMG
+                </a>
               </div>
               <div className="mt-auto pt-10">
                 <p className="mb-2 flex items-center gap-2 font-mono text-[10px] font-medium tracking-[0.14em] text-[#62636a] uppercase">
@@ -192,9 +179,8 @@ export default async function DownloadPage() {
           </div>
 
           <p className="mt-7 text-sm leading-relaxed text-[#62636a]">
-            {release
-              ? `Currently serving ${release.name}.`
-              : "No release is published yet. The commands will work as soon as the first release is live."}
+            The latest Release page includes both installers and the full change
+            notes.
           </p>
         </div>
       </section>

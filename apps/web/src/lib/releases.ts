@@ -23,7 +23,7 @@ export type LatestRelease = {
 export async function getLatestRelease(): Promise<LatestRelease | null> {
   const response = await fetch(LATEST_RELEASE_URL, {
     headers: { Accept: "application/vnd.github+json" },
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
 
   if (!response.ok) return null;
