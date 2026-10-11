@@ -20,8 +20,10 @@ export const metadata: Metadata = {
 
 const WINDOWS_COMMAND = `irm ${new URL("/install.ps1", siteUrl).href} | iex`;
 const MACOS_COMMAND = `curl -fsSL ${new URL("/install.sh", siteUrl).href} | bash`;
-const LATEST_RELEASE_URL =
-  "https://github.com/viincnt/Transfert/releases/latest";
+const WINDOWS_DOWNLOAD_URL =
+  "https://github.com/viincnt/Transfert/releases/latest/download/Transfert-windows.msi";
+const MACOS_DOWNLOAD_URL =
+  "https://github.com/viincnt/Transfert/releases/latest/download/Transfert-macos.dmg";
 
 export default function DownloadPage() {
   return (
@@ -105,7 +107,7 @@ export default function DownloadPage() {
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-[#62636a]">
-              The download buttons always open the latest published release.
+              The download buttons always fetch the latest published installer.
             </p>
           </div>
 
@@ -128,7 +130,7 @@ export default function DownloadPage() {
               </p>
               <div className="mt-7 min-h-10">
                 <a
-                  href={LATEST_RELEASE_URL}
+                  href={WINDOWS_DOWNLOAD_URL}
                   className="inline-flex items-center gap-2 rounded-full bg-[#f06c53] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <Download className="size-4" /> Download MSI
@@ -159,7 +161,7 @@ export default function DownloadPage() {
               </p>
               <div className="mt-7 min-h-10">
                 <a
-                  href={LATEST_RELEASE_URL}
+                  href={MACOS_DOWNLOAD_URL}
                   className="inline-flex items-center gap-2 rounded-full border border-[#18191d]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#18191d] hover:bg-[#ecebea]"
                 >
                   <Download className="size-4" /> Download DMG
@@ -179,8 +181,7 @@ export default function DownloadPage() {
           </div>
 
           <p className="mt-7 text-sm leading-relaxed text-[#62636a]">
-            The latest Release page includes both installers and the full change
-            notes.
+            Need the full change notes? They are on the GitHub Release page.
           </p>
         </div>
       </section>

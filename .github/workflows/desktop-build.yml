@@ -4,8 +4,20 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
+    paths:
+      - ".github/workflows/desktop-build.yml"
+      - "apps/desktop/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
   pull_request:
     branches: [main]
+    paths:
+      - ".github/workflows/desktop-build.yml"
+      - "apps/desktop/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
   workflow_dispatch:
 
 permissions:
@@ -90,6 +102,11 @@ jobs:
         run: >-
           node scripts/extract-changelog.mjs apps/desktop/CHANGELOG.md
           "${GITHUB_REF_NAME#v}" > release-notes.md
+
+      - name: Name release assets
+        run: |
+          mv release/*.msi release/Transfert-windows.msi
+          mv release/*.dmg release/Transfert-macos.dmg
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
