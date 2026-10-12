@@ -11,9 +11,7 @@ temp_dir="$(mktemp -d)"
 mount_point="$temp_dir/mount"
 
 cleanup() {
-  if mount | grep -Fq "on $mount_point "; then
-    hdiutil detach "$mount_point" -quiet
-  fi
+  hdiutil detach "$mount_point" -quiet 2>/dev/null || true
   rm -rf "$temp_dir"
 }
 trap cleanup EXIT

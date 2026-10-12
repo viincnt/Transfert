@@ -11,9 +11,9 @@ if (-not $installer) {
 
 $path = Join-Path $env:TEMP $installer.name
 Invoke-WebRequest -Uri $installer.browser_download_url -OutFile $path
-& msiexec.exe /i $path /passive /norestart
-if ($LASTEXITCODE -ne 0) {
-  throw "Transfert installation failed with exit code $LASTEXITCODE."
+$installerProcess = Start-Process msiexec.exe -ArgumentList @("/i", $path, "/passive", "/norestart") -Wait -PassThru
+if ($installerProcess.ExitCode -notin 0, 3010, 1641) {
+  throw "Transfert installation failed with exit code $($installerProcess.ExitCode)."
 }
 Remove-Item $path -Force
 `;
@@ -21,7 +21,7 @@ Remove-Item $path -Force
 export function GET() {
   return new NextResponse(script, {
     headers: {
-      "Cache-Control": "public, max-age=300",
+      "Cache-Control": "no-store",
       "Content-Type": "text/plain; charset=utf-8",
     },
   });

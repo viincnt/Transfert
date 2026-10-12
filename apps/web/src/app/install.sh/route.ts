@@ -21,9 +21,7 @@ temp_dir="$(mktemp -d)"
 mount_point="$temp_dir/mount"
 
 cleanup() {
-  if mount | grep -Fq "on $mount_point "; then
-    hdiutil detach "$mount_point" -quiet
-  fi
+  hdiutil detach "$mount_point" -quiet 2>/dev/null || true
   rm -rf "$temp_dir"
 }
 trap cleanup EXIT
@@ -41,7 +39,7 @@ echo "Transfert installed in /Applications."
 
   return new Response(script, {
     headers: {
-      "Cache-Control": "public, max-age=300",
+      "Cache-Control": "no-store",
       "Content-Type": "text/plain; charset=utf-8",
     },
   });
