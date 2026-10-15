@@ -19,9 +19,15 @@ export function ThemeToggle() {
   const [preference, setPreference] = useState<ThemePreference>("system");
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(STORAGE_KEY);
+    } catch {
+      /* Storage may be unavailable. */
+    }
     const nextPreference: ThemePreference =
       saved === "dark" || saved === "light" ? saved : "system";
     setPreference(nextPreference);
@@ -34,7 +40,13 @@ export function ThemeToggle() {
     }
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (
+        event.key === "Escape" &&
+        menuRef.current?.contains(document.activeElement)
+      ) {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     }
 
     document.addEventListener("mousedown", closeMenu);
@@ -48,48 +60,61 @@ export function ThemeToggle() {
 
   function setTheme(nextPreference: ThemePreference) {
     setPreference(nextPreference);
-    localStorage.setItem(STORAGE_KEY, nextPreference);
+    try {
+      localStorage.setItem(STORAGE_KEY, nextPreference);
+    } catch {
+      /* The theme still applies for this visit. */
+    }
     applyTheme(nextPreference);
     setOpen(false);
+    triggerRef.current?.focus();
   }
 
   const themes = [
-    { value: "system", label: "Use system theme", icon: Monitor },
-    { value: "dark", label: "Use dark theme", icon: Moon },
-    { value: "light", label: "Use light theme", icon: Sun },
+    { value: "light", label: "Claro", icon: Sun },
+    { value: "dark", label: "Escuro", icon: Moon },
+    { value: "system", label: "Sistema", icon: Monitor },
   ] as const;
   const CurrentIcon = themes.find((theme) => theme.value === preference)!.icon;
 
   return (
-    <div ref={menuRef} className="relative">
+    <div
+      ref={menuRef}
+      className="relative"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+    >
       <button
         type="button"
+        ref={triggerRef}
         onClick={() => setOpen((value) => !value)}
-        aria-label="Choose theme"
+        aria-label="Escolher tema"
         aria-expanded={open}
-        aria-haspopup="menu"
-        className="inline-flex size-9 items-center justify-center rounded-full border border-[#18191d]/15 text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d]"
+        aria-controls="theme-options"
+        title="Escolher tema"
+        className="inline-flex size-11 items-center justify-center rounded-full border border-[#18191d]/15 text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d]"
       >
         <CurrentIcon className="size-3.5" />
       </button>
       {open && (
         <div
-          role="menu"
-          aria-label="Theme"
-          className="absolute top-[calc(100%+0.5rem)] right-0 z-40 flex gap-1 rounded-full border border-[#18191d]/15 bg-[#fbfaf8] p-1 shadow-lg"
+          id="theme-options"
+          role="group"
+          aria-label="Tema"
+          className="absolute top-[calc(100%+0.5rem)] right-0 z-40 grid min-w-36 gap-1 rounded-2xl border border-[#18191d]/15 bg-[#fbfaf8] p-1.5 shadow-xl"
         >
           {themes.map(({ value, label, icon: Icon }) => (
             <button
               key={value}
               type="button"
-              role="menuitemradio"
-              aria-checked={preference === value}
+              aria-pressed={preference === value}
               aria-label={label}
-              title={label}
               onClick={() => setTheme(value)}
-              className="flex size-8 items-center justify-center rounded-full text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d] aria-checked:bg-[#18191d] aria-checked:text-[#fbfaf8]"
+              className="theme-option flex min-h-10 items-center gap-2.5 rounded-xl px-3 text-left text-sm font-medium text-[#62636a] transition-colors hover:bg-[#18191d]/8 hover:text-[#18191d]"
             >
               <Icon className="size-3.5" />
+              <span>{label}</span>
             </button>
           ))}
         </div>

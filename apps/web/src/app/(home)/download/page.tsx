@@ -27,13 +27,17 @@ const MACOS_DOWNLOAD_URL =
 
 export default function DownloadPage() {
   return (
-    <main className="relative overflow-hidden bg-[#f4f3f1] text-[#18191d]">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="relative overflow-hidden bg-[#f4f3f1] text-[#18191d]"
+    >
       <div
         aria-hidden
         className="site-grain pointer-events-none fixed inset-0 z-20"
       />
 
-      <section className="relative mx-auto max-w-[1400px] px-5 pt-10 pb-16 sm:px-8 sm:pt-14 lg:min-h-[calc(100dvh-4rem)] lg:pb-20">
+      <section className="hero-section relative mx-auto max-w-[1400px] px-5 pt-10 pb-20 sm:px-8 sm:pt-14 lg:pb-24">
         <div
           aria-hidden
           className="absolute top-12 right-[-13rem] size-[34rem] rounded-full border border-[#18191d]/10 sm:right-[-7rem]"
@@ -51,7 +55,7 @@ export default function DownloadPage() {
               Direct from the source
             </p>
             <h1 className="mt-5 text-5xl leading-[0.89] font-semibold tracking-[-0.065em] text-balance sm:text-7xl">
-              Your next download should not need a store.
+              A small download. A better workflow.
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-[#62636a] sm:text-xl">
               Pick your platform. Transfert is local, open source, and ships
@@ -87,9 +91,14 @@ export default function DownloadPage() {
               <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-[#62636a] uppercase">
                 Latest release
               </p>
-              <p className="mt-1 text-sm font-medium">
-                Always points to latest
-              </p>
+              <a
+                href="https://github.com/viincnt/Transfert/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 inline-flex items-center gap-2 text-sm font-medium"
+              >
+                View release notes <ArrowRight className="size-3.5" />
+              </a>
             </div>
           </div>
         </div>
@@ -111,42 +120,45 @@ export default function DownloadPage() {
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-12">
-            <article className="flex min-h-[31rem] flex-col overflow-hidden rounded-[1.5rem] bg-[#18191d] p-6 text-[#fbfaf8] shadow-[10px_12px_0_#d6d4d1] sm:p-8 lg:col-span-7">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <article className="download-card flex min-w-0 flex-col overflow-hidden rounded-[1.5rem] bg-[#fbfaf8] p-6 sm:p-8">
               <div className="flex items-start justify-between gap-6">
-                <span className="flex size-12 items-center justify-center rounded-xl bg-[#fbfaf8]/10 text-[#f06c53]">
+                <span className="flex size-12 items-center justify-center rounded-xl bg-[#f06c53]/10 text-[#f06c53]">
                   <MonitorDown className="size-5" />
                 </span>
-                <span className="font-mono text-[10px] font-medium tracking-[0.14em] text-[#fbfaf8]/45 uppercase">
+                <span className="font-mono text-[10px] font-medium tracking-[0.14em] text-[#62636a] uppercase">
                   MSI / PowerShell
                 </span>
               </div>
               <h3 className="mt-10 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
                 Windows
               </h3>
-              <p className="mt-3 max-w-md text-base leading-relaxed text-[#fbfaf8]/60">
+              <p className="mt-3 max-w-md text-base leading-relaxed text-[#62636a]">
                 Download the installer, or let PowerShell fetch and run the
                 latest MSI for you.
               </p>
               <div className="mt-7 min-h-10">
                 <a
                   href={WINDOWS_DOWNLOAD_URL}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#f06c53] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                  className="primary-button inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <Download className="size-4" /> Download MSI
                 </a>
               </div>
               <div className="mt-auto pt-10">
-                <p className="mb-2 flex items-center gap-2 font-mono text-[10px] font-medium tracking-[0.14em] text-[#fbfaf8]/45 uppercase">
+                <p className="mb-3 flex items-center gap-2 font-mono text-[10px] font-medium tracking-[0.14em] text-[#62636a] uppercase">
                   <Terminal className="size-3.5" /> Run in PowerShell
                 </p>
                 <CopyCommand command={WINDOWS_COMMAND} />
+                <p className="mt-4 text-xs leading-relaxed text-[#62636a]">
+                  The installer downloads and runs the latest MSI from GitHub.
+                </p>
               </div>
             </article>
 
-            <article className="flex min-h-[31rem] flex-col overflow-hidden rounded-[1.5rem] border border-[#18191d]/15 bg-[#fbfaf8] p-6 shadow-[10px_12px_0_#d6d4d1] sm:p-8 lg:col-span-5">
+            <article className="download-card flex min-w-0 flex-col overflow-hidden rounded-[1.5rem] bg-[#fbfaf8] p-6 sm:p-8">
               <div className="flex items-start justify-between gap-6">
-                <span className="flex size-12 items-center justify-center rounded-xl bg-[#f06c53] text-[#fbfaf8]">
+                <span className="flex size-12 items-center justify-center rounded-xl bg-[#f06c53]/10 text-[#f06c53]">
                   <Apple className="size-5" />
                 </span>
                 <span className="font-mono text-[10px] font-medium tracking-[0.14em] text-[#62636a] uppercase">
@@ -162,7 +174,7 @@ export default function DownloadPage() {
               <div className="mt-7 min-h-10">
                 <a
                   href={MACOS_DOWNLOAD_URL}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#18191d]/20 px-5 py-3 text-sm font-medium transition-colors hover:border-[#18191d] hover:bg-[#ecebea]"
+                  className="primary-button inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <Download className="size-4" /> Download DMG
                 </a>
@@ -181,7 +193,15 @@ export default function DownloadPage() {
           </div>
 
           <p className="mt-7 text-sm leading-relaxed text-[#62636a]">
-            Need the full change notes? They are on the GitHub Release page.
+            Every release is public.{" "}
+            <a
+              href="https://github.com/viincnt/Transfert/releases"
+              target="_blank"
+              rel="noreferrer"
+              className="underline decoration-[var(--accent)] underline-offset-4 hover:text-[var(--ink)]"
+            >
+              Explore the changelog on GitHub ↗
+            </a>
           </p>
         </div>
       </section>

@@ -46,8 +46,12 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-[calc(100dvh-4rem)] bg-[#f4f3f1] px-5 py-12 text-[#18191d] sm:px-8 sm:py-20">
-      <article className="mx-auto max-w-3xl">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="hero-section min-h-[calc(100dvh-4rem)] bg-[#f4f3f1] px-5 py-12 text-[#18191d] sm:px-8 sm:py-20"
+    >
+      <article className="privacy-content mx-auto max-w-4xl">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-[#62636a] transition-colors hover:text-[#18191d]"

@@ -8,7 +8,6 @@ import {
   FileImage,
   FilePenLine,
   FileX2,
-  GitFork,
   LockKeyhole,
   MonitorDown,
   WifiOff,
@@ -46,13 +45,17 @@ const tools = [
 
 export default function HomePage() {
   return (
-    <main className="relative overflow-hidden bg-[#f4f3f1] text-[#18191d]">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="relative overflow-hidden bg-[#f4f3f1] text-[#18191d]"
+    >
       <div
         aria-hidden
         className="site-grain pointer-events-none fixed inset-0 z-20"
       />
 
-      <section className="relative mx-auto max-w-[1400px] px-5 pt-12 pb-14 sm:px-8 sm:pt-16 lg:min-h-[calc(100dvh-4rem)] lg:pb-20">
+      <section className="hero-section relative mx-auto max-w-[1400px] px-5 pt-12 pb-20 sm:px-8 sm:pt-20 lg:py-28">
         <div
           aria-hidden
           className="absolute top-8 right-[-8rem] size-[28rem] rounded-full border border-[#18191d]/10 sm:right-[4%]"
@@ -60,7 +63,7 @@ export default function HomePage() {
         <div className="relative grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-16">
           <div className="max-w-xl lg:pb-10">
             <Reveal>
-              <p className="mb-7 flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] text-[#62636a] uppercase">
+              <p className="eyebrow-badge mb-7 flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.16em] text-[#62636a] uppercase">
                 <span className="size-2 rounded-full bg-[#f06c53]" />{" "}
                 Local-first file tools
               </p>
@@ -81,7 +84,7 @@ export default function HomePage() {
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
                   href="/download"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#18191d] px-5 py-3 text-sm font-medium text-[#fbfaf8] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                  className="primary-button inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <Download className="size-4" /> Download Transfert
                 </Link>
@@ -92,11 +95,18 @@ export default function HomePage() {
                   See it work <ArrowDownRight className="size-4" />
                 </a>
               </div>
+              <p className="mt-5 text-xs text-[var(--muted)]">
+                For Windows & macOS{" "}
+                <span className="px-2" aria-hidden="true">
+                  ·
+                </span>{" "}
+                Free & open source
+              </p>
             </Reveal>
           </div>
 
           <Reveal delay={0.2} className="relative lg:pt-10">
-            <div className="relative rotate-[-2deg] overflow-hidden rounded-[1.35rem] border border-[#18191d]/15 bg-[#18191d] p-2 shadow-[18px_20px_0_#dddcd9] transition-transform duration-500 hover:rotate-0 sm:p-3">
+            <div className="product-frame relative rotate-[-2deg] overflow-hidden rounded-[1.35rem] border border-[#18191d]/15 bg-[#18191d] p-2 transition-transform duration-500 hover:rotate-0 sm:p-3">
               <Image
                 src="/Transfert-001.png"
                 alt="The Transfert desktop toolbox with its file utilities"
@@ -233,10 +243,10 @@ export default function HomePage() {
               </p>
             </div>
           </Reveal>
-          <div className="border-t border-[#18191d]/15">
+          <div className="space-y-4">
             {tools.map(({ icon: Icon, name, description, status }, index) => (
               <Reveal key={name} delay={index * 0.08}>
-                <article className="group grid gap-4 border-b border-[#18191d]/15 py-7 sm:grid-cols-[3rem_minmax(0,1fr)_auto] sm:items-start">
+                <article className="tool-card group grid gap-4 sm:grid-cols-[3rem_minmax(0,1fr)] sm:items-start">
                   <span className="flex size-11 items-center justify-center rounded-xl bg-[#fbfaf8] text-[#18191d] transition-transform group-hover:-rotate-6">
                     <Icon className="size-5" strokeWidth={1.6} />
                   </span>
@@ -248,7 +258,7 @@ export default function HomePage() {
                       {description}
                     </p>
                   </div>
-                  <span className="font-mono text-[11px] font-medium text-[#62636a] sm:pt-1">
+                  <span className="availability font-mono text-[11px] font-medium text-[#62636a] sm:col-start-2">
                     {status}
                   </span>
                 </article>
@@ -259,7 +269,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-[1400px] px-5 py-24 sm:px-8 sm:py-32">
-        <Reveal className="relative overflow-hidden rounded-[1.5rem] bg-[#f06c53] px-6 py-14 text-[#fbfaf8] sm:px-12 sm:py-20">
+        <Reveal className="coral-panel relative overflow-hidden rounded-[1.5rem] bg-[#f06c53] px-6 py-14 sm:px-12 sm:py-20">
           <div
             aria-hidden
             className="absolute -top-28 -right-20 size-[26rem] rounded-full border border-[#fbfaf8]/35"
@@ -269,19 +279,19 @@ export default function HomePage() {
             className="absolute right-20 -bottom-32 size-[22rem] rounded-full border border-[#fbfaf8]/25"
           />
           <div className="relative max-w-2xl">
-            <p className="font-mono text-[11px] font-medium tracking-[0.16em] text-[#fbfaf8]/70 uppercase">
+            <p className="coral-eyebrow font-mono text-[11px] font-medium tracking-[0.16em] uppercase">
               Free and open source
             </p>
             <h2 className="mt-5 text-4xl leading-[0.94] font-semibold tracking-[-0.055em] text-balance sm:text-6xl">
               Let your computer do the work.
             </h2>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-[#fbfaf8]/80">
+            <p className="coral-description mt-6 max-w-lg text-lg leading-relaxed">
               Get a quieter, more private way to handle everyday files.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/download"
-                className="inline-flex items-center gap-2 rounded-full bg-[#fbfaf8] px-5 py-3 text-sm font-medium text-[#18191d] transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+                className="coral-primary-button inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 <Download className="size-4" /> Download Transfert
               </Link>
@@ -289,7 +299,7 @@ export default function HomePage() {
                 href="https://github.com/viincnt/Transfert"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#fbfaf8]/50 px-5 py-3 text-sm font-medium transition-colors hover:bg-[#fbfaf8]/10"
+                className="coral-secondary-button inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-medium transition-colors"
               >
                 View source <ArrowRight className="size-4" />
               </a>
@@ -297,37 +307,6 @@ export default function HomePage() {
           </div>
         </Reveal>
       </section>
-
-      <footer className="border-t border-[#18191d]/15 px-5 py-8 sm:px-8">
-        <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-4 text-sm text-[#62636a] sm:flex-row sm:items-center">
-          <p>Transfert. A local-first file toolbox.</p>
-          <div className="flex items-center gap-5">
-            <a
-              className="transition-colors hover:text-[#18191d]"
-              href="https://github.com/viincnt/Transfert"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <GitFork className="mr-1.5 inline size-4" /> GitHub
-            </a>
-            <Link
-              className="transition-colors hover:text-[#18191d]"
-              href="/privacy"
-            >
-              Privacy
-            </Link>
-            <a
-              className="transition-colors hover:text-[#18191d]"
-              href="https://viincnt.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              By Vincent
-            </a>
-            <span>GPL-3.0</span>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

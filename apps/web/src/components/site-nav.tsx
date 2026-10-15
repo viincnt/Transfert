@@ -31,14 +31,17 @@ export function SiteNav() {
           <span className="text-[#f06c53]">.</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm font-medium text-[#62636a] sm:flex">
+        <nav
+          aria-label="Main navigation"
+          className="hidden items-center gap-7 text-sm font-medium text-[#62636a] md:flex"
+        >
           {links.map(({ href, label, external }) => (
             <Link
               key={href}
               href={href}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
-              className="transition-colors hover:text-[#18191d]"
+              className="nav-link transition-colors hover:text-[#18191d]"
             >
               {label}
             </Link>
@@ -49,7 +52,7 @@ export function SiteNav() {
           <ThemeToggle />
           <Link
             href="/download"
-            className="hidden items-center gap-1.5 rounded-full bg-[#18191d] px-4 py-2 text-sm font-medium text-[#fbfaf8] transition-transform hover:-translate-y-0.5 active:scale-[0.98] sm:inline-flex"
+            className="primary-button hidden min-h-10 items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all hover:-translate-y-0.5 active:scale-[0.98] md:inline-flex"
           >
             <Download className="size-3.5" />
             Download
