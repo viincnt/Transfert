@@ -6,6 +6,25 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-15
+
+### Added
+
+- Document conversion for UTF-8 TXT, Markdown and HTML files.
+- Experimental local audio conversion through libVLC: WAV, FLAC, MP3, OGG, Opus and M4A/AAC outputs.
+- Local video conversion through libVLC: MP4, MOV, WebM, OGV, TS and AVI outputs.
+- Additional image output formats: QOI, TGA, PNM, HDR, EXR and farbfeld.
+- Audio/video runtime staging, codec integration tests and VideoLAN/libVLC attribution and license notices.
+
+### Changed
+
+- Input format lists now only show formats that are available as outputs; aliases such as JPEG/JPG and TIFF/TIF are accepted without duplicate entries.
+- Output format pickers use a three-column grid and disable the source format per file.
+
+### Known issues
+
+- Audio conversion is experimental. The bundled LibVLC 3 runtime can trim audio at the end of some files; retain the original and inspect converted audio.
+
 ## [0.2.1] - 2026-10-11
 
 ### Added
@@ -50,7 +69,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://github.com/viincnt/Transfert/compare/v0.2.1...main
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.0...main
+[0.3.0]: https://github.com/viincnt/Transfert/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/viincnt/Transfert/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/viincnt/Transfert/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/viincnt/Transfert/compare/v0.1.0...v0.1.1
