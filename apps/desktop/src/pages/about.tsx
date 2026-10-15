@@ -1,22 +1,17 @@
 import {
   ChevronLeft,
   ChevronRight,
-  Download,
   ExternalLink,
   FolderGit2,
-  RefreshCw,
   Scale,
 } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { openUrl } from "@tauri-apps/plugin-opener";
 
 import { AppIcon } from "@/components/app-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { credits } from "@/lib/credits";
-import { areUpdateChecksEnabled, checkForUpdate } from "@/lib/updates";
 
 import { version as appVersion } from "../../package.json";
 
@@ -25,31 +20,6 @@ const AUTHOR_URL = "https://viincnt.com";
 
 export function About() {
   const { t } = useTranslation();
-  const updateChecksEnabled = areUpdateChecksEnabled();
-  const [update, setUpdate] = useState<{
-    status:
-      "idle" | "checking" | "current" | "available" | "error" | "disabled";
-    url?: string;
-    version?: string;
-  }>({ status: updateChecksEnabled ? "idle" : "disabled" });
-
-  async function handleCheckForUpdate() {
-    if (!updateChecksEnabled) return;
-
-    setUpdate({ status: "checking" });
-
-    try {
-      const latest = await checkForUpdate(appVersion);
-      setUpdate(
-        latest.available
-          ? { status: "available", url: latest.url, version: latest.version }
-          : { status: "current" },
-      );
-    } catch {
-      setUpdate({ status: "error" });
-    }
-  }
-
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10 lg:py-12">
       <Button variant="ghost" size="sm" className="-ml-2" asChild>
@@ -116,53 +86,6 @@ export function About() {
             </Link>
           </Button>
         </div>
-      </div>
-
-      <div className="mx-auto mt-10 max-w-3xl">
-        <div className="mb-4">
-          <p className="font-mono text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
-            Updates
-          </p>
-        </div>
-        <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border/80 bg-card p-5 shadow-sm">
-          <div>
-            <h2 className="text-sm font-medium">Keep Transfert current</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {update.status === "available"
-                ? `Version ${update.version} is ready to download.`
-                : update.status === "current"
-                  ? "You have the latest version."
-                  : update.status === "error"
-                    ? "Could not check for updates. Try again later."
-                    : update.status === "disabled"
-                      ? "Update checks are disabled. Enable them in Settings to check GitHub Releases."
-                      : "Checks the latest public GitHub Release. This is Transfert's only network request."}
-            </p>
-          </div>
-          {update.status === "available" ? (
-            <Button onClick={() => openUrl(update.url!)}>
-              <Download />
-              Download v{update.version}
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={handleCheckForUpdate}
-              disabled={!updateChecksEnabled || update.status === "checking"}
-            >
-              <RefreshCw
-                className={
-                  update.status === "checking" ? "animate-spin" : undefined
-                }
-              />
-              {update.status === "checking"
-                ? "Checking..."
-                : update.status === "disabled"
-                  ? "Update checks disabled"
-                  : "Check for updates"}
-            </Button>
-          )}
-        </section>
       </div>
 
       <div className="mx-auto mt-10 max-w-3xl">

@@ -6,6 +6,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-15
+
+### Changed
+
+- Moved the manual update check from About to Settings, next to the automatic-update preference.
+
+### Fixed
+
+- VLC runtime packaging no longer downloads license texts during CI builds; builds work without GNU.org access.
+
 ## [0.3.0] - 2026-10-15
 
 ### Added
@@ -69,7 +79,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.0...main
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.1...main
+[0.3.1]: https://github.com/viincnt/Transfert/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/viincnt/Transfert/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/viincnt/Transfert/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/viincnt/Transfert/compare/v0.1.1...v0.2.0

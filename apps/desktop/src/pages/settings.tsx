@@ -11,8 +11,10 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 import { useTheme } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -22,7 +24,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { areUpdateChecksEnabled, setUpdateChecksEnabled } from "@/lib/updates";
+import {
+  areUpdateChecksEnabled,
+  checkForUpdate,
+  setUpdateChecksEnabled,
+} from "@/lib/updates";
+
+import { version as appVersion } from "../../package.json";
 
 function SettingMark({ children }: { children: React.ReactNode }) {
   return (
@@ -38,6 +46,25 @@ export function Settings() {
   const [updateChecksEnabled, setUpdateChecksEnabledState] = useState(
     areUpdateChecksEnabled,
   );
+  const [update, setUpdate] = useState<{
+    status: "idle" | "checking" | "current" | "available" | "error";
+    url?: string;
+    version?: string;
+  }>({ status: "idle" });
+
+  async function handleCheckForUpdate() {
+    setUpdate({ status: "checking" });
+    try {
+      const latest = await checkForUpdate(appVersion);
+      setUpdate(
+        latest.available
+          ? { status: "available", url: latest.url, version: latest.version }
+          : { status: "current" },
+      );
+    } catch {
+      setUpdate({ status: "error" });
+    }
+  }
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-8 lg:px-10 lg:py-12">
@@ -138,20 +165,56 @@ export function Settings() {
                 </p>
               </div>
             </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={updateChecksEnabled}
-              onClick={() => {
-                const enabled = !updateChecksEnabled;
-                setUpdateChecksEnabledState(enabled);
-                setUpdateChecksEnabled(enabled);
-              }}
-              className="group relative h-7 w-12 rounded-full bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-checked:bg-primary"
-            >
-              <span className="absolute top-1 left-1 size-5 rounded-full bg-background shadow-sm transition-transform group-aria-checked:translate-x-5" />
-              <span className="sr-only">{t("settings.updates.label")}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={updateChecksEnabled}
+                onClick={() => {
+                  const enabled = !updateChecksEnabled;
+                  setUpdateChecksEnabledState(enabled);
+                  setUpdateChecksEnabled(enabled);
+                }}
+                className="group relative h-7 w-12 rounded-full bg-muted transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-checked:bg-primary"
+              >
+                <span className="absolute top-1 left-1 size-5 rounded-full bg-background shadow-sm transition-transform group-aria-checked:translate-x-5" />
+                <span className="sr-only">{t("settings.updates.label")}</span>
+              </button>
+              {update.status === "available" ? (
+                <Button size="sm" onClick={() => openUrl(update.url!)}>
+                  {t("settings.updates.download", { version: update.version })}
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCheckForUpdate}
+                  disabled={update.status === "checking"}
+                >
+                  <RefreshCw
+                    className={
+                      update.status === "checking" ? "animate-spin" : undefined
+                    }
+                  />
+                  {update.status === "checking"
+                    ? t("settings.updates.checking")
+                    : t("settings.updates.checkNow")}
+                </Button>
+              )}
+            </div>
+            {update.status !== "idle" && (
+              <p className="basis-full text-xs text-muted-foreground">
+                {update.status === "current"
+                  ? t("settings.updates.current")
+                  : update.status === "error"
+                    ? t("settings.updates.error")
+                    : update.status === "available"
+                      ? t("settings.updates.available", {
+                          version: update.version,
+                        })
+                      : null}
+              </p>
+            )}
           </section>
         </div>
       </div>
