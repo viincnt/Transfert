@@ -48,26 +48,16 @@ if (platform === "win32") {
   }
 }
 
-// The macOS app bundle does not include the COPYING file that ships alongside
-// VLC in its distribution. Preserve the license texts in our runtime resources.
-for (const [name, url] of [
-  [
-    "COPYING-LGPL-2.1.txt",
-    "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt",
-  ],
+// Never retrieve legal material during a build. GNU's site may reject CI
+// traffic, and an installer must be reproducible while offline. These exact
+// upstream license texts are versioned under scripts/third-party-licenses.
+for (const [name, source] of [
+  ["COPYING-LGPL-2.1.txt", "LGPL-2.1.txt"],
   ...(platform === "darwin"
-    ? [
-        [
-          "COPYING-GPL-2.0.txt",
-          "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt",
-        ],
-      ]
+    ? [["COPYING-GPL-2.0.txt", "GPL-2.0.txt"]]
     : []),
 ]) {
-  const response = await fetch(url);
-  if (!response.ok)
-    throw new Error(`Cannot retrieve license ${url}: ${response.status}`);
-  await writeFile(path.join(destination, name), await response.text());
+  await cp(path.join(root, "scripts", "third-party-licenses", source), path.join(destination, name));
 }
 
 // Drop caches containing paths from the source installation. VLC rebuilds its
