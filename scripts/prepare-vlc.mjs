@@ -1,10 +1,13 @@
 import { cp, mkdir, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const destination = path.join(root, "apps/desktop/src-tauri/resources/vlc");
 const platform = process.platform;
+const run = promisify(execFile);
 if (!["win32", "darwin"].includes(platform)) {
   throw new Error(
     "VLC bundling currently supports Windows and macOS. Linux uses the distribution's LibVLC 3 runtime.",
@@ -46,6 +49,14 @@ if (platform === "win32") {
       dereference: true,
     });
   }
+  // libvlc.dylib references libvlccore.dylib through @rpath. Once copied out
+  // of VLC.app, the original app rpath no longer applies. Resolve it beside
+  // libvlc so the packaged app and CI tests can load the staged runtime.
+  await run("install_name_tool", [
+    "-add_rpath",
+    "@loader_path",
+    path.join(destination, "lib", "libvlc.dylib"),
+  ]);
 }
 
 // Never retrieve legal material during a build. GNU's site may reject CI
@@ -53,11 +64,12 @@ if (platform === "win32") {
 // upstream license texts are versioned under scripts/third-party-licenses.
 for (const [name, source] of [
   ["COPYING-LGPL-2.1.txt", "LGPL-2.1.txt"],
-  ...(platform === "darwin"
-    ? [["COPYING-GPL-2.0.txt", "GPL-2.0.txt"]]
-    : []),
+  ...(platform === "darwin" ? [["COPYING-GPL-2.0.txt", "GPL-2.0.txt"]] : []),
 ]) {
-  await cp(path.join(root, "scripts", "third-party-licenses", source), path.join(destination, name));
+  await cp(
+    path.join(root, "scripts", "third-party-licenses", source),
+    path.join(destination, name),
+  );
 }
 
 // Drop caches containing paths from the source installation. VLC rebuilds its

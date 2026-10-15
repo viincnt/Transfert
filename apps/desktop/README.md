@@ -106,5 +106,5 @@ contents and non-overwriting delivery. Media tests require LibVLC 3 with codecs:
 they synthesize fixtures, transcode every advertised output and round-trip audio
 back to WAV. A separate Symphonia decoder tracks the known lossless sample-loss
 regression independently of libVLC. Both Windows and macOS jobs run the suites
-before producing installers; the documented experimental regression is reported
-but does not block the build.
+before producing installers. Codec test failures are reported but do not block
+the build while media conversion remains experimental.
