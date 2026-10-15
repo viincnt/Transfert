@@ -5,7 +5,7 @@ use image::{imageops::FilterType, DynamicImage};
 
 use crate::naming::sanitize_stem;
 
-use super::decode::decode_source;
+use super::decode::decode_named_source;
 use super::error::ConversionError;
 use super::format::OutputFormat;
 use super::svg_wrap;
@@ -36,7 +36,7 @@ pub fn convert_to_bytes_with_max_dimension(
     name_override: Option<&str>,
     max_dimension: Option<u32>,
 ) -> Result<ConvertedImage, ConversionError> {
-    let source_image = decode_source(source_bytes)?;
+    let source_image = decode_named_source(source_bytes, source_name)?;
 
     let source_image = match max_dimension {
         Some(max_dimension) => fit_within_bounds(source_image, max_dimension),
@@ -56,6 +56,13 @@ pub fn convert_to_bytes_with_max_dimension(
         source_image
     };
     let (expected_width, expected_height) = (image_to_encode.width(), image_to_encode.height());
+    let image_to_encode = match target_format {
+        OutputFormat::Exr => DynamicImage::ImageRgba32F(image_to_encode.to_rgba32f()),
+        OutputFormat::Hdr => DynamicImage::ImageRgb32F(image_to_encode.to_rgb32f()),
+        OutputFormat::Farbfeld => DynamicImage::ImageRgba16(image_to_encode.to_rgba16()),
+        OutputFormat::Pnm => DynamicImage::ImageRgb8(image_to_encode.to_rgb8()),
+        _ => image_to_encode,
+    };
 
     let workdir = tempfile::Builder::new().prefix("transfert-").tempdir()?;
     let temp_path = workdir
@@ -78,8 +85,8 @@ pub fn convert_to_bytes_with_max_dimension(
     if target_format == OutputFormat::Avif {
         verify_avif_container(&bytes)?;
     } else {
-        let verified =
-            image::load_from_memory(&bytes).map_err(|_| ConversionError::IntegrityCheck)?;
+        let verified = image::load_from_memory_with_format(&bytes, codec_format)
+            .map_err(|_| ConversionError::IntegrityCheck)?;
         if verified.width() != expected_width || verified.height() != expected_height {
             return Err(ConversionError::IntegrityCheck);
         }
@@ -147,4 +154,78 @@ pub(super) fn renamed(
             .to_string(),
     };
     format!("{}.{}", sanitize_stem(&raw_stem), target_format.extension())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn source(width: u32, height: u32) -> Vec<u8> {
+        let image = DynamicImage::ImageRgba8(image::RgbaImage::from_pixel(
+            width,
+            height,
+            image::Rgba([30, 120, 210, 128]),
+        ));
+        let mut bytes = std::io::Cursor::new(Vec::new());
+        image.write_to(&mut bytes, image::ImageFormat::Png).unwrap();
+        bytes.into_inner()
+    }
+
+    #[test]
+    fn every_output_encodes_real_pixels() {
+        for name in [
+            "PNG", "JPG", "WEBP", "GIF", "BMP", "TIFF", "AVIF", "ICO", "SVG", "QOI", "TGA", "PNM",
+            "HDR", "EXR", "FF",
+        ] {
+            let format = OutputFormat::try_from(name).unwrap();
+            let result = convert_to_bytes_with_max_dimension(
+                &source(16, 8),
+                "photo.png",
+                format,
+                None,
+                None,
+            )
+            .unwrap_or_else(|e| panic!("{name}: {e}"));
+            assert_eq!((result.width, result.height), (16, 8));
+            assert_eq!(result.file_name, format!("photo.{}", format.extension()));
+            assert!(!result.bytes.is_empty());
+            if format != OutputFormat::Avif {
+                let decoded = decode_named_source(&result.bytes, &result.file_name).unwrap();
+                assert_eq!((decoded.width(), decoded.height()), (16, 8));
+            }
+        }
+    }
+
+    #[test]
+    fn resize_and_icon_keep_aspect_ratio_and_do_not_upscale() {
+        for (format, max, expected) in [
+            (OutputFormat::Png, Some(100), (100, 50)),
+            (OutputFormat::Ico, None, (256, 128)),
+            (OutputFormat::Png, Some(1000), (600, 300)),
+        ] {
+            let result = convert_to_bytes_with_max_dimension(
+                &source(600, 300),
+                "input.png",
+                format,
+                None,
+                max,
+            )
+            .unwrap();
+            assert_eq!((result.width, result.height), expected);
+        }
+    }
+
+    #[test]
+    fn malformed_images_fail_without_output() {
+        for source in [b"not an image".as_slice(), b"<svg>", &[]] {
+            assert!(convert_to_bytes_with_max_dimension(
+                source,
+                "fake.png",
+                OutputFormat::Png,
+                None,
+                None
+            )
+            .is_err());
+        }
+    }
 }

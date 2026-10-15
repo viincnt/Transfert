@@ -14,6 +14,20 @@ pub fn decode_source(bytes: &[u8]) -> Result<DynamicImage, ConversionError> {
     }
 }
 
+pub fn decode_named_source(bytes: &[u8], name: &str) -> Result<DynamicImage, ConversionError> {
+    // TGA has no reliable magic signature, so only this decoder needs a hint.
+    if image::guess_format(bytes).is_err()
+        && std::path::Path::new(name)
+            .extension()
+            .is_some_and(|ext| ext.eq_ignore_ascii_case("tga"))
+    {
+        image::load_from_memory_with_format(bytes, image::ImageFormat::Tga)
+            .map_err(ConversionError::from)
+    } else {
+        decode_source(bytes)
+    }
+}
+
 fn looks_like_svg(bytes: &[u8]) -> bool {
     let head = &bytes[..bytes.len().min(1024)];
     let text = String::from_utf8_lossy(head);

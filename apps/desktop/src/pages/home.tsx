@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Check, Sparkles } from "lucide-react";
+import { ArrowUpRight, Check, FlaskConical, Sparkles } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import { toolEntries } from "@/lib/tools";
@@ -11,12 +11,14 @@ function ToolCard({
   name,
   description,
   available,
+  experimental = false,
   featured = false,
 }: {
   icon: LucideIcon;
   name: string;
   description: string;
   available: boolean;
+  experimental?: boolean;
   featured?: boolean;
 }) {
   const { t } = useTranslation();
@@ -58,7 +60,12 @@ function ToolCard({
               featured && "text-primary-foreground/65",
             )}
           >
-            <Check className="size-3" /> Ready
+            {experimental ? (
+              <FlaskConical className="size-3" />
+            ) : (
+              <Check className="size-3" />
+            )}
+            {experimental ? "Experimental" : "Ready"}
           </span>
         ) : (
           <span className="text-[10px] font-medium tracking-[0.12em] text-muted-foreground uppercase">
@@ -125,6 +132,7 @@ export function Home() {
                   name={t(item.nameKey)}
                   description={t(item.descriptionKey)}
                   available={item.available}
+                  experimental={item.id === "audio"}
                   featured={groupIndex === 0 && index === 0}
                 />
               );

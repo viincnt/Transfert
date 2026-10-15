@@ -64,3 +64,20 @@ pub fn hash(bytes: &[u8]) -> String {
     hasher.update(bytes);
     format!("{:x}", hasher.finalize())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn delivery_preserves_existing_files_and_verifies_bytes() {
+        let dir = tempfile::tempdir().unwrap();
+        fs::write(dir.path().join("file.txt"), b"original").unwrap();
+        let delivered = write_verified(b"new content", dir.path(), "file.txt").unwrap();
+        assert_eq!(delivered.file_name, "file (1).txt");
+        assert_eq!(fs::read(dir.path().join("file.txt")).unwrap(), b"original");
+        assert_eq!(fs::read(&delivered.path).unwrap(), b"new content");
+        assert_eq!(delivered.size, 11);
+        assert_eq!(delivered.sha256, hash(b"new content"));
+    }
+}

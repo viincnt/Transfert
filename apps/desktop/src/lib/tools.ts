@@ -75,7 +75,7 @@ export const toolEntries: ToolEntry[] = [
         descriptionKey: "tools.fileConverter.document.description",
         icon: FileText,
         path: "/converter/document",
-        available: false,
+        available: true,
       },
       {
         id: "audio",
@@ -83,7 +83,7 @@ export const toolEntries: ToolEntry[] = [
         descriptionKey: "tools.fileConverter.audio.description",
         icon: FileAudio,
         path: "/converter/audio",
-        available: false,
+        available: true,
       },
       {
         id: "video",
@@ -91,7 +91,7 @@ export const toolEntries: ToolEntry[] = [
         descriptionKey: "tools.fileConverter.video.description",
         icon: FileVideo,
         path: "/converter/video",
-        available: false,
+        available: true,
       },
     ],
   },

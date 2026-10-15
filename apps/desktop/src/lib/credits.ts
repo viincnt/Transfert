@@ -27,6 +27,55 @@ export type Credit = {
 // is introduced.
 export const credits: Credit[] = [
   {
+    name: "LibVLC / VideoLAN",
+    description: "Native audio/video conversion engine and codec plugins",
+    license: "LGPL-2.1+",
+    url: "https://www.videolan.org/vlc/libvlc.html",
+    icon: Blocks,
+  },
+  {
+    name: "pulldown-cmark",
+    description: "Markdown parsing and HTML generation in Rust",
+    license: "MIT",
+    url: "https://github.com/pulldown-cmark/pulldown-cmark",
+    icon: Type,
+  },
+  {
+    name: "html2text",
+    description: "HTML to text conversion in Rust",
+    license: "MIT",
+    url: "https://crates.io/crates/html2text",
+    icon: Type,
+  },
+  {
+    name: "html2md",
+    description: "HTML to Markdown conversion in Rust",
+    license: "MIT",
+    url: "https://crates.io/crates/html2md",
+    icon: Type,
+  },
+  {
+    name: "image",
+    description: "Raster image decoding and encoding",
+    license: "MIT / Apache-2.0",
+    url: "https://github.com/image-rs/image",
+    icon: Blocks,
+  },
+  {
+    name: "resvg",
+    description: "SVG rasterization in Rust",
+    license: "MPL-2.0",
+    url: "https://github.com/linebender/resvg",
+    icon: Blocks,
+  },
+  {
+    name: "libloading",
+    description: "Runtime loading of the native LibVLC library",
+    license: "ISC",
+    url: "https://github.com/nagisa/rust_libloading",
+    icon: Blocks,
+  },
+  {
     name: "Tauri",
     description: "Native app shell",
     license: "MIT / Apache-2.0",

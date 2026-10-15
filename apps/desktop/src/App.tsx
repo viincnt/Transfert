@@ -17,6 +17,7 @@ import { About } from "@/pages/about";
 import { Home } from "@/pages/home";
 import { ImageConverter } from "@/pages/image-converter";
 import { ImageOptimizer } from "@/pages/image-optimizer";
+import { FileConverter } from "@/pages/file-converter";
 import { MetadataEdit } from "@/pages/metadata-edit";
 import { MetadataStrip } from "@/pages/metadata-strip";
 import { Settings } from "@/pages/settings";
@@ -92,6 +93,18 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/converter/image" element={<ImageConverter />} />
               <Route path="/converter/optimizer" element={<ImageOptimizer />} />
+              <Route
+                path="/converter/document"
+                element={<FileConverter key="document" kind="document" />}
+              />
+              <Route
+                path="/converter/audio"
+                element={<FileConverter key="audio" kind="audio" />}
+              />
+              <Route
+                path="/converter/video"
+                element={<FileConverter key="video" kind="video" />}
+              />
               <Route path="/metadata/strip" element={<MetadataStrip />} />
               <Route path="/metadata/edit" element={<MetadataEdit />} />
               <Route path="/settings" element={<Settings />} />

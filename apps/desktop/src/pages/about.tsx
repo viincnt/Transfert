@@ -178,6 +178,37 @@ export function About() {
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
             {t("settings.credits.description")}
           </p>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Our media integration uses libVLC, developed by VideoLAN and its
+            contributors. LibVLC is LGPL-2.1-or-later; its plugins and codec
+            dependencies retain their own licenses, including GPL licenses.
+            Transfert is independent and is not affiliated with or endorsed by
+            VideoLAN. VideoLAN, VLC and VLC media player are VideoLAN
+            trademarks.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-4 text-sm underline underline-offset-4">
+            <a
+              href="https://code.videolan.org/videolan/vlc"
+              target="_blank"
+              rel="noreferrer"
+            >
+              VLC source code
+            </a>
+            <a
+              href="https://www.videolan.org/legal.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              VideoLAN licenses
+            </a>
+            <a
+              href="https://github.com/viincnt/Transfert/blob/main/THIRD_PARTY_NOTICES.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Third-party notices
+            </a>
+          </div>
           <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {credits.map((credit) => (
               <a

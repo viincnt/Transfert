@@ -10,26 +10,16 @@ import {
   type ZipBatchOutcome,
 } from "@/components/conversion-queue";
 import { Dropzone } from "@/components/dropzone";
+import {
+  IMAGE_ACCEPT,
+  IMAGE_INPUT_FORMATS as INPUT_FORMATS,
+  IMAGE_OUTPUT_FORMATS as OUTPUT_FORMATS,
+} from "@/lib/image-formats";
 
 // Formats Transfert can produce. "SVG" here wraps the raster image in an
 // SVG document (base64 PNG data URI) rather than tracing it into real
 // vector paths — the same thing most "convert to SVG" tools do for
 // photographic sources.
-const OUTPUT_FORMATS = [
-  "PNG",
-  "JPG",
-  "WEBP",
-  "GIF",
-  "BMP",
-  "TIFF",
-  "AVIF",
-  "ICO",
-  "SVG",
-];
-
-// What the dropzone accepts and advertises. Same list as the outputs —
-// SVG works both ways (rasterized on the way in, wrapped on the way out).
-const INPUT_FORMATS = OUTPUT_FORMATS;
 
 function toQueueItems(files: File[]): QueueItem[] {
   return files.map((file) => ({ id: crypto.randomUUID(), file }));
@@ -86,12 +76,12 @@ export function ImageConverter() {
 
   if (items.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center p-6">
+      <div className="flex min-h-full items-center justify-center p-6">
         <Dropzone
           title={t("imageConverter.dropzone.title")}
           description={t("imageConverter.dropzone.description")}
           formats={INPUT_FORMATS}
-          accept="image/*"
+          accept={IMAGE_ACCEPT}
           onFilesSelected={addFiles}
         />
       </div>
@@ -102,7 +92,7 @@ export function ImageConverter() {
     <ConversionQueue
       items={items}
       formats={OUTPUT_FORMATS}
-      accept="image/*"
+      accept={IMAGE_ACCEPT}
       formatNotices={{ SVG: t("imageConverter.svgNotice") }}
       onAddFiles={addFiles}
       onRemoveItem={removeItem}

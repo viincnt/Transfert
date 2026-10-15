@@ -10,6 +10,7 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
+      - "scripts/prepare-vlc.mjs"
   pull_request:
     branches: [main]
     paths:
@@ -18,6 +19,7 @@ on:
       - "package.json"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
+      - "scripts/prepare-vlc.mjs"
   workflow_dispatch:
 
 permissions:
@@ -63,6 +65,47 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test frontend
+        run: pnpm --filter desktop test
+
+      - name: Test Rust converters
+        run: pnpm --filter desktop test:rust
+
+      - name: Install LibVLC (Windows)
+        if: runner.os == 'Windows'
+        run: choco install vlc --yes --no-progress
+
+      - name: Install LibVLC (macOS)
+        if: runner.os == 'macOS'
+        run: brew install --cask vlc
+
+      - name: Stage portable LibVLC runtime
+        run: pnpm --filter desktop prepare:vlc
+
+      - name: Test staged codecs (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:TRANSFERT_VLC_DIR = "$pwd/apps/desktop/src-tauri/resources/vlc"
+          pnpm --filter desktop test:media
+
+      - name: Track LibVLC audio sample-loss regression (Windows)
+        if: runner.os == 'Windows'
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $env:TRANSFERT_VLC_DIR = "$pwd/apps/desktop/src-tauri/resources/vlc"
+          pnpm --filter desktop test:media:regression
+
+      - name: Test staged codecs (macOS)
+        if: runner.os == 'macOS'
+        run: TRANSFERT_VLC_DIR="$PWD/apps/desktop/src-tauri/resources/vlc/lib" pnpm --filter desktop test:media
+
+      - name: Track LibVLC audio sample-loss regression (macOS)
+        if: runner.os == 'macOS'
+        continue-on-error: true
+        run: TRANSFERT_VLC_DIR="$PWD/apps/desktop/src-tauri/resources/vlc/lib" pnpm --filter desktop test:media:regression
+
       - name: Verify release version
         if: startsWith(github.ref, 'refs/tags/')
         run: >-
@@ -71,7 +114,7 @@ jobs:
           if (version !== tag) throw new Error('Tag ' + tag + ' does not match app version ' + version);"
 
       - name: Build installer
-        run: pnpm --filter desktop tauri build --bundles ${{ matrix.bundle }}
+        run: pnpm --filter desktop tauri build --config src-tauri/tauri.vlc.conf.json --bundles ${{ matrix.bundle }}
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

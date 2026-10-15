@@ -1,5 +1,6 @@
 mod bundling;
 mod conversion;
+mod converters;
 mod delivery;
 mod metadata;
 mod naming;
@@ -248,6 +249,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             convert_image_command,
             convert_images_to_zip_command,
+            converters::media_runtime_command,
+            converters::convert_file_command,
+            converters::convert_files_to_zip_command,
             strip_metadata_command,
             read_metadata_command,
             write_metadata_command

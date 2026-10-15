@@ -11,6 +11,8 @@ import {
 } from "@/components/conversion-queue";
 import { Dropzone } from "@/components/dropzone";
 import { Label } from "@/components/ui/label";
+import { IMAGE_SUPPORTED_INPUT_FORMATS } from "@/lib/image-formats";
+import { conversionInputs } from "@/lib/conversion-formats";
 import {
   Select,
   SelectContent,
@@ -20,7 +22,10 @@ import {
 } from "@/components/ui/select";
 
 const OUTPUT_FORMATS = ["WEBP", "JPG", "AVIF"];
-const INPUT_FORMATS = ["JPG", "PNG", "WEBP", "GIF", "BMP", "TIFF", "AVIF"];
+const { formats: INPUT_FORMATS, accept: IMAGE_ACCEPT } = conversionInputs(
+  IMAGE_SUPPORTED_INPUT_FORMATS,
+  OUTPUT_FORMATS,
+);
 
 const resizePresets = [
   { value: "0", label: "Keep original dimensions" },
@@ -87,12 +92,12 @@ export function ImageOptimizer() {
 
   if (items.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center p-6">
+      <div className="flex min-h-full items-center justify-center p-6">
         <Dropzone
           title={t("imageOptimizer.dropzone.title")}
           description={t("imageOptimizer.dropzone.description")}
           formats={INPUT_FORMATS}
-          accept="image/*"
+          accept={IMAGE_ACCEPT}
           onFilesSelected={addFiles}
         />
       </div>
@@ -101,9 +106,10 @@ export function ImageOptimizer() {
 
   return (
     <ConversionQueue
+      allowSameFormat
       items={items}
       formats={OUTPUT_FORMATS}
-      accept="image/*"
+      accept={IMAGE_ACCEPT}
       outputControls={
         <div className="flex flex-col gap-2">
           <Label>{t("imageOptimizer.maxDimension.label")}</Label>

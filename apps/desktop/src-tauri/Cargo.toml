@@ -35,3 +35,10 @@ rayon = "1"
 base64 = "0.23"
 little_exif = "0.6.23"
 tauri-plugin-window-state = "2.4.1"
+libloading = "0.8"
+pulldown-cmark = "0.13"
+html2text = "0.16"
+html2md = "0.2"
+
+[dev-dependencies]
+symphonia = { version = "0.5", features = ["all"] }

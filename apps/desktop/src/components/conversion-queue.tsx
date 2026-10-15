@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { FormatSelect } from "@/components/format-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -25,6 +26,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useFilePicker } from "@/hooks/use-file-picker";
 import { formatBytes } from "@/lib/format-bytes";
+import { isSourceFormat } from "@/lib/conversion-formats";
 import { resolveFileNameOverride, type NamingMode } from "@/lib/naming";
 import { cn } from "@/lib/utils";
 
@@ -38,8 +40,8 @@ export type DeliveredFile = {
 };
 
 export type ConversionOutcome = DeliveredFile & {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 };
 
 export type ZipBatchOutcome = {
@@ -64,6 +66,7 @@ type ConversionQueueProps = {
   items: QueueItem[];
   formats: string[];
   accept?: string;
+  allowSameFormat?: boolean;
   // Per-format heads-up shown when that format is the effective target
   // for at least one item (e.g. "SVG" → "this wraps the image, it
   // doesn't vectorize it"). Keeps format-specific caveats out of this
@@ -90,6 +93,7 @@ export function ConversionQueue({
   items,
   formats,
   accept,
+  allowSameFormat = false,
   formatNotices,
   onAddFiles,
   onRemoveItem,
@@ -110,6 +114,21 @@ export function ConversionQueue({
   const [rejected, setRejected] = useState<File[]>([]);
   const [statuses, setStatuses] = useState<Record<string, ItemStatus>>({});
   const [isConverting, setIsConverting] = useState(false);
+
+  const isDisabled = (item: QueueItem, format: string) =>
+    !allowSameFormat && isSourceFormat(item.file, format);
+  const globalDisabled = (format: string) =>
+    items.some((item) => isDisabled(item, format));
+  const effectiveGlobal = !globalDisabled(globalFormat)
+    ? globalFormat
+    : (formats.find((format) => !globalDisabled(format)) ?? "");
+
+  function formatFor(item: QueueItem): string {
+    const preferred = perFileFormat[item.id] ?? effectiveGlobal;
+    return formats.includes(preferred) && !isDisabled(item, preferred)
+      ? preferred
+      : (formats.find((format) => !isDisabled(item, format)) ?? "");
+  }
 
   const { open: openFilePicker, inputProps } = useFilePicker({
     accept,
@@ -137,6 +156,7 @@ export function ConversionQueue({
   }
 
   async function handleConvert() {
+    if (isConverting || items.some((item) => !formatFor(item))) return;
     let dir = destinationDir;
     if (!dir) {
       const selected = await pickDestination();
@@ -154,7 +174,7 @@ export function ConversionQueue({
       );
       try {
         const entries: ZipBatchEntry[] = items.map((item, index) => {
-          const format = perFileFormat[item.id] ?? globalFormat;
+          const format = formatFor(item);
           return {
             item,
             format,
@@ -168,8 +188,11 @@ export function ConversionQueue({
           const next = { ...prev };
           for (const item of items) {
             const entry = byId.get(item.id);
-            if (entry?.error) {
-              next[item.id] = { state: "error", message: entry.error };
+            if (!entry || entry.error || !entry.fileName) {
+              next[item.id] = {
+                state: "error",
+                message: entry?.error ?? "No converted file was returned",
+              };
             } else {
               next[item.id] = {
                 state: "done",
@@ -192,38 +215,36 @@ export function ConversionQueue({
       }
     } else {
       const dirPath = dir;
-      await Promise.all(
-        items.map(async (item, index) => {
-          const format = perFileFormat[item.id] ?? globalFormat;
+      for (const [index, item] of items.entries()) {
+        const format = formatFor(item);
+        setStatuses((prev) => ({
+          ...prev,
+          [item.id]: { state: "converting" },
+        }));
+        try {
+          const result = await onConvertItem(
+            item,
+            format,
+            dirPath,
+            nameFor(item, format, index + 1),
+          );
           setStatuses((prev) => ({
             ...prev,
-            [item.id]: { state: "converting" },
+            [item.id]: {
+              state: "done",
+              note: `${formatBytes(item.file.size)} → ${formatBytes(result.size)}`,
+            },
           }));
-          try {
-            const result = await onConvertItem(
-              item,
-              format,
-              dirPath,
-              nameFor(item, format, index + 1),
-            );
-            setStatuses((prev) => ({
-              ...prev,
-              [item.id]: {
-                state: "done",
-                note: `${formatBytes(item.file.size)} → ${formatBytes(result.size)}`,
-              },
-            }));
-          } catch (error) {
-            setStatuses((prev) => ({
-              ...prev,
-              [item.id]: {
-                state: "error",
-                message: error instanceof Error ? error.message : String(error),
-              },
-            }));
-          }
-        }),
-      );
+        } catch (error) {
+          setStatuses((prev) => ({
+            ...prev,
+            [item.id]: {
+              state: "error",
+              message: error instanceof Error ? error.message : String(error),
+            },
+          }));
+        }
+      }
     }
 
     setIsConverting(false);
@@ -278,7 +299,10 @@ export function ConversionQueue({
                 key={item.id}
                 item={item}
                 formats={formats}
-                value={perFileFormat[item.id] ?? globalFormat}
+                value={formatFor(item)}
+                disabledFormats={formats.filter((format) =>
+                  isDisabled(item, format),
+                )}
                 status={statuses[item.id]}
                 onFormatChange={(format) =>
                   setPerFileFormat((prev) => ({ ...prev, [item.id]: format }))
@@ -296,18 +320,18 @@ export function ConversionQueue({
             </p>
             <div className="mt-3 flex items-center justify-between gap-3">
               <Label>{t("queue.convertAllTo")}</Label>
-              <Select value={globalFormat} onValueChange={setGlobalFormat}>
-                <SelectTrigger className="w-28">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {formats.map((format) => (
-                    <SelectItem key={format} value={format}>
-                      {format}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormatSelect
+                label={t("queue.convertAllTo")}
+                formats={formats}
+                disabledFormats={formats.filter(globalDisabled)}
+                value={effectiveGlobal}
+                disabled={isConverting}
+                placeholder="Choose per file"
+                onValueChange={(format) => {
+                  setGlobalFormat(format);
+                  setPerFileFormat({});
+                }}
+              />
             </div>
           </div>
 
@@ -315,9 +339,7 @@ export function ConversionQueue({
             {outputControls}
             {Object.entries(formatNotices ?? {}).map(
               ([format, notice]) =>
-                items.some(
-                  (item) => (perFileFormat[item.id] ?? globalFormat) === format,
-                ) && (
+                items.some((item) => formatFor(item) === format) && (
                   <p
                     key={format}
                     className="flex items-start gap-1.5 rounded-lg bg-secondary/65 p-3 text-xs leading-relaxed text-muted-foreground"
@@ -407,7 +429,7 @@ export function ConversionQueue({
               className="w-full"
               size="lg"
               onClick={handleConvert}
-              disabled={isConverting}
+              disabled={isConverting || items.some((item) => !formatFor(item))}
             >
               {isConverting && <Loader2 className="animate-spin" />}
               {t("queue.convert", { count: items.length })}
@@ -423,6 +445,7 @@ function FileRow({
   item,
   formats,
   value,
+  disabledFormats,
   status,
   onFormatChange,
   onRemove,
@@ -430,6 +453,7 @@ function FileRow({
   item: QueueItem;
   formats: string[];
   value: string;
+  disabledFormats: string[];
   status: ItemStatus | undefined;
   onFormatChange: (format: string) => void;
   onRemove: () => void;
@@ -477,18 +501,14 @@ function FileRow({
         )}
       </div>
 
-      <Select value={value} onValueChange={onFormatChange} disabled={isBusy}>
-        <SelectTrigger className="w-28 shrink-0">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {formats.map((format) => (
-            <SelectItem key={format} value={format}>
-              {format}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <FormatSelect
+        label={`Output format: ${item.file.name}`}
+        formats={formats}
+        value={value}
+        onValueChange={onFormatChange}
+        disabledFormats={disabledFormats}
+        disabled={isBusy}
+      />
 
       {status?.state === "converting" && (
         <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />

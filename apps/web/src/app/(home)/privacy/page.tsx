@@ -12,15 +12,23 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "We do not collect any data",
-    body: "Transfert does not collect, store, or transmit personal data, files, or usage information. There are no analytics, crash reports, telemetry, or tracking built into the app.",
+    body: "Transfert does not collect personal data, files, or usage information for itself or send them to a service. There are no analytics, crash reports, telemetry, or tracking built into the app. Files are read and written locally to perform the operations you request.",
   },
   {
     title: "Your files never leave your device",
     body: "Every conversion happens entirely on your computer. Files you drop into Transfert are read from disk, processed locally, and written to a destination you choose. They are never uploaded to a server, sent over a network, or shared with a third party.",
   },
   {
-    title: "One update request",
-    body: "When Transfert opens, it checks the latest public GitHub Release to see whether an update is available. This is the app's only network request. The request contains no files, account details, analytics, or usage data.",
+    title: "Local conversion engines",
+    body: "Audio and video conversion uses libVLC, developed by VideoLAN and its contributors, through a local Rust integration. LibVLC and its codec plugins run on your device, not in a VideoLAN cloud service. Transfert does not send your files to VideoLAN or use libVLC to stream files or retrieve online media metadata. Images and text documents use local Rust libraries.",
+  },
+  {
+    title: "Temporary files",
+    body: "Conversions may create working copies in your operating system's temporary directory. These are removed when the operation finishes or returns an error. An unexpected application or system shutdown may leave temporary files behind. Completed outputs remain in your chosen destination until you remove them.",
+  },
+  {
+    title: "Optional update checks",
+    body: "When automatic update checks are enabled, Transfert checks the latest public GitHub Release on startup. You can disable automatic checks in Settings or check manually from About. These requests contain no files, account details, analytics, or usage data. File conversion does not need these requests.",
   },
   {
     title: "No accounts, no sign-up",
@@ -32,7 +40,7 @@ const sections = [
   },
   {
     title: "Third parties",
-    body: "The update check is made to GitHub's public Releases API. GitHub may process standard connection data under its own privacy policy. Links to the source repository, the author's site, and open-source projects are also governed by each destination's privacy policy.",
+    body: "The update check uses GitHub's public Releases API. GitHub may process standard connection data under its own privacy policy. Links to external sites are governed by each destination's policy. Using third-party libraries locally does not share files with their authors. Transfert is an independent project and is not affiliated with or endorsed by VideoLAN.",
   },
   {
     title: "Children's privacy",
@@ -73,11 +81,18 @@ export default function PrivacyPage() {
             A plain-language policy for a local-first application.
           </p>
           <p className="mt-8 font-mono text-xs text-[#62636a]">
-            Last updated: October 11, 2026
+            Last updated: October 15, 2026
           </p>
         </header>
 
         <div className="divide-y divide-[#18191d]/15">
+          <p className="py-6 text-sm text-[#62636a]">
+            Open-source attribution and license links are available in our{" "}
+            <Link href="/credits" className="underline underline-offset-4">
+              third-party credits
+            </Link>
+            .
+          </p>
           {sections.map(({ title, body }) => (
             <section
               key={title}

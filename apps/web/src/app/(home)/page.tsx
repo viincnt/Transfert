@@ -6,6 +6,9 @@ import {
   ArrowRight,
   Download,
   FileImage,
+  FileAudio,
+  FileVideo,
+  FileText,
   FilePenLine,
   FileX2,
   LockKeyhole,
@@ -21,6 +24,27 @@ export const metadata: Metadata = {
 };
 
 const tools = [
+  {
+    icon: FileAudio,
+    name: "Audio conversion",
+    description:
+      "MP3, OGG, Opus, FLAC, M4A and WAV output presets through VideoLAN's libVLC. Native validation is in progress.",
+    status: "In development",
+  },
+  {
+    icon: FileVideo,
+    name: "Video conversion",
+    description:
+      "Local libVLC integration for MP4, MOV, WebM, OGV, TS and AVI output presets.",
+    status: "In development",
+  },
+  {
+    icon: FileText,
+    name: "Text documents",
+    description:
+      "Convert UTF-8 text, Markdown and HTML with local Rust libraries.",
+    status: "In development",
+  },
   {
     icon: FileImage,
     name: "Image conversion",
@@ -138,7 +162,7 @@ export default function HomePage() {
             [
               MonitorDown,
               "No tracking",
-              "No telemetry. The only network request checks for updates on GitHub.",
+              "No telemetry. Optional update checks use GitHub.",
             ],
           ].map(([Icon, title, detail]) => {
             const IconComponent = Icon as typeof WifiOff;

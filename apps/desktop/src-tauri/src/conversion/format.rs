@@ -17,6 +17,12 @@ pub enum OutputFormat {
     Avif,
     Ico,
     Svg,
+    Qoi,
+    Tga,
+    Pnm,
+    Hdr,
+    Exr,
+    Farbfeld,
 }
 
 impl OutputFormat {
@@ -34,6 +40,12 @@ impl OutputFormat {
             Self::Avif => Some(ImageFormat::Avif),
             Self::Ico => Some(ImageFormat::Ico),
             Self::Svg => None,
+            Self::Qoi => Some(ImageFormat::Qoi),
+            Self::Tga => Some(ImageFormat::Tga),
+            Self::Pnm => Some(ImageFormat::Pnm),
+            Self::Hdr => Some(ImageFormat::Hdr),
+            Self::Exr => Some(ImageFormat::OpenExr),
+            Self::Farbfeld => Some(ImageFormat::Farbfeld),
         }
     }
 
@@ -48,6 +60,12 @@ impl OutputFormat {
             Self::Avif => "avif",
             Self::Ico => "ico",
             Self::Svg => "svg",
+            Self::Qoi => "qoi",
+            Self::Tga => "tga",
+            Self::Pnm => "pnm",
+            Self::Hdr => "hdr",
+            Self::Exr => "exr",
+            Self::Farbfeld => "ff",
         }
     }
 }
@@ -68,10 +86,16 @@ impl TryFrom<&str> for OutputFormat {
             "WEBP" => Ok(Self::WebP),
             "GIF" => Ok(Self::Gif),
             "BMP" => Ok(Self::Bmp),
-            "TIFF" => Ok(Self::Tiff),
+            "TIFF" | "TIF" => Ok(Self::Tiff),
             "AVIF" => Ok(Self::Avif),
             "ICO" => Ok(Self::Ico),
             "SVG" => Ok(Self::Svg),
+            "QOI" => Ok(Self::Qoi),
+            "TGA" => Ok(Self::Tga),
+            "PNM" => Ok(Self::Pnm),
+            "HDR" => Ok(Self::Hdr),
+            "EXR" => Ok(Self::Exr),
+            "FF" => Ok(Self::Farbfeld),
             other => Err(ConversionError::UnsupportedFormat(other.to_string())),
         }
     }

@@ -93,6 +93,7 @@
     "subtitle": "Pick a tool to get started."
   },
   "dropzone": {
+    "inputFormats": "Accepted input formats",
     "cta": "Drag & drop files here",
     "or": "or",
     "browse": "Browse files",

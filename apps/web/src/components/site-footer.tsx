@@ -18,6 +18,13 @@ export function SiteFooter() {
           <p className="mt-2 text-sm text-[var(--muted)]">
             A little less cloud. A little more control.
           </p>
+          <p className="mt-2 text-xs text-[var(--muted)]">
+            Media engine: libVLC by{" "}
+            <a className="footer-link" href="https://www.videolan.org/">
+              VideoLAN
+            </a>{" "}
+            and contributors.
+          </p>
           <div className="mt-4">
             <Copyright />
           </div>
@@ -31,6 +38,9 @@ export function SiteFooter() {
           </Link>
           <Link className="footer-link" href="/privacy">
             Privacy
+          </Link>
+          <Link className="footer-link" href="/credits">
+            Credits
           </Link>
           <a
             className="footer-link inline-flex items-center gap-1"

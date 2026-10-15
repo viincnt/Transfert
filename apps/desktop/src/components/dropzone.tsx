@@ -43,7 +43,7 @@ export function Dropzone({
     <div className="flex w-full max-w-2xl flex-col items-center gap-3">
       <div
         className={cn(
-          "relative flex aspect-[1.45/1] w-full flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-colors",
+          "relative flex min-h-96 w-full flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border-2 border-dashed p-8 text-center transition-colors",
           isDragging
             ? "border-primary bg-primary/10"
             : "border-border bg-card/65",
@@ -78,12 +78,19 @@ export function Dropzone({
             {description}
           </p>
         </div>
-        <div className="relative flex flex-wrap items-center justify-center gap-1.5">
-          {formats.map((format) => (
-            <Badge key={format} variant="secondary">
-              {format}
-            </Badge>
-          ))}
+        <div className="relative space-y-3">
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">
+              {t("dropzone.inputFormats")}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              {formats.map((format) => (
+                <Badge key={format} variant="secondary">
+                  {format}
+                </Badge>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="relative flex flex-col items-center gap-3">

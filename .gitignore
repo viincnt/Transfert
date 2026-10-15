@@ -33,3 +33,4 @@ scripts/cache/
 *.njsproj
 *.sln
 *.sw?
+apps/desktop/src-tauri/resources/vlc/

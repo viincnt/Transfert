@@ -1,6 +1,9 @@
 mod decode;
+mod document;
 mod error;
+pub mod file;
 mod format;
+pub mod media;
 mod pipeline;
 mod svg_wrap;
 

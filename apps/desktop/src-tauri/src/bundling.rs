@@ -33,8 +33,7 @@ pub fn build_zip(entries: &[ZipEntry]) -> Result<Vec<u8>, BundleError> {
     let mut buffer = Cursor::new(Vec::new());
     {
         let mut writer = ZipWriter::new(&mut buffer);
-        let options =
-            SimpleFileOptions::default().compression_method(CompressionMethod::Deflated);
+        let options = SimpleFileOptions::default().compression_method(CompressionMethod::Deflated);
 
         let mut used_names: HashSet<String> = HashSet::new();
         for entry in entries {
@@ -79,5 +78,33 @@ fn unique_zip_name(used: &mut HashSet<String>, file_name: &str) -> String {
             return candidate;
         }
         attempt += 1;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::io::Read;
+
+    #[test]
+    fn duplicate_names_keep_every_file_and_its_contents() {
+        let entries: Vec<_> = ["file.txt", "file.txt", "file (1).txt"]
+            .into_iter()
+            .enumerate()
+            .map(|(i, name)| ZipEntry {
+                file_name: name.into(),
+                bytes: vec![i as u8; 10],
+            })
+            .collect();
+        let bytes = build_zip(&entries).unwrap();
+        let mut zip = ZipArchive::new(Cursor::new(bytes)).unwrap();
+        let mut names = HashSet::new();
+        for (i, entry) in entries.iter().enumerate() {
+            let mut file = zip.by_index(i).unwrap();
+            assert!(names.insert(file.name().to_owned()));
+            let mut actual = Vec::new();
+            file.read_to_end(&mut actual).unwrap();
+            assert_eq!(actual, entry.bytes);
+        }
     }
 }
