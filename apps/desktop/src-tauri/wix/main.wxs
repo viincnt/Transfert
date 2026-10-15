@@ -25,15 +25,8 @@
                  InstallerVersion="450"
                  Languages="0"
                  Compressed="yes"
-                 InstallScope="perUser"
+                  InstallScope="perMachine"
                  SummaryCodepage="!(loc.TauriCodepage)"/>
-
-        <!-- InstallScope="perUser" above only governs WiX's own component/ICE
-             rules. The MSI engine itself decides where PublishProduct writes
-             the Add/Remove Programs entry based on this property - without
-             it, the product got registered as installed (Installer\Products)
-             but never showed up in ARP at all. -->
-        <Property Id="MSIINSTALLPERUSER" Value="1" Secure="yes" />
 
         <!-- https://docs.microsoft.com/en-us/windows/win32/msi/reinstallmode -->
         <!-- reinstall all files; rewrite all registry entries; reinstall all shortcuts -->
@@ -125,12 +118,7 @@
                     <RegistryValue Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="Desktop Shortcut" Type="integer" Value="1" KeyPath="yes" />
                 </Component>
             </Directory>
-            <!-- perUser scope: Program Files needs admin write access, which means
-                 a UAC prompt - and the Microsoft Store's "unpackaged app" silent
-                 install check fails outright on any installer that shows one.
-                 LocalAppDataFolder is writable by the current user, so install
-                 and uninstall both stay silent with no elevation at all. -->
-            <Directory Id="LocalAppDataFolder">
+            <Directory Id="$(var.PlatformProgramFilesFolder)">
                 <Directory Id="INSTALLDIR" Name="{{product_name}}"/>
             </Directory>
             <Directory Id="ProgramMenuFolder">
@@ -140,10 +128,9 @@
 
         <DirectoryRef Id="INSTALLDIR">
             <Component Id="RegistryEntries" Guid="*">
-                <RegistryKey Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}">
+                    <RegistryKey Root="HKLM" Key="Software\\{{manufacturer}}\\{{product_name}}">
                     <RegistryValue Name="InstallDir" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
                 </RegistryKey>
-                <!-- Change the Root to HKCU for perUser installations -->
                 {{#each deep_link_protocols as |protocol| ~}}
                 <RegistryKey Root="HKLM" Key="Software\Classes\\{{protocol}}">
                     <RegistryValue Type="string" Name="URL Protocol" Value=""/>
@@ -158,10 +145,7 @@
                 {{/each~}}
             </Component>
             <Component Id="Path" Guid="{{path_component_guid}}" Win64="$(var.Win64)">
-                <!-- ICE38: a component installing under the user profile (our
-                     INSTALLDIR, now under LocalAppDataFolder) must use an HKCU
-                     registry value as its KeyPath, not the file itself. -->
-                <RegistryValue Root="HKCU" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="Path" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
+                <RegistryValue Root="HKLM" Key="Software\\{{manufacturer}}\\{{product_name}}" Name="Path" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
                 <File Id="Path" Source="{{main_binary_path}}" Checksum="yes"/>
                 {{#each file_associations as |association| ~}}
                 {{#each association.ext as |ext| ~}}
