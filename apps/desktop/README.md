@@ -40,6 +40,20 @@ pnpm --filter desktop tauri build --bundles msi
 
 The MSI is produced under `src-tauri/target/release/bundle/msi/`.
 
+## Updates
+
+Transfert updates itself from signed GitHub Release artifacts. Users receive the
+update inside the app; they do not need to download a new installer manually.
+
+To publish an update, set the same version in `package.json`,
+`src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`, then push a matching
+`v<version>` tag. The GitHub Actions workflow creates the signed installers and
+its `latest.json` updater manifest automatically.
+
+The signing key must remain available in the `TAURI_SIGNING_PRIVATE_KEY` GitHub
+Actions secret. The local backup is stored at `~/.tauri/transfert.key`; losing
+both copies prevents new releases from updating existing installations.
+
 ## Conversion engines
 
 - Images: Rust `image` and `resvg`. Outputs: PNG, JPG, WEBP, GIF, BMP,

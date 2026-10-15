@@ -1,12 +1,12 @@
-const LATEST_RELEASE_URL =
-  "https://api.github.com/repos/viincnt/Transfert/releases/latest";
+import {
+  check,
+  type DownloadEvent,
+  type Update,
+} from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
+
 const UPDATE_CHECKS_STORAGE_KEY = "transfert-update-checks-enabled";
 export const UPDATE_CHECKS_CHANGED_EVENT = "transfert-update-checks-changed";
-
-type LatestRelease = {
-  html_url: string;
-  tag_name: string;
-};
 
 export function areUpdateChecksEnabled() {
   if (typeof window === "undefined") return true;
@@ -19,43 +19,16 @@ export function setUpdateChecksEnabled(enabled: boolean) {
   window.dispatchEvent(new Event(UPDATE_CHECKS_CHANGED_EVENT));
 }
 
-function versionParts(version: string) {
-  const normalized = version.trim().replace(/^v/i, "");
+export { type Update };
 
-  if (!/^\d+(\.\d+)*$/.test(normalized)) return null;
-
-  return normalized.split(".").map(Number);
+export function checkForUpdate() {
+  return check();
 }
 
-function isNewerVersion(candidate: string, current: string) {
-  const candidateParts = versionParts(candidate);
-  const currentParts = versionParts(current);
-
-  if (!candidateParts || !currentParts) return false;
-
-  const length = Math.max(candidateParts.length, currentParts.length);
-
-  for (let index = 0; index < length; index += 1) {
-    const difference =
-      (candidateParts[index] ?? 0) - (currentParts[index] ?? 0);
-    if (difference !== 0) return difference > 0;
-  }
-
-  return false;
-}
-
-export async function checkForUpdate(currentVersion: string) {
-  const response = await fetch(LATEST_RELEASE_URL, {
-    headers: { Accept: "application/vnd.github+json" },
-  });
-
-  if (!response.ok) throw new Error("Unable to check for updates.");
-
-  const release = (await response.json()) as LatestRelease;
-
-  return {
-    available: isNewerVersion(release.tag_name, currentVersion),
-    url: release.html_url,
-    version: release.tag_name.replace(/^v/i, ""),
-  };
+export async function installUpdate(
+  update: Update,
+  onProgress?: (event: DownloadEvent) => void,
+) {
+  await update.downloadAndInstall(onProgress);
+  await relaunch();
 }

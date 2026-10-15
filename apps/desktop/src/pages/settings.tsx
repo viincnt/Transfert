@@ -8,10 +8,9 @@ import {
   Sun,
   SunMoon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { openUrl } from "@tauri-apps/plugin-opener";
 
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -27,10 +26,10 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   areUpdateChecksEnabled,
   checkForUpdate,
+  installUpdate,
   setUpdateChecksEnabled,
+  type Update,
 } from "@/lib/updates";
-
-import { version as appVersion } from "../../package.json";
 
 function SettingMark({ children }: { children: React.ReactNode }) {
   return (
@@ -47,20 +46,33 @@ export function Settings() {
     areUpdateChecksEnabled,
   );
   const [update, setUpdate] = useState<{
-    status: "idle" | "checking" | "current" | "available" | "error";
-    url?: string;
-    version?: string;
+    status:
+      "idle" | "checking" | "current" | "available" | "installing" | "error";
+    update?: Update;
   }>({ status: "idle" });
+
+  useEffect(() => () => void update.update?.close(), [update.update]);
 
   async function handleCheckForUpdate() {
     setUpdate({ status: "checking" });
     try {
-      const latest = await checkForUpdate(appVersion);
+      const latest = await checkForUpdate();
       setUpdate(
-        latest.available
-          ? { status: "available", url: latest.url, version: latest.version }
+        latest
+          ? { status: "available", update: latest }
           : { status: "current" },
       );
+    } catch {
+      setUpdate({ status: "error" });
+    }
+  }
+
+  async function handleInstallUpdate() {
+    if (!update.update) return;
+
+    setUpdate({ status: "installing", update: update.update });
+    try {
+      await installUpdate(update.update);
     } catch {
       setUpdate({ status: "error" });
     }
@@ -181,8 +193,15 @@ export function Settings() {
                 <span className="sr-only">{t("settings.updates.label")}</span>
               </button>
               {update.status === "available" ? (
-                <Button size="sm" onClick={() => openUrl(update.url!)}>
-                  {t("settings.updates.download", { version: update.version })}
+                <Button size="sm" onClick={handleInstallUpdate}>
+                  {t("settings.updates.install", {
+                    version: update.update?.version,
+                  })}
+                </Button>
+              ) : update.status === "installing" ? (
+                <Button size="sm" disabled>
+                  <RefreshCw className="animate-spin" />
+                  {t("settings.updates.installing")}
                 </Button>
               ) : (
                 <Button
@@ -210,7 +229,7 @@ export function Settings() {
                     ? t("settings.updates.error")
                     : update.status === "available"
                       ? t("settings.updates.available", {
-                          version: update.version,
+                          version: update.update?.version,
                         })
                       : null}
               </p>

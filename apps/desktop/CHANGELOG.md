@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-10-15
+
+### Added
+
+- Signed in-app updates for Windows and macOS releases. Updates download,
+  verify, install and restart from Transfert without requiring a manual GitHub
+  download.
+
 ## [0.3.3] - 2026-10-15
 
 ### Fixed
@@ -93,7 +101,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.3...main
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.4...main
+[0.3.4]: https://github.com/viincnt/Transfert/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/viincnt/Transfert/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/viincnt/Transfert/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/viincnt/Transfert/compare/v0.3.0...v0.3.1

@@ -185,12 +185,13 @@
     },
     "updates": {
       "label": "Check for updates",
-      "description": "Checks the latest public GitHub Release when the app opens. Turn this off to keep Transfert fully offline.",
+      "description": "Checks for verified updates when the app opens. Turn this off to keep Transfert fully offline.",
       "checkNow": "Check now",
       "checking": "Checking…",
       "current": "You have the latest version.",
-      "available": "Version {{version}} is ready to download.",
-      "download": "Download v{{version}}",
+      "available": "Version {{version}} is ready to install.",
+      "install": "Install v{{version}}",
+      "installing": "Installing…",
       "error": "Could not check for updates. Try again later."
     },
     "about": {

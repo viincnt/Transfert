@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Download } from "lucide-react";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { Download, LoaderCircle } from "lucide-react";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,8 @@ import { useNativeAppGuards } from "@/hooks/use-native-app-guards";
 import {
   areUpdateChecksEnabled,
   checkForUpdate,
+  installUpdate,
+  type Update,
   UPDATE_CHECKS_CHANGED_EVENT,
 } from "@/lib/updates";
 import { About } from "@/pages/about";
@@ -22,8 +23,6 @@ import { MetadataEdit } from "@/pages/metadata-edit";
 import { MetadataStrip } from "@/pages/metadata-strip";
 import { Settings } from "@/pages/settings";
 
-import { version as appVersion } from "../package.json";
-
 // Bundles the full GPL text, so it's split into its own chunk and only
 // fetched when someone actually opens the license page.
 const License = lazy(() =>
@@ -32,10 +31,8 @@ const License = lazy(() =>
 
 function App() {
   useNativeAppGuards();
-  const [update, setUpdate] = useState<{
-    url: string;
-    version: string;
-  } | null>(null);
+  const [update, setUpdate] = useState<Update | null>(null);
+  const [installingUpdate, setInstallingUpdate] = useState(false);
   const [updateChecksEnabled, setUpdateChecksEnabled] = useState(
     areUpdateChecksEnabled,
   );
@@ -64,10 +61,12 @@ function App() {
 
     let cancelled = false;
 
-    void checkForUpdate(appVersion)
+    void checkForUpdate()
       .then((latest) => {
-        if (!cancelled && latest.available) {
-          setUpdate({ url: latest.url, version: latest.version });
+        if (cancelled) {
+          void latest?.close();
+        } else if (latest) {
+          setUpdate(latest);
         }
       })
       // Update checks must not prevent use when offline or GitHub is unavailable.
@@ -77,6 +76,23 @@ function App() {
       cancelled = true;
     };
   }, [updateChecksEnabled]);
+
+  useEffect(() => () => void update?.close(), [update]);
+
+  async function handleInstallUpdate() {
+    if (!update) return;
+
+    setInstallingUpdate(true);
+    try {
+      await installUpdate(update);
+    } catch {
+      setInstallingUpdate(false);
+    }
+  }
+
+  function dismissUpdate() {
+    setUpdate(null);
+  }
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -130,15 +146,26 @@ function App() {
                 Transfert {update.version} is ready
               </h1>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Download the latest version to get the newest improvements.
+                Downloading and installing happens securely inside Transfert.
               </p>
               <div className="mt-6 flex flex-wrap justify-end gap-2">
-                <Button variant="ghost" onClick={() => setUpdate(null)}>
+                <Button
+                  variant="ghost"
+                  onClick={dismissUpdate}
+                  disabled={installingUpdate}
+                >
                   Not now
                 </Button>
-                <Button onClick={() => openUrl(update.url)}>
-                  <Download />
-                  Download update
+                <Button
+                  onClick={handleInstallUpdate}
+                  disabled={installingUpdate}
+                >
+                  {installingUpdate ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    <Download />
+                  )}
+                  {installingUpdate ? "Installing update" : "Install update"}
                 </Button>
               </div>
             </section>
