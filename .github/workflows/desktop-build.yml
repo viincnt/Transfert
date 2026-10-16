@@ -37,7 +37,7 @@ jobs:
         include:
           - name: macOS
             os: macos-latest
-            bundle: dmg
+            bundle: dmg,app
             artifact-name: transfert-macos
             artifact-path: apps/desktop/src-tauri/target/release/bundle/dmg/*.dmg
           - name: Windows
