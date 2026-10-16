@@ -17,11 +17,17 @@ it("keeps documents usable without a native media runtime", () => {
   expect(invoke).not.toHaveBeenCalled();
 });
 
-it("blocks media input when LibVLC is unavailable and supports retry", async () => {
+it("checks LibVLC only after media is selected and supports retry", async () => {
   invoke
     .mockRejectedValueOnce("LibVLC runtime unavailable")
     .mockResolvedValueOnce(undefined);
-  render(<FileConverter kind="audio" />);
+  const user = userEvent.setup({ applyAccept: false });
+  const { container } = render(<FileConverter kind="audio" />);
+  expect(screen.getByRole("button", { name: /browse/i })).toBeTruthy();
+  expect(invoke).not.toHaveBeenCalled();
+  const input =
+    container.querySelector<HTMLInputElement>('input[type="file"]')!;
+  await user.upload(input, new File(["fixture"], "track.mp3"));
   expect(await screen.findByText("LibVLC runtime unavailable")).toBeTruthy();
   expect(screen.queryByRole("button", { name: /browse/i })).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Check again" }));

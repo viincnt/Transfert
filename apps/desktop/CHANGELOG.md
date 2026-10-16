@@ -6,6 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.3.6] - 2026-10-16
+
+### Fixed
+
+- Opening the audio or video converter no longer initializes LibVLC immediately,
+  preventing a broken native media runtime from crashing the app on navigation.
+
 ## [0.3.5] - 2026-10-15
 
 ### Fixed
@@ -108,7 +115,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - App icon, in both the flat badge style used inside the app and a macOS-ready squircle source for the packaged app icon.
 - Windows packaging via MSI, as the source artifact for eventual Microsoft Store (MSIX) submission.
 
-[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.5...main
+[unreleased]: https://github.com/viincnt/Transfert/compare/v0.3.6...main
+[0.3.6]: https://github.com/viincnt/Transfert/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/viincnt/Transfert/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/viincnt/Transfert/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/viincnt/Transfert/compare/v0.3.2...v0.3.3

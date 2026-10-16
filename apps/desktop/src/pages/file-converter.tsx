@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
 import {
@@ -77,28 +77,23 @@ export function FileConverter({ kind }: { kind: ConverterKind }) {
   const config = converters[kind];
   const inputs = conversionInputs(config.inputs, config.outputs);
   const [items, setItems] = useState<QueueItem[]>([]);
-  const [runtime, setRuntime] = useState<"checking" | "ready" | string>(
-    kind === "document" ? "ready" : "checking",
+  const [runtime, setRuntime] = useState<"unverified" | "checking" | "ready" | string>(
+    kind === "document" ? "ready" : "unverified",
   );
-  const [retry, setRetry] = useState(0);
-  useEffect(() => {
-    if (kind === "document") return;
-    let cancelled = false;
+  async function checkRuntime() {
+    if (kind === "document") return true;
     setRuntime("checking");
-    invoke("media_runtime_command").then(
-      () => {
-        if (!cancelled) setRuntime("ready");
-      },
-      (error) => {
-        if (!cancelled) setRuntime(String(error));
-      },
-    );
-    return () => {
-      cancelled = true;
-    };
-  }, [kind, retry]);
+    try {
+      await invoke("media_runtime_command");
+      setRuntime("ready");
+      return true;
+    } catch (error) {
+      setRuntime(String(error));
+      return false;
+    }
+  }
 
-  if (runtime !== "ready") {
+  if (runtime !== "unverified" && runtime !== "ready") {
     return (
       <div className="mx-auto max-w-2xl space-y-4 p-8">
         <h1 className="text-xl font-semibold">{config.title}</h1>
@@ -106,15 +101,18 @@ export function FileConverter({ kind }: { kind: ConverterKind }) {
           {runtime === "checking" ? "Checking LibVLC runtime…" : runtime}
         </p>
         {runtime !== "checking" && (
-          <Button onClick={() => setRetry((value) => value + 1)}>
-            Check again
-          </Button>
+          <Button onClick={checkRuntime}>Check again</Button>
         )}
       </div>
     );
   }
 
-  function addFiles(files: File[]) {
+  async function addFiles(files: File[]) {
+    // Loading LibVLC can abort the native process on a broken installation, so
+    // never initialize it merely by navigating to a media converter.
+    if (kind !== "document" && runtime !== "ready" && !(await checkRuntime())) {
+      return;
+    }
     setItems((prev) => [
       ...prev,
       ...files.map((file) => ({ id: crypto.randomUUID(), file })),
