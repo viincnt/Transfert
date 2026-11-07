@@ -1,0 +1,17 @@
+{
+  "name": "transfert",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @transfert/website dev",
+    "build": "pnpm -r --if-present build",
+    "lint": "pnpm -r --if-present lint",
+    "format": "pnpm --filter @transfert/website format",
+    "format:check": "pnpm --filter @transfert/website format:check"
+  },
+  "license": "UNLICENSED"
+}

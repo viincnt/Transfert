@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #0c0d0b;
+  --color-surface: #151613;
+  --color-raised: #1e201b;
+  --color-chip: #2b2e26;
+  --color-line: #2c2e26;
+  --color-ink: #f4f5ef;
+  --color-muted: #a3a59c;
+  --color-accent: #ffffff;
+
+  --text-ui: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: 1.125rem;
+  --text-title: clamp(1.375rem, 1.3rem + 0.35vw, 1.625rem);
+  --text-head: clamp(1.875rem, 1.45rem + 1.9vw, 2.75rem);
+  --text-display: clamp(2.75rem, 1.75rem + 4.4vw, 4.5rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --gutter: 16px;
+  --nav: 64px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@utility frame {
+  width: min(1080px, calc(100% - 2 * var(--gutter)));
+  margin-inline: auto;
+}
+
+@utility button-primary {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 8px;
+  padding-inline: 16px;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color 180ms ease,
+    transform 140ms var(--ease-out),
+    opacity 180ms ease;
+  &:hover {
+    background: var(--color-accent);
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: calc(var(--nav) + 24px);
+    color-scheme: dark;
+    scrollbar-color: #45483c var(--color-bg);
+    background: var(--color-bg);
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    font-optical-sizing: auto;
+    font-synthesis: none;
+    font-feature-settings: "calt", "kern", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+  a {
+    text-underline-offset: 0.25em;
+  }
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+  a,
+  button {
+    touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+  svg {
+    flex-shrink: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* A word of a heading, masked so it can rise from behind its own baseline. */
+.word {
+  display: inline-block;
+  clip-path: inset(0 -0.1em -0.18em -0.1em);
+}
+.word > span {
+  display: inline-block;
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes settle {
+  to {
+    transform: none;
+  }
+}
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes tick {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The first screen: over by 1.2s, and the words are in the HTML from frame one. */
+  .js .hero-rise {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: rise 800ms var(--ease-out) forwards;
+    animation-delay: var(--d);
+  }
+  .js .hero-settle {
+    transform: scale(1.06);
+    animation: settle 1600ms var(--ease-expo) 200ms forwards;
+  }
+
+  .js [data-reveal="words"] .word > span {
+    transform: translateY(120%);
+    transition: transform 1000ms var(--ease-expo);
+    transition-delay: calc(var(--i, 0) * 45ms);
+  }
+  .js [data-reveal="words"].is-in .word > span {
+    transform: none;
+  }
+
+  .js [data-reveal="rise"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 800ms var(--ease-out) var(--d, 0ms),
+      transform 1100ms var(--ease-expo) var(--d, 0ms);
+  }
+  .js [data-reveal="rise"].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-reveal="rows"] > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 900ms var(--ease-expo);
+  }
+  .js [data-reveal="rows"].is-in > * {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal="rows"] > :nth-child(2) {
+    transition-delay: 70ms;
+  }
+  [data-reveal="rows"] > :nth-child(3) {
+    transition-delay: 140ms;
+  }
+
+  .row-in {
+    animation: row-in 420ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 50ms);
+  }
+  .pop {
+    animation: pop 300ms var(--ease-out) backwards;
+  }
+  .fade-in {
+    animation: fade-in 280ms ease backwards;
+  }
+  .tick {
+    animation: tick var(--cycle) linear both;
+    transform-origin: left;
+  }
+  .arrow {
+    transition: transform 260ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover .arrow {
+      transform: translateX(3px);
+    }
+  }
+}
+
+/* Scrubbed moves keep their finished state, without the travel. */
+@media (prefers-reduced-motion: reduce) {
+  [data-scrub] {
+    clip-path: none !important;
+    transform: none !important;
+  }
+}
+
+/* Without a script every answer stays readable. */
+html:not(.js) [data-faq-panel] {
+  display: block !important;
+}
+html:not(.js) [data-answer] {
+  grid-template-rows: 1fr !important;
+  visibility: visible !important;
+}
+
+/* Legal document prose */
+.legal-prose {
+  > * + * {
+    margin-top: 1.5em;
+  }
+  h2 {
+    font-size: var(--text-lead);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin-top: 2.5em;
+    color: var(--color-ink);
+  }
+  h2:first-child {
+    margin-top: 0;
+  }
+  p {
+    color: var(--color-muted);
+    line-height: 1.7;
+    max-width: 68ch;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.6em;
+    max-width: 68ch;
+  }
+  li {
+    color: var(--color-muted);
+    line-height: 1.7;
+    padding-left: 1.25em;
+    position: relative;
+  }
+  li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: var(--color-chip);
+  }
+  a:not([class]) {
+    color: var(--color-ink);
+    text-underline-offset: 3px;
+  }
+  a:not([class]):hover {
+    color: var(--color-accent);
+  }
+  .callout {
+    background: var(--color-surface);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    max-width: 68ch;
+  }
+  .callout p {
+    margin: 0;
+  }
+}

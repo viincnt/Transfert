@@ -1,0 +1,285 @@
+{
+  "nav": {
+    "skipToContent": "Skip to content",
+    "logoLabel": "Transfert, home",
+    "features": "Features",
+    "privacy": "Privacy",
+    "faq": "FAQ",
+    "learnMore": "Learn more",
+    "mainNavLabel": "Main navigation"
+  },
+  "hero": {
+    "lead": "Your files.",
+    "rest": "Your way.",
+    "subtitle": "Convert formats. Edit metadata. Share only what you want. All on your device. Completely free.",
+    "cta": "Explore Transfert",
+    "secondary": "Explore features",
+    "badge": "Desktop app in development"
+  },
+  "demo": {
+    "sectionLabel": "Interactive Transfert demo",
+    "caption": "Fewer steps between the file you have and the one you need.",
+    "disclaimer": "Conceptual preview · No files are processed"
+  },
+  "features": {
+    "lead": "Fewer tools.",
+    "rest": "More possibilities.",
+    "intro": "A photo in the wrong format. A heavy video. A location that doesn't need to come along. One place to fix all of it.",
+    "disclaimer": "Planned features. Supported formats will be confirmed as development progresses. Examples are illustrative.",
+    "items": [
+      {
+        "title": "A new format. Same idea.",
+        "body": "Images, video, audio and documents. Convert your files to the format the next step demands.",
+        "note": "Conversion across compatible formats"
+      },
+      {
+        "title": "Share the photo. Not your location.",
+        "body": "See what your files say about you. Inspect, edit or remove metadata before sharing.",
+        "note": "You choose what stays"
+      },
+      {
+        "title": "Once. For the whole batch.",
+        "body": "Do it less. Apply conversions and adjustments to multiple files at once, with presets for your workflow.",
+        "note": "Presets to share, publish or archive"
+      }
+    ]
+  },
+  "privacy": {
+    "lead": "Your files don't",
+    "rest": "need the cloud.",
+    "body": "Or a trip to a server. Transfert is being built to work locally, with the power of your device and control in your hands.",
+    "photoAlt": "Clouds over a mountain valley",
+    "principles": [
+      {
+        "title": "Local processing",
+        "body": "Works with the power of your device. No file uploads."
+      },
+      {
+        "title": "100% free",
+        "body": "No subscription. No premium tier. No per-file charge."
+      },
+      {
+        "title": "Privacy by principle",
+        "body": "No account to convert. What's yours stays yours."
+      }
+    ]
+  },
+  "faq": {
+    "lead": "Good to know.",
+    "rest": "Before you start.",
+    "subtitle": "No fine print. No surprises after.",
+    "categoriesLabel": "Question categories",
+    "categories": [
+      {
+        "name": "Pricing",
+        "questions": [
+          [
+            "Is it really free?",
+            "Yes. Transfert is being built to be completely free — no subscription, no premium plan, no per-file charge."
+          ],
+          [
+            "Do I need an account?",
+            "No. The idea is that you can convert your files without any account."
+          ],
+          [
+            "Will the code be open source?",
+            "Yes. The desktop app will be open source under the MIT or Apache-2.0 licenses."
+          ]
+        ]
+      },
+      {
+        "name": "Privacy",
+        "questions": [
+          [
+            "Do my files go to a server?",
+            "No. Transfert is designed to process your files on your own device. Conversion and metadata editing will be local — no content ever leaves your machine."
+          ],
+          [
+            "What is metadata?",
+            "Metadata is information attached to a file — GPS location, camera model, author, creation date. Transfert will let you inspect, edit or remove supported fields before sharing."
+          ]
+        ]
+      },
+      {
+        "name": "Features",
+        "questions": [
+          [
+            "Which formats will be supported?",
+            "The project plans to support images, video, audio, documents and archives. The exact list of formats and conversions will be confirmed as the processing engine is built. The formats shown in the demo are illustrative."
+          ],
+          [
+            "Can I convert multiple files at once?",
+            "That's the plan. You'll be able to apply conversions and adjustments to multiple files at once, with presets for your workflow."
+          ]
+        ]
+      },
+      {
+        "name": "Launch",
+        "questions": [
+          [
+            "Can I download the app now?",
+            "Not yet. The desktop app is in development and there is no public version available for download. This page presents the concept and an interactive demo, not a working converter."
+          ],
+          [
+            "Which platforms will it support?",
+            "Not confirmed yet. Supported platforms will be defined as development progresses."
+          ]
+        ]
+      }
+    ]
+  },
+  "cta": {
+    "badge": "In development",
+    "lead": "A new destination.",
+    "rest": "Without leaving your computer.",
+    "body": "Free, local and built to simplify. We're preparing Transfert. The download is coming in a future update.",
+    "button": "Try the demo"
+  },
+  "footer": {
+    "copyright": "© {year} Transfert",
+    "license": "Desktop app: MIT / Apache-2.0",
+    "photo": "Photography: Unsplash",
+    "backToTop": "Back to top"
+  },
+  "productDemo": {
+    "windowTitle": "Transfert",
+    "windowLabel": "Demo",
+    "sidebarSpace": "Your space",
+    "sidebarLibrary": "Library",
+    "fileTypeLabel": "Demo file type",
+    "localNote": "{device}\n{files}",
+    "device": "Your device.",
+    "files": "Your files.",
+    "headingIdle": "A new format. That's all.",
+    "headingDone": "Ready to export.",
+    "subtitleIdle": "Same content. New possibilities.",
+    "subtitleDone": "Illustrative preview of the output files.",
+    "fileCount": "3 files",
+    "metaNoMetadata": "Output preview · no metadata",
+    "metaWithMetadata": "Output preview · with metadata",
+    "convertLabel": "Convert to",
+    "removeMetadata": "Remove metadata",
+    "statusNoMetadata": "Preview without metadata",
+    "statusWithMetadata": "Preview with metadata",
+    "statusCloud": "Nothing sent to the cloud",
+    "runIdle": "Simulate conversion",
+    "runRunning": "Simulating…",
+    "runDone": "Reset"
+  },
+  "formatFragment": {
+    "groupLabel": "Example file type",
+    "sameContent": "same content"
+  },
+  "metadataFragment": {
+    "nothingRemoved": "Nothing removed",
+    "oneRemoved": "1 field removed",
+    "manyRemoved": "{count} fields removed",
+    "removeLabel": "Remove {name}",
+    "fields": [
+      { "name": "GPS location", "value": "60.77° N, 137.55° W" },
+      { "name": "Device", "value": "Phone camera" },
+      { "name": "Author", "value": "Your name" },
+      { "name": "Creation date", "value": "Mar 12, 2026" }
+    ]
+  },
+  "batchFragment": {
+    "presetLabel": "Preset",
+    "fileCount": "3 files",
+    "runIdle": "Apply to batch",
+    "runRunning": "Applying…",
+    "runDone": "Redo",
+    "readyFor": "Ready to {verb}",
+    "presets": {
+      "Share": { "format": "JPG", "verb": "share" },
+      "Publish": { "format": "WebP", "verb": "publish" },
+      "Archive": { "format": "PNG", "verb": "archive" }
+    }
+  },
+  "examples": {
+    "categories": {
+      "images": "Images",
+      "videos": "Videos",
+      "audio": "Audio",
+      "documents": "Documents"
+    },
+    "files": {
+      "images": ["Mountains", "Late afternoon", "Along the way"],
+      "videos": ["A day outside", "View from above", "On the road"],
+      "audio": ["Nature sounds", "Voice note", "First take"],
+      "documents": ["Presentation", "Notes", "My project"]
+    }
+  },
+  "legalLayout": {
+    "logoLabel": "Transfert, home",
+    "logoText": "Transfert",
+    "back": "Back",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "copyright": "© {year} Transfert"
+  },
+  "downloadPage": {
+    "pageTitle": "Download — Transfert",
+    "pageDescription": "Download the Transfert desktop app for macOS and Windows.",
+    "appName": "Transfert",
+    "appSubtitle": "Desktop app",
+    "statusBadge": "In development — no release yet",
+    "description": "Transfert is a desktop app that converts, strips metadata, and packages your files locally — no cloud, no account. Download links will appear here when the first version ships.",
+    "statusInDevelopment": "In development",
+    "statusPlanned": "Planned",
+    "directDownload": "Direct download",
+    "downloadButton": "Download",
+    "commandLine": "Command line",
+    "copyCommand": "Copy command",
+    "footnote": "Will be open source under MIT or Apache-2.0 — build from source or grab a pre-built binary when it ships.",
+    "tryDemo": "Try the web demo",
+    "followGithub": "Follow on GitHub"
+  },
+  "privacyPage": {
+    "pageTitle": "Privacy Policy — Transfert",
+    "pageDescription": "Transfert collects no personal data. No tracking, no analytics, no account required.",
+    "layoutTitle": "Privacy Policy",
+    "updated": "Last updated: November 2026",
+    "callout": "Short version: Transfert collects nothing about you. We do not sell, share or monetise any data — because we do not have any.",
+    "websiteHeading": "The website",
+    "websiteStatic": "This website is static and informational. It does not use cookies, analytics, tracking pixels or advertising scripts of any kind.",
+    "websiteHosting": "The site is hosted on <vercel>Vercel</vercel>. As part of their infrastructure, Vercel may log standard HTTP access data — such as IP addresses and request timestamps — at the edge network level. This is handled entirely by Vercel, we do not access or store this data ourselves. You can read more in <vercelPrivacy>Vercel's privacy policy</vercelPrivacy>.",
+    "desktopHeading": "The desktop application",
+    "desktopIntro": "Transfert is designed to work entirely on your device. This is a core principle of the project, not a setting.",
+    "desktopPoints": [
+      "Your files are never uploaded to any server.",
+      "No account is required to use the application.",
+      "No usage data, telemetry or crash reports are collected.",
+      "No third-party analytics or advertising SDKs are included."
+    ],
+    "desktopDisclaimer": "The application has not been released yet. This policy describes the design intent. It will be updated if anything changes before or after launch.",
+    "demoHeading": "The interactive demo",
+    "demoBody": "The demonstration on the main page runs entirely in your browser. No files are processed or transmitted anywhere. The file names and sizes shown are illustrative placeholders.",
+    "thirdPartyHeading": "Third-party content",
+    "thirdPartyBody": "The landscape photograph used on this site is from <unsplash>Unsplash</unsplash> and is used under their licence.",
+    "changesHeading": "Changes to this policy",
+    "changesBody": "If this policy changes, the updated version will be published at this URL with a new date at the top.",
+    "contactHeading": "Contact",
+    "contactBody": "Questions or concerns? Open an issue or start a discussion on <github>GitHub</github>."
+  },
+  "termsPage": {
+    "pageTitle": "Terms of Use — Transfert",
+    "pageDescription": "Terms of use for the Transfert website and desktop application.",
+    "layoutTitle": "Terms of Use",
+    "updated": "Last updated: November 2026",
+    "intro": "By using this website or the Transfert desktop application, you agree to these terms. They are intentionally short.",
+    "websiteHeading": "The website",
+    "websiteInformational": "This website is informational. It presents the concept and an interactive demonstration of Transfert. The demonstration does not process any real files — the file names, sizes and formats shown are illustrative.",
+    "websiteGoodFaith": "The content is provided in good faith and kept up to date as the project evolves. Features described are planned and subject to change.",
+    "desktopHeading": "The desktop application",
+    "desktopBody": "Transfert has not been released yet. When it is, the application will be distributed as open-source software under the <mit>MIT</mit> or <apache>Apache-2.0</apache> licence. The licence file in the repository is the authoritative reference.",
+    "desktopOpenSource": "Open-source means you are free to use, modify and distribute the software in accordance with the licence. It also means the software is provided without warranty of any kind, express or implied.",
+    "warrantyHeading": "No warranty",
+    "warrantyBody": "This website and all associated software are provided \"as is\". We make no guarantees about availability, accuracy or fitness for a particular purpose. Use at your own discretion.",
+    "ipHeading": "Intellectual property",
+    "ipBody": "The Transfert name, logo and website design are not covered by the open-source licence. The landscape photograph is from <unsplash>Unsplash</unsplash> and used under their licence.",
+    "changesHeading": "Changes to these terms",
+    "changesBody": "These terms may be updated as the project develops. The current version will always be available at this URL, with the date at the top.",
+    "contactHeading": "Contact",
+    "contactBody": "Questions? Open an issue or start a discussion on <github>GitHub</github>."
+  }
+}
